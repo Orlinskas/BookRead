@@ -12,7 +12,7 @@ public class Book {
     private String bookTitle = BookConstant.NA_BOOK_TITLE;
     private String annotation = BookConstant.DEFAULT_ANNOTATION;
     private String date = BookConstant.NOT_AVAILABILITY;
-    private File bookBody;
+    private File bookText;
 
     private SimpleDateFormat commonFormat = new SimpleDateFormat(BookConstant.YYYY_MM_DD, Locale.ENGLISH);
 
@@ -40,12 +40,12 @@ public class Book {
         this.annotation = annotation;
     }
 
-    public File getBookBody() {
-        return bookBody;
+    public File getBookText() {
+        return bookText;
     }
 
-    public void setBookBody(File bookBody) {
-        this.bookBody = bookBody;
+    public void setBookText(File bookText) {
+        this.bookText = bookText;
     }
 
     public String getDate() {

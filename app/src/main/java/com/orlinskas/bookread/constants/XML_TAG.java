@@ -6,4 +6,8 @@ public class XML_TAG {
     public final static String LAST_NAME = "last-name";
     public final static String BOOK_TITLE = "book-title";
     public final static String ANNOTATION = "annotation";
+    public final static String BODY = "body";
+    public final static String P = "p";
+    public final static String TITLE = "title";
+    public final static String EMPTY_LINE = "empty-line";
 }

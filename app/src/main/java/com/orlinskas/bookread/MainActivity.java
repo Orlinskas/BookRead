@@ -1,6 +1,8 @@
 package com.orlinskas.bookread;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -18,8 +20,15 @@ import com.orlinskas.bookread.constants.BookConstant;
 import com.orlinskas.bookread.constants.XML_TAG;
 import com.orlinskas.bookread.data.LicenceData;
 import com.orlinskas.bookread.data.SharedPreferencesData;
+import com.orlinskas.bookread.parsers.ParserFb2;
 
 import org.xmlpull.v1.XmlPullParser;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,8 +64,9 @@ public class MainActivity extends AppCompatActivity
 
         parse();
 
+        AppContext.setContext(getApplicationContext());
         SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
-
+        LicenceData.setCountOfBookCreate(SharedPreferencesData.getPreferenceUsingKey(SharedPreferencesData.KEY_COUNT_OF_BOOK_CREATE, 0));
     }
 
     @Override
@@ -124,172 +134,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void parse () {
-        //XmlPullParser xpp = getResources().getXml(R.xml.book2);
-
+        XmlPullParser xml = getResources().getXml(R.xml.book2);
         Book book = new Book();
-
-        book.setAuthorName(findAuthorName(getResources().getXml(R.xml.xmlbook)));
-        book.setBookTitle(findBookTitle(getResources().getXml(R.xml.xmlbook)));
-        book.setAnnotation(findAnnotation(getResources().getXml(R.xml.xmlbook)));
-        book.setDate();
-
-        test.setText(String.format("%s%s%s%s", book.getAuthorName(), book.getBookTitle(), book.getDate(), book.getAnnotation()));
-
-
-    }
-
-    public String findAuthorName (XmlPullParser parser){
-        //нужно исключить неправильные имена авторов!
-        StringBuilder authorName = new StringBuilder();
-
-        int eventType;
-        String tag;
-        boolean stop = false;
+        FileHelper fileHelper = new FileHelper();
+        ParserFb2 parserFb2 = new ParserFb2();
+        book.setBookText(fileHelper.createFile(getApplicationContext(), parserFb2.findBody(xml)));
 
         try {
-            do {
-                eventType = parser.next();
-                tag = parser.getName();
 
-                if (tag != null && tag.equals(XML_TAG.AUTHOR) && !stop) {
-                    try {
-                        authorName.append(parser.nextText()).append(" ");
-                    } catch (Exception ignored) {}
-                    while (checkEndTag(XML_TAG.AUTHOR, parser.getName(), parser.getEventType()) && !stop) {
-                        try {
-                            authorName.append(parser.nextText()).append(" ");
-                        } catch (Exception ignored) {}
-                        if (!checkEndTag(XML_TAG.LAST_NAME, parser.getName(), parser.getEventType())){
-                            stop = true;
-                        }
-                        parser.next();
-                    }
-                }
+            StringBuilder text = new StringBuilder();
 
-            } while (eventType != parser.END_DOCUMENT);
+            for (Character ch : fileHelper.readFile(book.getBookText())){
+                text.append(ch);
+            }
+
+            test.setText(text.toString());
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return String.valueOf(authorName);
     }
 
-    public String findBookTitle (XmlPullParser parser){
-        //не останавливается в конце тега, доходит до конца документа
-        String bookTitle = BookConstant.NA_BOOK_TITLE;
-        String tag;
-        int eventType;
-        boolean stop = false;
-
-        try {
-            do {
-                eventType = parser.next();
-                tag = parser.getName();
-
-                if (tag != null && tag.equals(XML_TAG.BOOK_TITLE) && !stop) {
-                    try {
-                        bookTitle = parser.nextText();
-                    } catch (Exception ignored) {}
-                    while (checkEndTag(XML_TAG.BOOK_TITLE, parser.getName(), parser.getEventType()) && !stop) {
-                        try {
-                            bookTitle = parser.nextText();
-                        } catch (Exception ignored) {}
-                        if (!checkEndTag(XML_TAG.BOOK_TITLE, parser.getName(), parser.getEventType())){
-                            stop = true;
-                        }
-                        parser.next();
-                    }
-                }
-
-            } while (eventType != parser.END_DOCUMENT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return bookTitle;
-    }
-
-    public String findAnnotation(XmlPullParser parser){
-        //не останавливается в конце тега, доходит до конца документа
-        StringBuilder annotation = new StringBuilder();
-
-        int eventType;
-        String tag;
-        boolean stop = false;
-
-        try {
-            do {
-                eventType = parser.next();
-                tag = parser.getName();
-
-                if (tag != null && tag.equals(XML_TAG.ANNOTATION) && !stop) {
-                    try {
-                        annotation.append(parser.nextText()).append(" ");
-                    } catch (Exception ignored) {}
-                    while (checkEndTag(XML_TAG.ANNOTATION, parser.getName(), parser.getEventType()) && !stop) {
-                        try {
-                            annotation.append(parser.nextText()).append(" ");
-                        } catch (Exception ignored) {}
-                        if (!checkEndTag(XML_TAG.ANNOTATION, parser.getName(), parser.getEventType())){
-                            stop = true;
-                        }
-                        parser.next();
-                    }
-                }
-
-            } while (eventType != parser.END_DOCUMENT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return String.valueOf(annotation);
-    }
-
-    /*public String findBody(XmlPullParser parser){
-        //не останавливается в конце тега, доходит до конца документа
-        StringBuilder body = new StringBuilder();
-
-        int eventType;
-        String tag;
-        boolean stop = false;
-
-        try {
-            do {
-                eventType = parser.next();
-                tag = parser.getName();
-
-                if (tag != null && tag.equals(XML_TAG.ANNOTATION) && !stop) {
-                    try {
-                        annotation.append(parser.nextText()).append(" ");
-                    } catch (Exception ignored) {}
-                    while (checkEndTag(XML_TAG.ANNOTATION, parser.getName(), parser.getEventType()) && !stop) {
-                        try {
-                            annotation.append(parser.nextText()).append(" ");
-                        } catch (Exception ignored) {}
-                        if (!checkEndTag(XML_TAG.ANNOTATION, parser.getName(), parser.getEventType())){
-                            stop = true;
-                        }
-                        parser.next();
-                    }
-                }
-
-            } while (eventType != parser.END_DOCUMENT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return String.valueOf(annotation);
-    }
-    */
-
-    public boolean checkEndTag (String needTag, String nowTag, int eventType){
-        if (nowTag == null){
-            return true;
-        }
-        if (nowTag.equals(needTag)){
-            return eventType != XmlPullParser.END_TAG;
-        }
-        return true;
-    }
 }
 

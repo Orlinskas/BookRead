@@ -1,34 +1,60 @@
 package com.orlinskas.bookread;
 
+import android.content.Context;
+
+import com.orlinskas.bookread.data.BookFilesData;
 import com.orlinskas.bookread.data.LicenceData;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FileHelper {
 
-    public File createFile () {
+    public File createFile (Context context, String body) {
         String fileName = LicenceData.getCountOfBookCreate() + ".txt";
+        String filePath = context.getFilesDir().getPath() + "/" + fileName;
+        File file = new File(filePath);
 
-        File bodyFile = new File(fileName);
-
-        try(FileWriter writer = new FileWriter(bodyFile, true))
-        {
+        try (FileWriter writer = new FileWriter(file, true)) {
             // запись всей строки
-            String text = "Hello Gold!";
-            writer.write(text);
-
-            // запись по символам
-            writer.append('\n');
-            writer.append('E');
-
+            writer.write(body);
             writer.flush();
-        }
-        catch(Exception ex){
 
-            System.out.println(ex.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
-        return bodyFile;
+        return file;
+    }
+
+    public ArrayList<Character> readFile (File file) {
+        ArrayList<Character> bodyChar = new ArrayList<>();
+        BufferedReader bufferedReader = null;
+
+        try {
+            bufferedReader = new BufferedReader(new FileReader(file));
+            int c;
+            while ((c = bufferedReader.read()) != -1) {
+                bodyChar.add((char) c);
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return bodyChar;
     }
 }
