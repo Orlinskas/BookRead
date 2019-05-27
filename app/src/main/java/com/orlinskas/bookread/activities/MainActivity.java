@@ -1,4 +1,4 @@
-package com.orlinskas.bookread.activitys;
+package com.orlinskas.bookread.activities;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -17,11 +17,18 @@ import android.widget.TextView;
 
 import com.orlinskas.bookread.AppContext;
 import com.orlinskas.bookread.Book;
+import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
+import com.orlinskas.bookread.data.LibraryData;
 import com.orlinskas.bookread.data.SharedPreferencesData;
-import com.orlinskas.bookread.helpers.BookHelper;
+import com.orlinskas.bookread.helpers.BookBodyFileWriter;
+import com.orlinskas.bookread.helpers.BookCreater;
+import com.orlinskas.bookread.helpers.LibraryHelper;
+import com.orlinskas.bookread.helpers.LicenceHelper;
 
 import org.xmlpull.v1.XmlPullParser;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -119,19 +126,28 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void parse () {
-        try {
-            XmlPullParser xml = getResources().getXml(R.xml.book2);
-            BookHelper bookHelper = new BookHelper(getApplicationContext());
-            Book newBook = bookHelper.createBook(xml);
-            bookHelper.addBookInLibrary(newBook);
+    public void parse() {
+       //XmlPullParser xml = getResources().getXml(R.xml.book2);
+       //BookCreater bookCreater = new BookCreater();
+       //Book book = bookCreater.create(xml);
 
-            Book book = bookHelper.getBook(bookHelper.booksSize() - 1);
-            test.setText(book.getBookBody());
-        } catch (Resources.NotFoundException e) {
-            e.printStackTrace();
-        }
+       //LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+       //libraryHelper.add(book);
+
+       //LicenceHelper licenceHelper = new LicenceHelper(getApplicationContext());
+       //licenceHelper.update();
+
+       go();
     }
+
+    public void go() {
+        LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+        Book book = libraryHelper.getBook(0);
+
+        test.setText(book.getBookBody());
+    }
+
+
 
 }
 

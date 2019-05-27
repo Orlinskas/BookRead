@@ -1,36 +1,14 @@
 package com.orlinskas.bookread.helpers;
 
-import android.content.Context;
-
-import com.orlinskas.bookread.Licence;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FileHelper {
+public class BookBodyFileReader {
 
-    public File createFile (Context context, String body) {
-        String fileName = Licence.getCountOfBookCreate() + ".txt";
-        String filePath = context.getFilesDir().getPath() + "/" + fileName;
-        File file = new File(filePath);
-
-        try (FileWriter writer = new FileWriter(file, true)) {
-            // запись всей строки
-            writer.write(body);
-            writer.flush();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return file;
-    }
-
-    public ArrayList<Character> readFile (File file) {
+    public ArrayList<Character> read (File file) {
         ArrayList<Character> bodyChar = new ArrayList<>();
         BufferedReader bufferedReader = null;
 
