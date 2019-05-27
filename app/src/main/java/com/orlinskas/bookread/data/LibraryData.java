@@ -2,45 +2,49 @@ package com.orlinskas.bookread.data;
 
 import android.content.Context;
 
-import com.orlinskas.bookread.Book;
+import com.orlinskas.bookread.Library;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
-public class BooksData implements java.io.Serializable {
-    private static final String FILE_BOOKS_DATA_NAME  = "serializedBooks" + ".txt";
+
+public class LibraryData {
+    private static final String FILE_LIBRARY_NAME = "serializedLibrary" + ".txt";
     private Context context;
 
-    public BooksData(Context context){
+    public LibraryData(Context context){
         this.context = context;
     }
-    public  ArrayList<Book> findBooks() {
-        String filePath = context.getFilesDir().getPath() + "/" + FILE_BOOKS_DATA_NAME;
+    public Library loadLibrary() {
+        String filePath = context.getFilesDir().getPath() + "/" + FILE_LIBRARY_NAME;
         File file = new File(filePath);
 
-        try{
+        try {
             ObjectInputStream ois =
                     new ObjectInputStream(new FileInputStream(file));
 
-           return (ArrayList<Book>) ois.readObject();
-        }
-        catch (Exception e){
+            return (Library) ois.readObject();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return books;
+
+        return new Library();
     }
 
-    public void saveBooks(ArrayList<Book> books) {
-        String filePath = context.getFilesDir().getPath() + "/" + FILE_BOOKS_DATA_NAME;
+    public void saveLibrary(Library library) {
+        String filePath = context.getFilesDir().getPath() + "/" + FILE_LIBRARY_NAME;
         File file = new File(filePath);
 
         try (FileOutputStream fos = new FileOutputStream(file);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(books);
+            oos.writeObject(library);
         }
         catch (Exception e){
             e.printStackTrace();

@@ -1,7 +1,10 @@
 package com.orlinskas.bookread.helpers;
 
+import android.content.Context;
+
 import com.orlinskas.bookread.Book;
-import com.orlinskas.bookread.data.BookFilesData;
+import com.orlinskas.bookread.Library;
+import com.orlinskas.bookread.data.LibraryData;
 import com.orlinskas.bookread.data.LicenceData;
 import com.orlinskas.bookread.parsers.ParserFb2;
 
@@ -11,24 +14,37 @@ import java.util.ArrayList;
 
 public class BookHelper {
     private ArrayList<Book> books = new ArrayList<>();
+    private Context context;
+
+    public BookHelper(Context context){
+        this.context = context;
+    }
 
     public void createBook (XmlPullParser xml){
         ParserFb2 parserFb2 = new ParserFb2();
         Book book = parserFb2.parse(xml);
-        book.setDate();
+        book.setDate(); //сделать внутри конструктора
 
-        books = BookFilesData.findBooks();
+        LibraryData libraryData = new LibraryData(context);
+        Library library = libraryData.loadLibrary();
+        books = library.getBooks();
         books.add(book);
-        BookFilesData.saveBooks(books);
+        library.setBooks(books);
+        libraryData.saveLibrary(library);
 
         LicenceData.newBookCreate();
     }
 
     public Book getBook (int id){
+        LibraryData libraryData = new LibraryData(context);
+        Library library = libraryData.loadLibrary();
+        books = library.getBooks();
         return books.get(id);
     }
 
-    public int booksCount(){
-        return books.size();
+    public int booksSize(){
+        LibraryData libraryData = new LibraryData(context);
+        Library library = libraryData.loadLibrary();
+        return library.getBooks().size();
     }
 }

@@ -2,7 +2,6 @@ package com.orlinskas.bookread.helpers;
 
 import android.content.Context;
 
-import com.orlinskas.bookread.data.BookFilesData;
 import com.orlinskas.bookread.data.LicenceData;
 
 import java.io.BufferedReader;
@@ -11,7 +10,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class FileHelper {
 

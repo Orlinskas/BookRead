@@ -3,17 +3,18 @@ package com.orlinskas.bookread;
 import com.orlinskas.bookread.constants.BookConstant;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Book {
+public class Book implements Serializable {
     private String authorName = BookConstant.UNKNOWN_AUTHOR;
     private String bookTitle = BookConstant.NA_BOOK_TITLE;
     private String annotation = BookConstant.DEFAULT_ANNOTATION;
     private String date = BookConstant.NOT_AVAILABILITY;
     private String bookBody = BookConstant.NOT_AVAILABILITY;
-    private File bookText;
+    //private File bookText;
 
     public Book(String authorName, String bookTitle, String annotation, String bookBody){
         this.authorName = authorName;
@@ -51,13 +52,13 @@ public class Book {
         this.annotation = annotation;
     }
 
-    public File getBookText() {
+   /* public File getBookText() {
         return bookText;
     }
 
     public void setBookText(File bookText) {
         this.bookText = bookText;
-    }
+    } */
 
     public String getDate() {
         return date;

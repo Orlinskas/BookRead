@@ -55,9 +55,10 @@ public class MainActivity extends AppCompatActivity
 
         parse();
 
-        AppContext.setContext(getApplicationContext());
+
         SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
         LicenceData.setCountOfBookCreate(SharedPreferencesData.getPreferenceUsingKey(SharedPreferencesData.KEY_COUNT_OF_BOOK_CREATE, 0));
+        AppContext.setContext(getApplicationContext());
     }
 
     @Override
@@ -127,10 +128,10 @@ public class MainActivity extends AppCompatActivity
     public void parse () {
         try {
             XmlPullParser xml = getResources().getXml(R.xml.xmlbook);
-            BookHelper bookCreateHelper = new BookHelper();
-            bookCreateHelper.createBook(xml);
+            BookHelper bookHelper = new BookHelper(getApplicationContext());
+            bookHelper.createBook(xml);
 
-            Book book = bookCreateHelper.getBook(bookCreateHelper.booksCount());
+            Book book = bookHelper.getBook(bookHelper.booksSize() - 1);
             test.setText(book.getAuthorName());
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
