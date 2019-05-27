@@ -5,6 +5,7 @@ import android.content.Context;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.data.LibraryData;
+import com.orlinskas.bookread.Licence;
 import com.orlinskas.bookread.data.LicenceData;
 import com.orlinskas.bookread.parsers.ParserFb2;
 
@@ -26,28 +27,45 @@ public class BookHelper {
     }
 
     public boolean addBookInLibrary (Book book){
-        LibraryData libraryData = new LibraryData(context);
-        Library library = libraryData.loadLibrary();
-        books = library.getBooks();
-        books.add(book); //нужно добавить проверку на существование книги в библиотеке
-        library.setBooks(books);
-        libraryData.saveLibrary(library);
+        try {
+            LibraryData libraryData = new LibraryData(context);
+            Library library = libraryData.loadLibrary();
+            books = library.getBooks();
+            books.add(book); //нужно добавить проверку на существование книги в библиотеке
+            library.setBooks(books);
+            libraryData.saveLibrary(library);
 
-        LicenceData.newBookCreate();
+            LicenceData licenceData = new LicenceData(context);
+            Licence licence = licenceData.loadLicence();
+            licence.newBookCreate();
+            licenceData.saveLicence(licence);
 
-        return true;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Book getBook (int id){
-        LibraryData libraryData = new LibraryData(context);
-        Library library = libraryData.loadLibrary();
-        books = library.getBooks();
+        try {
+            LibraryData libraryData = new LibraryData(context);
+            Library library = libraryData.loadLibrary();
+            books = library.getBooks();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return books.get(id);
     }
 
     public int booksSize(){
-        LibraryData libraryData = new LibraryData(context);
-        Library library = libraryData.loadLibrary();
-        return library.getBooks().size();
+        try {
+            LibraryData libraryData = new LibraryData(context);
+            Library library = libraryData.loadLibrary();
+            return library.getBooks().size();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

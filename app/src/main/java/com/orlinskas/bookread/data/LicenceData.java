@@ -1,46 +1,53 @@
 package com.orlinskas.bookread.data;
 
-import com.orlinskas.bookread.constants.LicenceConstant;
+import android.content.Context;
+
+import com.orlinskas.bookread.Licence;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class LicenceData {
-    private static int countOfBookCreate = 0;
-    private static int countOfFreeBooks = 10;
-    private static boolean marketAd = true;
-    private static String licenceVer = LicenceConstant.FREE_WITH_AD;
+    private static final String FILE_LICENCE_NAME = "serializedLicence" + ".txt";
+    private Context context;
 
-    public static boolean isMarketAd() {
-        return marketAd;
+    public LicenceData(Context context){
+        this.context = context;
     }
 
-    public static void setMarketAd(boolean marketAd) {
-        LicenceData.marketAd = marketAd;
+    public Licence loadLicence() {
+        String filePath = context.getFilesDir().getPath() + "/" + FILE_LICENCE_NAME;
+        File file = new File(filePath);
+
+        try {
+            ObjectInputStream ois =
+                    new ObjectInputStream(new FileInputStream(file));
+
+            return (Licence) ois.readObject();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return new Licence();
     }
 
-    public static String getLicenceVer() {
-        return licenceVer;
-    }
+    public void saveLicence(Licence licence) {
+        String filePath = context.getFilesDir().getPath() + "/" + FILE_LICENCE_NAME;
+        File file = new File(filePath);
 
-    public static void setLicenceVer(String licenceVer) {
-        LicenceData.licenceVer = licenceVer;
-    }
-
-    public static int getCountOfBookCreate() {
-        return countOfBookCreate;
-    }
-
-    public static void setCountOfBookCreate(int countOfBookCreate) {
-        LicenceData.countOfBookCreate = countOfBookCreate;
-    }
-
-    public static void newBookCreate(){
-        countOfBookCreate++;
-    }
-
-    public static int getCountOfFreeBooks() {
-        return countOfFreeBooks;
-    }
-
-    public static void setCountOfFreeBooks(int countOfFreeBooks) {
-        LicenceData.countOfFreeBooks = countOfFreeBooks;
+        try (FileOutputStream fos = new FileOutputStream(file);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(licence);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

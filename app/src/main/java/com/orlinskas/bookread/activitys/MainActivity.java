@@ -1,4 +1,4 @@
-package com.orlinskas.bookread;
+package com.orlinskas.bookread.activitys;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -15,7 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.orlinskas.bookread.data.LicenceData;
+import com.orlinskas.bookread.AppContext;
+import com.orlinskas.bookread.Book;
+import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.data.SharedPreferencesData;
 import com.orlinskas.bookread.helpers.BookHelper;
 
@@ -57,7 +59,6 @@ public class MainActivity extends AppCompatActivity
 
 
         SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
-        LicenceData.setCountOfBookCreate(SharedPreferencesData.getPreferenceUsingKey(SharedPreferencesData.KEY_COUNT_OF_BOOK_CREATE, 0));
         AppContext.setContext(getApplicationContext());
     }
 
@@ -116,13 +117,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void getLicenceData (){
-        SharedPreferencesData.getPreferenceUsingKey(SharedPreferencesData.KEY_COUNT_OF_BOOK_CREATE, LicenceData.getCountOfBookCreate());
-        SharedPreferencesData.getPreferenceUsingKey(SharedPreferencesData.KEY_COUNT_OF_FREE_BOOK, LicenceData.getCountOfFreeBooks());
-        SharedPreferencesData.getPreferenceUsingKey(SharedPreferencesData.KEY_MARKET_AD, LicenceData.isMarketAd());
-        SharedPreferencesData.getPreferenceUsingKey(SharedPreferencesData.KEY_LICENCE_VERSION, LicenceData.getLicenceVer());
     }
 
     public void parse () {

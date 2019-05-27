@@ -2,7 +2,7 @@ package com.orlinskas.bookread.helpers;
 
 import android.content.Context;
 
-import com.orlinskas.bookread.data.LicenceData;
+import com.orlinskas.bookread.Licence;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class FileHelper {
 
     public File createFile (Context context, String body) {
-        String fileName = LicenceData.getCountOfBookCreate() + ".txt";
+        String fileName = Licence.getCountOfBookCreate() + ".txt";
         String filePath = context.getFilesDir().getPath() + "/" + fileName;
         File file = new File(filePath);
 

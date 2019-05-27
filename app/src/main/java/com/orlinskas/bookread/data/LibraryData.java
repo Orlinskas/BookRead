@@ -3,6 +3,7 @@ package com.orlinskas.bookread.data;
 import android.content.Context;
 
 import com.orlinskas.bookread.Library;
+import com.orlinskas.bookread.Licence;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,35 +21,24 @@ public class LibraryData {
         this.context = context;
     }
 
-    public Library loadLibrary() {
+    public Library loadLibrary() throws Exception {
         String filePath = context.getFilesDir().getPath() + "/" + FILE_LIBRARY_NAME;
         File file = new File(filePath);
 
-        try {
+        if(file.exists() && !file.isDirectory()) {
             ObjectInputStream ois =
                     new ObjectInputStream(new FileInputStream(file));
 
             return (Library) ois.readObject();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
-
-        return new Library();
+        else return new Library();
     }
 
-    public void saveLibrary(Library library) {
+    public void saveLibrary(Library library) throws Exception {
         String filePath = context.getFilesDir().getPath() + "/" + FILE_LIBRARY_NAME;
         File file = new File(filePath);
-
-        try (FileOutputStream fos = new FileOutputStream(file);
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(library);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        FileOutputStream fos = new FileOutputStream(file);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(library);
     }
 }
