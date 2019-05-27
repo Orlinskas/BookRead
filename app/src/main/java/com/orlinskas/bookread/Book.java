@@ -15,6 +15,16 @@ public class Book {
     private String bookBody = BookConstant.NOT_AVAILABILITY;
     private File bookText;
 
+    public Book(String authorName, String bookTitle, String annotation, String bookBody){
+        this.authorName = authorName;
+        this.bookTitle = bookTitle;
+        this.annotation = annotation;
+        this.bookBody = bookBody;
+    }
+
+    public Book(){
+    }
+
     private SimpleDateFormat commonFormat = new SimpleDateFormat(BookConstant.YYYY_MM_DD, Locale.ENGLISH);
 
     public String getAuthorName() {
