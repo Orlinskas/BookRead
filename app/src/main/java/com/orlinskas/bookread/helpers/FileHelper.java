@@ -1,4 +1,4 @@
-package com.orlinskas.bookread;
+package com.orlinskas.bookread.helpers;
 
 import android.content.Context;
 

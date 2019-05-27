@@ -19,12 +19,12 @@ public class BookFilesData implements java.io.Serializable {
         BookFilesData.books = books;
     }
 
-    public static Object findBooks() {
+    public static ArrayList<Book> findBooks() {
         try{
             ObjectInputStream ois =
                     new ObjectInputStream(new FileInputStream("serializedBooks.txt"));
 
-           return ois.readObject();
+           return (ArrayList<Book>) ois.readObject();
         }
         catch (Exception e){
             e.printStackTrace();

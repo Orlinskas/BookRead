@@ -12,6 +12,7 @@ public class Book {
     private String bookTitle = BookConstant.NA_BOOK_TITLE;
     private String annotation = BookConstant.DEFAULT_ANNOTATION;
     private String date = BookConstant.NOT_AVAILABILITY;
+    private String bookBody = BookConstant.NOT_AVAILABILITY;
     private File bookText;
 
     private SimpleDateFormat commonFormat = new SimpleDateFormat(BookConstant.YYYY_MM_DD, Locale.ENGLISH);
@@ -58,5 +59,13 @@ public class Book {
         } catch (Exception e) {
             this.date = "n/a";
         }
+    }
+
+    public String getBookBody() {
+        return bookBody;
+    }
+
+    public void setBookBody(String bookBody) {
+        this.bookBody = bookBody;
     }
 }

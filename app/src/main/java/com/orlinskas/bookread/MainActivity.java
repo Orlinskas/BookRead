@@ -1,8 +1,7 @@
 package com.orlinskas.bookread;
 
-import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -16,19 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.orlinskas.bookread.constants.BookConstant;
-import com.orlinskas.bookread.constants.XML_TAG;
 import com.orlinskas.bookread.data.LicenceData;
 import com.orlinskas.bookread.data.SharedPreferencesData;
-import com.orlinskas.bookread.parsers.ParserFb2;
+import com.orlinskas.bookread.helpers.BookHelper;
 
 import org.xmlpull.v1.XmlPullParser;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -134,24 +125,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void parse () {
-        XmlPullParser xml = getResources().getXml(R.xml.book2);
-        Book book = new Book();
-        FileHelper fileHelper = new FileHelper();
-        ParserFb2 parserFb2 = new ParserFb2();
-        book.setBookText(fileHelper.createFile(getApplicationContext(), parserFb2.findBody(xml)));
-
         try {
+            XmlPullParser xml = getResources().getXml(R.xml.xmlbook);
+            BookHelper bookCreateHelper = new BookHelper();
+            bookCreateHelper.createBook(xml);
 
-            StringBuilder text = new StringBuilder();
-
-            for (Character ch : fileHelper.readFile(book.getBookText())){
-                text.append(ch);
-            }
-
-            test.setText(text.toString());
-
-
-        } catch (Exception e) {
+            Book book = bookCreateHelper.getBook(bookCreateHelper.booksCount());
+            test.setText(book.getAuthorName());
+        } catch (Resources.NotFoundException e) {
             e.printStackTrace();
         }
     }

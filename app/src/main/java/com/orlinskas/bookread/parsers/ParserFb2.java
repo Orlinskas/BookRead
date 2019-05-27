@@ -5,7 +5,9 @@ import com.orlinskas.bookread.constants.BookConstant;
 import com.orlinskas.bookread.constants.XML_TAG;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ParserFb2 {
@@ -52,6 +54,7 @@ public class ParserFb2 {
         String tag;
         int eventType;
         boolean stop = false;
+        goToStartDocument(parser);
 
         try {
             do {
@@ -157,6 +160,22 @@ public class ParserFb2 {
         }
 
         return body.toString();
+    }
+
+    private void goToStartDocument(XmlPullParser parser){
+        int eventType;
+        int colmn = parser.getColumnNumber();
+        try {
+            do {
+                eventType = parser.next();
+            }
+            while (eventType != parser.START_DOCUMENT);
+
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean checkEndTag (String needTag, String nowTag, int eventType){
