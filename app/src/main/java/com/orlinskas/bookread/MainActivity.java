@@ -127,12 +127,13 @@ public class MainActivity extends AppCompatActivity
 
     public void parse () {
         try {
-            XmlPullParser xml = getResources().getXml(R.xml.xmlbook);
+            XmlPullParser xml = getResources().getXml(R.xml.book2);
             BookHelper bookHelper = new BookHelper(getApplicationContext());
-            bookHelper.createBook(xml);
+            Book newBook = bookHelper.createBook(xml);
+            bookHelper.addBookInLibrary(newBook);
 
             Book book = bookHelper.getBook(bookHelper.booksSize() - 1);
-            test.setText(book.getAuthorName());
+            test.setText(book.getBookBody());
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
         }

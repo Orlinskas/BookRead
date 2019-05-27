@@ -2,7 +2,6 @@ package com.orlinskas.bookread;
 
 import com.orlinskas.bookread.constants.BookConstant;
 
-import java.io.File;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +20,12 @@ public class Book implements Serializable {
         this.bookTitle = bookTitle;
         this.annotation = annotation;
         this.bookBody = bookBody;
+        SimpleDateFormat commonFormat = new SimpleDateFormat(BookConstant.YYYY_MM_DD, Locale.ENGLISH);
+        try {
+            this.date = commonFormat.format(new Date());
+        } catch (Exception e) {
+            this.date = "n/a";
+        }
     }
 
     public Book(){

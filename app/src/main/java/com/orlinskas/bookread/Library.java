@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class Library implements Serializable {
     private ArrayList<Book> books = new ArrayList<>();
 
-
     public ArrayList<Book> getBooks() {
         return books;
     }

@@ -20,19 +20,22 @@ public class BookHelper {
         this.context = context;
     }
 
-    public void createBook (XmlPullParser xml){
+    public Book createBook (XmlPullParser xml){
         ParserFb2 parserFb2 = new ParserFb2();
-        Book book = parserFb2.parse(xml);
-        book.setDate(); //сделать внутри конструктора
+        return  parserFb2.parse(xml);
+    }
 
+    public boolean addBookInLibrary (Book book){
         LibraryData libraryData = new LibraryData(context);
         Library library = libraryData.loadLibrary();
         books = library.getBooks();
-        books.add(book);
+        books.add(book); //нужно добавить проверку на существование книги в библиотеке
         library.setBooks(books);
         libraryData.saveLibrary(library);
 
         LicenceData.newBookCreate();
+
+        return true;
     }
 
     public Book getBook (int id){
