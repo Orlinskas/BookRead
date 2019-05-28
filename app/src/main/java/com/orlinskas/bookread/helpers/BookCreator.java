@@ -5,7 +5,7 @@ import com.orlinskas.bookread.parsers.ParserFb2;
 
 import org.xmlpull.v1.XmlPullParser;
 
-public class BookCreater {
+public class BookCreator {
 
     public Book create(XmlPullParser xml){
         ParserFb2 parserFb2 = new ParserFb2();

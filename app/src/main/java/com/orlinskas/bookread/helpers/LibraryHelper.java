@@ -9,37 +9,68 @@ import com.orlinskas.bookread.data.LibraryData;
 import java.util.ArrayList;
 
 public class LibraryHelper {
-    private ArrayList<Book> books = new ArrayList<>();
+    private ArrayList<Book> libraryBooks = new ArrayList<>();
     private Context context;
 
     public LibraryHelper(Context context){
         this.context = context;
     }
 
-    public boolean add(Book book){
+    public boolean addBook(Book book){
         try {
             LibraryData libraryData = new LibraryData(context);
             Library library = libraryData.loadLibrary();
-            books = library.getBooks();
-            books.add(book); //нужно добавить проверку на существование книги в библиотеке
-            library.setBooks(books);
-            libraryData.saveLibrary(library);
+            libraryBooks = library.getBooks();
 
-            return true;
+            if (containBookInLibrary(libraryBooks, book)){
+                return false;
+            }
+            else {
+                libraryBooks.add(book);
+                library.setBooks(libraryBooks);
+                libraryData.saveLibrary(library);
+
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public Book getBook(int id){ //после переопределения equals изменить на гет (Бук)
+    public Book getBook(int id){
         try {
             LibraryData libraryData = new LibraryData(context);
             Library library = libraryData.loadLibrary();
-            books = library.getBooks();
+            libraryBooks = library.getBooks();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return books.get(id);
+        return libraryBooks.get(id);
+    }
+
+    public Book getBook(Book book){
+        try {
+            LibraryData libraryData = new LibraryData(context);
+            Library library = libraryData.loadLibrary();
+            libraryBooks = library.getBooks();
+            for (Book libraryBook: libraryBooks) {
+                if (libraryBook.equals(book)){
+                    return libraryBook;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private boolean containBookInLibrary(ArrayList<Book> libraryBooks, Book book) {
+        for (Book libraryBook: libraryBooks) {
+            if (libraryBook.equals(book)){
+             return true;
+            }
+        }
+        return false;
     }
 }

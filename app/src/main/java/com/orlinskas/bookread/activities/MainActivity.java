@@ -1,6 +1,5 @@
 package com.orlinskas.bookread.activities;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,14 +20,11 @@ import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.data.LibraryData;
 import com.orlinskas.bookread.data.SharedPreferencesData;
-import com.orlinskas.bookread.helpers.BookBodyFileWriter;
-import com.orlinskas.bookread.helpers.BookCreater;
+import com.orlinskas.bookread.helpers.BookCreator;
 import com.orlinskas.bookread.helpers.LibraryHelper;
 import com.orlinskas.bookread.helpers.LicenceHelper;
 
 import org.xmlpull.v1.XmlPullParser;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -127,24 +123,26 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void parse() {
-       //XmlPullParser xml = getResources().getXml(R.xml.book2);
-       //BookCreater bookCreater = new BookCreater();
-       //Book book = bookCreater.create(xml);
+      XmlPullParser xml = getResources().getXml(R.xml.book2);
+      BookCreator bookCreator = new BookCreator();
+      Book book = bookCreator.create(xml);
 
-       //LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
-       //libraryHelper.add(book);
+      LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+      libraryHelper.addBook(book);
 
-       //LicenceHelper licenceHelper = new LicenceHelper(getApplicationContext());
-       //licenceHelper.update();
+      LicenceHelper licenceHelper = new LicenceHelper(getApplicationContext());
+      licenceHelper.update();
 
-       go();
+      go(book);
     }
 
-    public void go() {
+    public void go(Book bookNeed) {
         LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
         Book book = libraryHelper.getBook(0);
 
-        test.setText(book.getBookBody());
+        test.setText(book.getAnnotation());
+        
+
     }
 
 

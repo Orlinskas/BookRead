@@ -6,8 +6,11 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class Book implements Serializable {
+    private SimpleDateFormat commonFormat = new SimpleDateFormat(BookConstant.YYYY_MM_DD, Locale.ENGLISH);
+
     private String authorName = BookConstant.UNKNOWN_AUTHOR;
     private String bookTitle = BookConstant.NA_BOOK_TITLE;
     private String annotation = BookConstant.DEFAULT_ANNOTATION;
@@ -31,7 +34,20 @@ public class Book implements Serializable {
     public Book(){
     }
 
-    private SimpleDateFormat commonFormat = new SimpleDateFormat(BookConstant.YYYY_MM_DD, Locale.ENGLISH);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return Objects.equals(authorName, book.authorName) &&
+                Objects.equals(bookTitle, book.bookTitle) &&
+                Objects.equals(date, book.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(authorName, bookTitle, date);
+    }
 
     public String getAuthorName() {
         return authorName;
@@ -57,14 +73,6 @@ public class Book implements Serializable {
         this.annotation = annotation;
     }
 
-   /* public File getBookText() {
-        return bookText;
-    }
-
-    public void setBookText(File bookText) {
-        this.bookText = bookText;
-    } */
-
     public String getDate() {
         return date;
     }
@@ -84,4 +92,12 @@ public class Book implements Serializable {
     public void setBookBody(String bookBody) {
         this.bookBody = bookBody;
     }
+
+    /* public File getBookText() {
+        return bookText;
+    }
+
+    public void setBookText(File bookText) {
+        this.bookText = bookText;
+    } */
 }
