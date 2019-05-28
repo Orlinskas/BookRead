@@ -141,11 +141,8 @@ public class MainActivity extends AppCompatActivity
         Book book = libraryHelper.getBook(0);
 
         test.setText(book.getAnnotation());
-        
+
 
     }
-
-
-
 }
 
