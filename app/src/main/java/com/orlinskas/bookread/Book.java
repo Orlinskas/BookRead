@@ -2,6 +2,7 @@ package com.orlinskas.bookread;
 
 import com.orlinskas.bookread.constants.BookConstant;
 
+import java.io.File;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,7 +17,7 @@ public class Book implements Serializable {
     private String annotation = BookConstant.DEFAULT_ANNOTATION;
     private String date = BookConstant.NOT_AVAILABILITY;
     private String bookBody = BookConstant.NOT_AVAILABILITY;
-    //private File bookText;
+    private File bookBodyFile;
 
     public Book(String authorName, String bookTitle, String annotation, String bookBody){
         this.authorName = authorName;
@@ -93,11 +94,11 @@ public class Book implements Serializable {
         this.bookBody = bookBody;
     }
 
-    /* public File getBookText() {
-        return bookText;
+    public File getBookBodyFile() {
+        return bookBodyFile;
     }
 
-    public void setBookText(File bookText) {
-        this.bookText = bookText;
-    } */
+    public void setBookBodyFile(File bookBodyFile) {
+        this.bookBodyFile = bookBodyFile;
+    }
 }

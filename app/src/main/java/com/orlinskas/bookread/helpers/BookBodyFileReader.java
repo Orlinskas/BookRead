@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class BookBodyFileReader {
 
-    public ArrayList<Character> read (File file) {
+    public String read (File file) {
         ArrayList<Character> bodyChar = new ArrayList<>();
         BufferedReader bufferedReader = null;
 
@@ -31,6 +31,29 @@ public class BookBodyFileReader {
             }
         }
 
-        return bodyChar;
+        StringBuilder endText = new StringBuilder();
+        for (String word : findWordsIn(bodyChar)){
+            endText.append(word);
+        }
+
+        return endText.toString();
+    }
+
+    private ArrayList<String> findWordsIn (ArrayList<Character> bodyChar) {
+        ArrayList<String> words = new ArrayList<>();
+        StringBuilder word = new StringBuilder();
+
+        for (Character ch : bodyChar){
+            if (ch == ' '){
+                word.append(ch);
+                words.add(word.toString());
+                word = new StringBuilder();
+            }
+            else {
+                word.append(ch);
+            }
+        }
+
+        return words;
     }
 }

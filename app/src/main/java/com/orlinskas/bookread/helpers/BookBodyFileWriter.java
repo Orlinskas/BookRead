@@ -14,7 +14,10 @@ import java.util.ArrayList;
 public class BookBodyFileWriter {
 
     public File write (Context context, Book book) {
-        String fileName = book.getBookTitle() + ".txt";
+        String clearAuthorName = book.getBookTitle();
+        clearAuthorName = clearAuthorName.replaceAll("\\s","");
+
+        String fileName = clearAuthorName + book.getDate() + ".txt";
         String filePath = context.getFilesDir().getPath() + "/" + fileName;
         File file = new File(filePath);
         try (FileWriter writer = new FileWriter(file, true)) {

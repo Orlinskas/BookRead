@@ -16,10 +16,9 @@ import android.widget.TextView;
 
 import com.orlinskas.bookread.AppContext;
 import com.orlinskas.bookread.Book;
-import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
-import com.orlinskas.bookread.data.LibraryData;
 import com.orlinskas.bookread.data.SharedPreferencesData;
+import com.orlinskas.bookread.helpers.BookBodyFileReader;
 import com.orlinskas.bookread.helpers.BookCreator;
 import com.orlinskas.bookread.helpers.LibraryHelper;
 import com.orlinskas.bookread.helpers.LicenceHelper;
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView test;
+    //Context context = getApplicationContext();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,26 +123,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void parse() {
-      XmlPullParser xml = getResources().getXml(R.xml.book2);
-      BookCreator bookCreator = new BookCreator();
-      Book book = bookCreator.create(xml);
+        XmlPullParser xml = getResources().getXml(R.xml.book2);
+        BookCreator bookCreator = new BookCreator();
+        Book book = bookCreator.create(getApplicationContext(), xml);
 
-      LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
-      libraryHelper.addBook(book);
+        LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+        libraryHelper.addBook(book);
 
-      LicenceHelper licenceHelper = new LicenceHelper(getApplicationContext());
-      licenceHelper.update();
+        LicenceHelper licenceHelper = new LicenceHelper(getApplicationContext());
+        licenceHelper.update();
 
-      go(book);
+        go(book);
     }
 
     public void go(Book bookNeed) {
         LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
-        Book book = libraryHelper.getBook(0);
+        Book book = libraryHelper.getBook(bookNeed);
 
-        test.setText(book.getAnnotation());
-
-
+        BookBodyFileReader bodyFileReader = new BookBodyFileReader();
+        test.setText(bodyFileReader.read(book.getBookBodyFile()));
     }
 }
 

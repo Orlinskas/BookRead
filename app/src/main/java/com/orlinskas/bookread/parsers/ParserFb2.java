@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ParserFb2 {
 
-    public Book parse (XmlPullParser parser){
+    public Book parse (XmlPullParser parser) {
         //нужно исключить неправильные имена авторов!
         StringBuilder authorName = new StringBuilder();
         String bookTitle = BookConstant.NA_BOOK_TITLE;
