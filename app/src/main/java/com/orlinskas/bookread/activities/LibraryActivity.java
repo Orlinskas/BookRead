@@ -9,9 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
+import com.orlinskas.bookread.data.LibraryData;
 import com.orlinskas.bookread.fragments.LibraryBookFragment;
+
+import java.util.ArrayList;
 
 public class LibraryActivity extends AppCompatActivity {
 
@@ -21,15 +25,32 @@ public class LibraryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
 
+        ArrayList<Book> books = new ArrayList<>();
+        Library library;
+        LibraryData libraryData = new LibraryData(getApplicationContext());
+        try {
+            library = libraryData.loadLibrary();
+            books = library.getBooks();
+            showFragments(books);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showFragments(ArrayList<Book> books) {
         FragmentManager fm = getSupportFragmentManager();
 
-        Fragment fragment = fm.findFragmentById(R.id.activity_library_ll_container);
-        if (fragment == null) {
-            fragment = new LibraryBookFragment();
-            fm.beginTransaction()
-                    .add(R.id.activity_library_ll_container, fragment)
-                    .commit();
+        for (Book book : books){
+            Fragment fragment = fm.findFragmentById(R.id.activity_library_ll_container);
+            if (fragment == null) {
+                fragment = new LibraryBookFragment();
+                ((LibraryBookFragment) fragment).book = book;
+                fm.beginTransaction()
+                        .add(R.id.activity_library_ll_container, fragment)
+                        .commit();
+            }
         }
+
     }
 
 

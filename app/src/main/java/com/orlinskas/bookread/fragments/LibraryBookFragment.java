@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 
 public class LibraryBookFragment extends Fragment {
@@ -19,6 +20,7 @@ public class LibraryBookFragment extends Fragment {
     private ImageView image;
     private TextView title, author, date;
     private Button button;
+    public Book book;
 
     @Nullable
     @Override
@@ -31,7 +33,7 @@ public class LibraryBookFragment extends Fragment {
         title = view.findViewById(R.id.library_book_fragment_tv_title);
         date = view.findViewById(R.id.library_book_fragment_tv_date);
 
-
+        author.setText(book.getAuthorName());
 
         button.setAlpha(0.0f);
         button.setOnClickListener(new View.OnClickListener() {

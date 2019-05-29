@@ -1,9 +1,13 @@
 package com.orlinskas.bookread.activities;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +23,8 @@ import com.orlinskas.bookread.AppContext;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
+import com.orlinskas.bookread.ToastBuilder;
+import com.orlinskas.bookread.constants.PermissionConstant;
 import com.orlinskas.bookread.data.SharedPreferencesData;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
@@ -32,6 +38,7 @@ import org.xmlpull.v1.XmlPullParser;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    int permissionStatus;
     TextView test;
     //Context context = getApplicationContext();
 
@@ -62,11 +69,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        parse();
+        //parse();
 
 
         SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
         AppContext.setContext(getApplicationContext());
+
+        permissionStatus = ContextCompat.checkSelfPermission
+                (this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        checkStoragePermission();
     }
 
     @Override
@@ -108,7 +119,14 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_add_book) {
-
+            permissionStatus = ContextCompat.checkSelfPermission
+                    (this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+                ActivityOpenHelper.openActivity(getApplicationContext(), OpenBookActivity.class);
+            }
+            else {
+                ToastBuilder.create(this, "Вы не разрешили приложению доступ к памяти телефона!");
+            }
         } else if (id == R.id.nav_library) {
             ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);
         } else if (id == R.id.nav_settings) {
@@ -124,26 +142,36 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void parse() {
-        XmlPullParser xml = getResources().getXml(R.xml.book2);
-        BookCreator bookCreator = new BookCreator();
-        Book book = bookCreator.create(getApplicationContext(), xml);
-
-        LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
-        libraryHelper.addBook(book);
-
-        LicenceHelper licenceHelper = new LicenceHelper(getApplicationContext());
-        licenceHelper.update();
-
-        go(book);
+    private void checkStoragePermission() {
+        if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+            ToastBuilder.create(this, "Привет)");
+            //добавить рандомные приветствия
+        } else {
+            ActivityCompat.requestPermissions
+                    (this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                            PermissionConstant.MY_REQUEST_CODE);
+        }
     }
+   // public void parse() {
+   //     XmlPullParser xml = getResources().getXml(R.xml.book2);
+   //     BookCreator bookCreator = new BookCreator();
+   //     Book book = bookCreator.create(getApplicationContext(), xml);
+//
+   //     LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+   //     libraryHelper.addBook(book);
+//
+   //     LicenceHelper licenceHelper = new LicenceHelper(getApplicationContext());
+   //     licenceHelper.update();
+//
+   //     go(book);
+   // }
 
-    public void go(Book bookNeed) {
-        LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
-        Book book = libraryHelper.getBook(bookNeed);
-        BookBodyFileReader bodyFileReader = new BookBodyFileReader();
+   // public void go(Book bookNeed) {
+   //     LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+   //     Book book = libraryHelper.getBook(bookNeed);
+   //     BookBodyFileReader bodyFileReader = new BookBodyFileReader();
+//
 
-        test.setText(ArrayListToString.parse(bodyFileReader.read(book.getBookBodyFile())));
-    }
+   // }
 }
 
