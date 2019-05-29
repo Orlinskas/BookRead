@@ -1,5 +1,6 @@
 package com.orlinskas.bookread.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,12 +17,15 @@ import android.widget.TextView;
 
 import com.orlinskas.bookread.AppContext;
 import com.orlinskas.bookread.Book;
+import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.data.SharedPreferencesData;
+import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
 import com.orlinskas.bookread.helpers.BookCreator;
 import com.orlinskas.bookread.helpers.LibraryHelper;
 import com.orlinskas.bookread.helpers.LicenceHelper;
+import com.orlinskas.bookread.parsers.ArrayListToString;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -103,17 +107,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_add_book) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_library) {
+            ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);
+        } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_send_author) {
 
         }
 
@@ -139,9 +141,9 @@ public class MainActivity extends AppCompatActivity
     public void go(Book bookNeed) {
         LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
         Book book = libraryHelper.getBook(bookNeed);
-
         BookBodyFileReader bodyFileReader = new BookBodyFileReader();
-        test.setText(bodyFileReader.read(book.getBookBodyFile()));
+
+        test.setText(ArrayListToString.parse(bodyFileReader.read(book.getBookBodyFile())));
     }
 }
 

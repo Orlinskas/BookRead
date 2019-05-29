@@ -8,15 +8,24 @@ import java.util.ArrayList;
 
 public class BookBodyFileReader {
 
-    public String read (File file) {
-        ArrayList<Character> bodyChar = new ArrayList<>();
+    public ArrayList<String> read (File file) {
         BufferedReader bufferedReader = null;
+        ArrayList<String> words = new ArrayList<>();
+        StringBuilder word = new StringBuilder();
 
         try {
             bufferedReader = new BufferedReader(new FileReader(file));
             int c;
             while ((c = bufferedReader.read()) != -1) {
-                bodyChar.add((char) c);
+
+                if ((char) c == ' '){
+                    word.append((char) c);
+                    words.add(word.toString());
+                    word = new StringBuilder();
+                }
+                else {
+                    word.append((char) c);
+                }
             }
             bufferedReader.close();
         } catch (IOException e) {
@@ -31,29 +40,7 @@ public class BookBodyFileReader {
             }
         }
 
-        StringBuilder endText = new StringBuilder();
-        for (String word : findWordsIn(bodyChar)){
-            endText.append(word);
-        }
-
-        return endText.toString();
-    }
-
-    private ArrayList<String> findWordsIn (ArrayList<Character> bodyChar) {
-        ArrayList<String> words = new ArrayList<>();
-        StringBuilder word = new StringBuilder();
-
-        for (Character ch : bodyChar){
-            if (ch == ' '){
-                word.append(ch);
-                words.add(word.toString());
-                word = new StringBuilder();
-            }
-            else {
-                word.append(ch);
-            }
-        }
-
         return words;
     }
+
 }

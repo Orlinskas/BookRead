@@ -2,8 +2,16 @@
     <string name="app_name">BookRead</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">BookRead v. 1.0</string>
+    <string name="nav_header_subtitle">orlinskas.development@gmai.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="nav_add_book">Добавить книгу</string>
+    <string name="nav_library">Библиотека</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="nav_help">Помощь</string>
+    <string name="communicate">Communicate</string>
+    <string name="nav_share">Поделиться</string>
+    <string name="nav_send_author">Связь с разработчиком</string>
+    <string name="book_image">обложка книги</string>
 </resources>
