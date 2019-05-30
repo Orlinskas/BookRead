@@ -1,7 +1,6 @@
 package com.orlinskas.bookread.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,20 +19,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.orlinskas.bookread.AppContext;
-import com.orlinskas.bookread.Book;
-import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.ToastBuilder;
 import com.orlinskas.bookread.constants.PermissionConstant;
 import com.orlinskas.bookread.data.SharedPreferencesData;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
-import com.orlinskas.bookread.helpers.BookBodyFileReader;
-import com.orlinskas.bookread.helpers.BookCreator;
-import com.orlinskas.bookread.helpers.LibraryHelper;
-import com.orlinskas.bookread.helpers.LicenceHelper;
-import com.orlinskas.bookread.parsers.ArrayListToString;
-
-import org.xmlpull.v1.XmlPullParser;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -122,7 +112,7 @@ public class MainActivity extends AppCompatActivity
             permissionStatus = ContextCompat.checkSelfPermission
                     (this, Manifest.permission.READ_EXTERNAL_STORAGE);
             if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
-                ActivityOpenHelper.openActivity(getApplicationContext(), OpenBookActivity.class);
+                ActivityOpenHelper.openActivity(getApplicationContext(), FileManagerActivity.class);
             }
             else {
                 ToastBuilder.create(this, "Вы не разрешили приложению доступ к памяти телефона!");

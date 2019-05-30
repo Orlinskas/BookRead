@@ -8,12 +8,17 @@
     android:layout_height="fill_parent">
 
     <TableRow>
+
         <TextView
             android:id="@+id/titleManager"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="398dp"
+            android:layout_height="match_parent"
             android:padding="5dip"
-            />
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:textColor="@color/colorGREY"
+            android:textSize="18sp"/>
     </TableRow>
 
     <TableRow>
