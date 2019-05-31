@@ -17,10 +17,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.constants.FormatConstants;
+import com.orlinskas.bookread.fileManager.FileFormat;
+import com.orlinskas.bookread.parsers.ListToArray;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,6 +38,15 @@ public class FileManagerActivity extends ListActivity {
         super.onCreate(icicle);
         setContentView(R.layout.activity_file_manager);
         browseTo(new File("/sdcard/Download/"));
+
+        ImageView rowIconHelp = findViewById(R.id.activity_file_manager_iv_help);
+        ImageView rowIconSearch = findViewById(R.id.activity_file_manager_iv_search);
+        RelativeLayout rowRelativeLayout = findViewById(R.id.activity_file_manager_rl);
+
+        rowIconHelp.setImageResource(R.drawable.ic_file_manager_help);
+        rowIconSearch.setImageResource(R.drawable.ic_file_manager_search);
+        rowRelativeLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
     }
 
     private void upOneLevel(){
@@ -92,7 +104,7 @@ public class FileManagerActivity extends ListActivity {
         //ArrayAdapter<String> directoryList = new ArrayAdapter<>(this, R.layout.file_manager_row, R.id.file_manager_row_tv, this.directoryEntries);
 
         //в параметр принимается только массив
-        this.setListAdapter(new FileManagerAdapter(this, R.layout.file_manager_row, parseToArray(directoryEntries)));
+        this.setListAdapter(new FileManagerAdapter(this, R.layout.file_manager_row, ListToArray.parse(directoryEntries)));
     }
 
     @Override
@@ -111,6 +123,12 @@ public class FileManagerActivity extends ListActivity {
         }
     }
 
+    public void searchButton(View view) {
+    }
+
+    public void helpButton(View view) {
+    }
+
     private class FileManagerAdapter extends ArrayAdapter<String> {
 
         FileManagerAdapter(Context context, int textViewResourceId, String[] objects) {
@@ -123,7 +141,8 @@ public class FileManagerActivity extends ListActivity {
             LayoutInflater inflater = getLayoutInflater();
             View row = inflater.inflate(R.layout.file_manager_row, parent, false);
             TextView rowText = (TextView) row.findViewById(R.id.file_manager_row_tv);
-            rowText.setText(directoryEntries.get(position));
+            String path = directoryEntries.get(position);
+            rowText.setText(path);
             ImageView rowIcon = (ImageView) row.findViewById(R.id.file_manager_row_image);
 
             if (position%2 == 0) {
@@ -137,37 +156,33 @@ public class FileManagerActivity extends ListActivity {
                 row.setBackgroundColor(getResources().getColor(R.color.colorWHITE));
             }
 
-            String rowName = directoryEntries.get(position);
-            String format;
-            try {
-                format = rowName.substring(rowName.length() - 4);
-            } catch (Exception e) {
-                e.printStackTrace();
-                format = "";
-            }
+           // String rowName = directoryEntries.get(position);
+           // String format;
+           // try {
+           //     format = rowName.substring(rowName.length() - 4);
+           // } catch (Exception e) {
+           //     e.printStackTrace();
+           //     format = "";
+           // }
 
-            if (directoryEntries.get(position).equals("..")){
+            //String path = directoryEntries.get(position);
+
+            if (path.equals("..")){
                 rowIcon.setImageResource(R.drawable.ic_file_manager_row_back);
             }
             else {
-                if (format.equals(FormatConstants.FB2)) {
+                if (FileFormat.getFormat(path).equals(FileFormat.FB2)) {
                     rowIcon.setImageResource(R.drawable.ic_book_fb2);
                 }
-                else {
+                if (FileFormat.getFormat(path).equals(FileFormat.FOLDER)) {
                     rowIcon.setImageResource(R.drawable.ic_folder);
+                }
+                else {
+                    rowIcon.setImageResource(R.drawable.ic_file);
                 }
             }
             return row;
         }
-    }
-
-    private String[] parseToArray(List<String> directoryEntries) {
-        String[] entries = new String[directoryEntries.size()];
-
-        for(int i = 0; i < entries.length; i++){
-            entries[i] = directoryEntries.get(i);
-        }
-        return entries;
     }
 }
 

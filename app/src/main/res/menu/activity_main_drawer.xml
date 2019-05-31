@@ -6,11 +6,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_add_book"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_add_book"
             android:title="@string/nav_add_book" />
         <item
             android:id="@+id/nav_library"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_library"
             android:title="@string/nav_library" />
         <item
             android:id="@+id/nav_settings"
@@ -18,7 +18,7 @@
             android:title="@string/nav_settings" />
         <item
             android:id="@+id/nav_help"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_help"
             android:title="@string/nav_help" />
     </group>
 
