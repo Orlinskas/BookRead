@@ -34,6 +34,8 @@ public class LibraryBookFragment extends Fragment {
         date = view.findViewById(R.id.library_book_fragment_tv_date);
 
         author.setText(book.getAuthorName());
+        title.setText(book.getBookTitle());
+        date.setText(book.getDate());
 
         button.setAlpha(0.0f);
         button.setOnClickListener(new View.OnClickListener() {

@@ -1,12 +1,12 @@
 package com.orlinskas.bookread.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,14 +20,24 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.orlinskas.bookread.Book;
+import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
-import com.orlinskas.bookread.constants.FormatConstants;
+import com.orlinskas.bookread.ToastBuilder;
+import com.orlinskas.bookread.data.LibraryData;
 import com.orlinskas.bookread.fileManager.FileFormat;
+import com.orlinskas.bookread.fileManager.Opener;
+import com.orlinskas.bookread.helpers.BookCreator;
 import com.orlinskas.bookread.parsers.ListToArray;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.orlinskas.bookread.fileManager.FileFormat.FB2;
+import static com.orlinskas.bookread.fileManager.FileFormat.FOLDER;
+import static com.orlinskas.bookread.fileManager.FileFormat.OTHER;
+import static com.orlinskas.bookread.fileManager.FileFormat.TXT;
 
 public class FileManagerActivity extends ListActivity {
     private List<String> directoryEntries = new ArrayList<>();
@@ -61,17 +71,31 @@ public class FileManagerActivity extends ListActivity {
             this.currentDirectory = aDirectory;
             fill(aDirectory.listFiles());
 
-            TextView titleManager = (TextView) findViewById(R.id.titleManager);
+            TextView titleManager = findViewById(R.id.titleManager);
             titleManager.setText(aDirectory.getAbsolutePath());
         }
-        else {
+        else { //обработчик нажатий
             DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface arg0, int arg1) {
 
-                    Intent i = new Intent(android.content.Intent.ACTION_VIEW,
-                            Uri.parse("file://" + aDirectory.getAbsolutePath()));
+                    File file = aDirectory;
+                    Opener opener = new Opener(getResources());
+                    BookCreator bookCreator = new BookCreator();
+                    Book book = bookCreator.create(getApplicationContext(), opener.open(file));
+                    ArrayList<Book> books;
 
-                    startActivity(i);
+                    try {
+                        LibraryData libraryData = new LibraryData(getApplicationContext());
+                        Library library = libraryData.loadLibrary();
+                        books = library.getBooks();
+                        books.add(book);
+                        library.setBooks(books);
+                        libraryData.saveLibrary(library);
+                        ToastBuilder.create(getApplicationContext(), "Книга добавлена в библиотеку!)");
+                    } catch (Exception e) {
+                        ToastBuilder.create(getApplicationContext(), "Ошибка, не удалось открыть книгу!");
+                        e.printStackTrace();
+                    }
                 }
             };
 
@@ -99,34 +123,30 @@ public class FileManagerActivity extends ListActivity {
         for (File file : files) {
             this.directoryEntries.add(file.getAbsolutePath());
         }
-
-        //create array adapter to show everything
-        //ArrayAdapter<String> directoryList = new ArrayAdapter<>(this, R.layout.file_manager_row, R.id.file_manager_row_tv, this.directoryEntries);
-
         //в параметр принимается только массив
         this.setListAdapter(new FileManagerAdapter(this, R.layout.file_manager_row, ListToArray.parse(directoryEntries)));
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        int selectionRowID = position;
-        String selectedFileString = this.directoryEntries.get(selectionRowID);
+        String selectedFileString = this.directoryEntries.get(position);
 
         if(selectedFileString.equals("..")){
             this.upOneLevel();
         }
         else {
-            File clickedFile = null;
+            File clickedFile;
             clickedFile = new File(selectedFileString);
-            if (clickedFile != null)
-                this.browseTo(clickedFile);
+            this.browseTo(clickedFile);
         }
     }
 
     public void searchButton(View view) {
+        ToastBuilder.create(this, "Поиск");
     }
 
     public void helpButton(View view) {
+        ToastBuilder.create(this, "Помощь");
     }
 
     private class FileManagerAdapter extends ArrayAdapter<String> {
@@ -139,11 +159,11 @@ public class FileManagerActivity extends ListActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
-            View row = inflater.inflate(R.layout.file_manager_row, parent, false);
-            TextView rowText = (TextView) row.findViewById(R.id.file_manager_row_tv);
+            @SuppressLint("ViewHolder") View row = inflater.inflate(R.layout.file_manager_row, parent, false);
+            TextView rowText = row.findViewById(R.id.file_manager_row_tv);
             String path = directoryEntries.get(position);
             rowText.setText(path);
-            ImageView rowIcon = (ImageView) row.findViewById(R.id.file_manager_row_image);
+            ImageView rowIcon = row.findViewById(R.id.file_manager_row_image);
 
             if (position%2 == 0) {
                 try {
@@ -156,29 +176,30 @@ public class FileManagerActivity extends ListActivity {
                 row.setBackgroundColor(getResources().getColor(R.color.colorWHITE));
             }
 
-           // String rowName = directoryEntries.get(position);
-           // String format;
-           // try {
-           //     format = rowName.substring(rowName.length() - 4);
-           // } catch (Exception e) {
-           //     e.printStackTrace();
-           //     format = "";
-           // }
-
-            //String path = directoryEntries.get(position);
-
             if (path.equals("..")){
                 rowIcon.setImageResource(R.drawable.ic_file_manager_row_back);
             }
             else {
-                if (FileFormat.getFormat(path).equals(FileFormat.FB2)) {
-                    rowIcon.setImageResource(R.drawable.ic_book_fb2);
-                }
-                if (FileFormat.getFormat(path).equals(FileFormat.FOLDER)) {
-                    rowIcon.setImageResource(R.drawable.ic_folder);
-                }
-                else {
-                    rowIcon.setImageResource(R.drawable.ic_file);
+                switch(FileFormat.getFormat(path)) {
+                    case FB2:
+                        rowIcon.setImageResource(R.drawable.ic_book_fb2);
+                        break;
+
+                    case TXT:
+                        rowIcon.setImageResource(R.drawable.ic_file);
+                        break;
+
+                    case OTHER:
+                        rowIcon.setImageResource(R.drawable.ic_file);
+                        break;
+
+                    case FOLDER:
+                        rowIcon.setImageResource(R.drawable.ic_folder);
+                        break;
+
+                    default:
+                        rowIcon.setImageResource(R.drawable.ic_file);
+                        break;
                 }
             }
             return row;

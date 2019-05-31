@@ -14,4 +14,5 @@
     <string name="nav_share">Поделиться</string>
     <string name="nav_send_author">Связь с разработчиком</string>
     <string name="book_image">обложка книги</string>
+    <string name="activity_title_search_book">Search Book</string>
 </resources>
