@@ -1,7 +1,4 @@
-package com.orlinskas.bookread.fileManager;
-
-import android.content.res.Resources;
-
+package com.orlinskas.bookread.parsers;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -9,10 +6,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.File;
 import java.io.FileReader;
 
-public class Opener {
+public class ParserFb2ToXML {
 
-    public XmlPullParser open(File file) {
-
+    public XmlPullParser parse(File file) {
 
         XmlPullParser xpp = null;
         try {

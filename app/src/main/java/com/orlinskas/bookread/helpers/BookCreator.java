@@ -3,20 +3,20 @@ package com.orlinskas.bookread.helpers;
 import android.content.Context;
 
 import com.orlinskas.bookread.Book;
-import com.orlinskas.bookread.parsers.ParserFb2;
+import com.orlinskas.bookread.parsers.ParserFb2ToXML;
+import com.orlinskas.bookread.parsers.ParserXmlToBook;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import java.io.File;
+
 public class BookCreator {
 
-    public Book create(Context context, XmlPullParser xml){
-        ParserFb2 parserFb2 = new ParserFb2(context);
-        return writeBookBodyToFile(context, parserFb2.parse(xml));
+    public Book create(Context context, File book){
+        ParserFb2ToXML parserFb2ToXML = new ParserFb2ToXML();
+        XmlPullParser xml = parserFb2ToXML.parse(book);
+        ParserXmlToBook parserXmlToBook = new ParserXmlToBook(context);
+        return parserXmlToBook.parse(xml);
     }
 
-    private Book writeBookBodyToFile (Context context, Book book) {
-        BookBodyFileWriter bookBodyFileWriter = new BookBodyFileWriter();
-        book.setBookBodyFile(bookBodyFileWriter.write(context, book));
-        return book;
-    }
 }

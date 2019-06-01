@@ -4,6 +4,7 @@ package com.orlinskas.bookread.parsers;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.constants.BookConstant;
 import com.orlinskas.bookread.constants.XML_TAG;
+import com.orlinskas.bookread.helpers.BookBodyFileWriter;
 import com.orlinskas.bookread.helpers.BookImageFileWriter;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -15,10 +16,10 @@ import java.io.IOException;
 import android.content.Context;
 import android.util.Base64;
 
-public class ParserFb2 {
+public class ParserXmlToBook {
     private Context context;
 
-    public ParserFb2(Context context){
+    public ParserXmlToBook(Context context){
         this.context = context;
     }
 
@@ -100,10 +101,15 @@ public class ParserFb2 {
             e.printStackTrace();
         }
 
-        Book book = new Book(authorName.toString(), bookTitle, annotation.toString(), body.toString());
-        book.setCoverImage(decodeImage(book.getBookTitle(), book.getDate(), imageBase64));
-
-        return new Book(authorName.toString(), bookTitle, annotation.toString(), body.toString());
+        Book book = new Book(authorName.toString(), bookTitle, annotation.toString());
+        book.setBookBodyFile(writeBookBodyToFile(book, body.toString()));
+        if(imageBase64 != null){
+            book.setCoverImage(decodeImage(book, imageBase64));
+        }
+        else {
+            book.setCoverImage(null);
+        }
+        return book;
     }
 
     private boolean checkEndTag (String needTag, String nowTag, int eventType){
@@ -116,9 +122,9 @@ public class ParserFb2 {
         return true;
     }
 
-    private File decodeImage(String bookTitle, String bookDate, String imageBase64) {
+    private File decodeImage(Book book, String imageBase64) {
         BookImageFileWriter bookImageFileWriter = new BookImageFileWriter();
-        File imageFile = bookImageFileWriter.write(context, bookTitle, bookDate, imageBase64);
+        File imageFile = bookImageFileWriter.write(context, book.getBookTitle(), book.getDate(), imageBase64);
         try {
             byte data[] = Base64.decode(imageBase64, Base64.DEFAULT);
             FileOutputStream fos = new FileOutputStream(imageFile);
@@ -129,5 +135,10 @@ public class ParserFb2 {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private File writeBookBodyToFile (Book book, String body) {
+        BookBodyFileWriter bookBodyFileWriter = new BookBodyFileWriter();
+        return bookBodyFileWriter.write(context, book, body);
     }
 }

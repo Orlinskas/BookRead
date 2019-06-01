@@ -23,11 +23,11 @@ import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.ToastBuilder;
 import com.orlinskas.bookread.fileManager.FileFormat;
-import com.orlinskas.bookread.fileManager.Opener;
-import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookCreator;
+import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.LibraryHelper;
 import com.orlinskas.bookread.parsers.ListToArray;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -220,10 +220,10 @@ public class FileManagerActivity extends ListActivity {
 
     private boolean castFileToBookAndAddToLibrary (File file){
         try {
-            Opener opener = new Opener();
             BookCreator bookCreator = new BookCreator();
-            Book book = bookCreator.create(getApplicationContext(), opener.open(file));
+            Book book = bookCreator.create(getApplicationContext(), file);
             LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+
             if(libraryHelper.addBook(book)){
                 ToastBuilder.create(getApplicationContext(), "Книга добавлена в библиотеку!)");
                 ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);

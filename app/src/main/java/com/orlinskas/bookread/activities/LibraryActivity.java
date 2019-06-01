@@ -52,7 +52,6 @@ public class LibraryActivity extends AppCompatActivity {
                 countFragments++;
             }
         }
-
     }
 
 

@@ -144,26 +144,5 @@ public class MainActivity extends AppCompatActivity
                             PermissionConstant.MY_REQUEST_CODE);
         }
     }
-   // public void parse() {
-   //     XmlPullParser xml = getResources().getXml(R.xml.book2);
-   //     BookCreator bookCreator = new BookCreator();
-   //     Book book = bookCreator.create(getApplicationContext(), xml);
-//
-   //     LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
-   //     libraryHelper.addBook(book);
-//
-   //     LicenceHelper licenceHelper = new LicenceHelper(getApplicationContext());
-   //     licenceHelper.update();
-//
-   //     go(book);
-   // }
-
-   // public void go(Book bookNeed) {
-   //     LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
-   //     Book book = libraryHelper.getBook(bookNeed);
-   //     BookBodyFileReader bodyFileReader = new BookBodyFileReader();
-//
-
-   // }
 }
 

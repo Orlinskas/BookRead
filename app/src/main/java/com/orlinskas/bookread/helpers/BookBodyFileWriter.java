@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class BookBodyFileWriter {
 
-    public File write (Context context, Book book) {
+    public File write (Context context, Book book, String body) {
         String clearAuthorName = book.getBookTitle();
         clearAuthorName = clearAuthorName.replaceAll("\\s","");
 
@@ -22,7 +22,7 @@ public class BookBodyFileWriter {
         File file = new File(filePath);
         try (FileWriter writer = new FileWriter(file, true)) {
             // запись всей строки
-            writer.write(book.getBookBody());
+            writer.write(body);
             writer.flush();
         } catch (Exception ex) {
             ex.printStackTrace();

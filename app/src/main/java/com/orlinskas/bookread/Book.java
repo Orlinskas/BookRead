@@ -20,7 +20,7 @@ public class Book implements Serializable {
     private File bookBodyFile;
     private File coverImage;
 
-    public Book(String authorName, String bookTitle, String annotation, String bookBody){
+    public Book(String authorName, String bookTitle, String annotation){
         this.authorName = authorName;
         this.bookTitle = bookTitle;
         this.annotation = annotation;
