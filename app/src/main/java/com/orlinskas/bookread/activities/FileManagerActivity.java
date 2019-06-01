@@ -5,9 +5,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,17 +15,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.orlinskas.bookread.Book;
-import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.ToastBuilder;
-import com.orlinskas.bookread.data.LibraryData;
 import com.orlinskas.bookread.fileManager.FileFormat;
 import com.orlinskas.bookread.fileManager.Opener;
+import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookCreator;
+import com.orlinskas.bookread.helpers.LibraryHelper;
 import com.orlinskas.bookread.parsers.ListToArray;
 
 import java.io.File;
@@ -42,6 +41,7 @@ import static com.orlinskas.bookread.fileManager.FileFormat.TXT;
 public class FileManagerActivity extends ListActivity {
     private List<String> directoryEntries = new ArrayList<>();
     private File currentDirectory = new File("/");
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -52,10 +52,12 @@ public class FileManagerActivity extends ListActivity {
         ImageView rowIconHelp = findViewById(R.id.activity_file_manager_iv_help);
         ImageView rowIconSearch = findViewById(R.id.activity_file_manager_iv_search);
         RelativeLayout rowRelativeLayout = findViewById(R.id.activity_file_manager_rl);
+        progressBar = findViewById(R.id.activity_file_manager_pb);
 
         rowIconHelp.setImageResource(R.drawable.ic_file_manager_help);
         rowIconSearch.setImageResource(R.drawable.ic_file_manager_search);
         rowRelativeLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        progressBar.setVisibility(View.INVISIBLE);
 
     }
 
@@ -67,35 +69,33 @@ public class FileManagerActivity extends ListActivity {
 
     private void browseTo(final File aDirectory){
 
+        assert aDirectory != null;
         if (aDirectory.isDirectory()){
-            this.currentDirectory = aDirectory;
-            fill(aDirectory.listFiles());
+            try {
+                this.currentDirectory = aDirectory;
+                fill(aDirectory.listFiles());
 
-            TextView titleManager = findViewById(R.id.titleManager);
-            titleManager.setText(aDirectory.getAbsolutePath());
+                TextView titleManager = findViewById(R.id.titleManager);
+                titleManager.setText(aDirectory.getAbsolutePath());
+            } catch (Exception e) {
+                e.printStackTrace();
+                ToastBuilder.create(getApplicationContext(), "Невозможно открыть, сейчас будет вылет, не волнуйтесь)");
+            }
         }
         else { //обработчик нажатий
+
+
             DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface arg0, int arg1) {
+                    progressBar.setVisibility(View.VISIBLE);
 
-                    File file = aDirectory;
-                    Opener opener = new Opener(getResources());
-                    BookCreator bookCreator = new BookCreator();
-                    Book book = bookCreator.create(getApplicationContext(), opener.open(file));
-                    ArrayList<Book> books;
-
-                    try {
-                        LibraryData libraryData = new LibraryData(getApplicationContext());
-                        Library library = libraryData.loadLibrary();
-                        books = library.getBooks();
-                        books.add(book);
-                        library.setBooks(books);
-                        libraryData.saveLibrary(library);
+                    if(castFileToBookAndAddToLibrary(aDirectory)){
                         ToastBuilder.create(getApplicationContext(), "Книга добавлена в библиотеку!)");
-                    } catch (Exception e) {
-                        ToastBuilder.create(getApplicationContext(), "Ошибка, не удалось открыть книгу!");
-                        e.printStackTrace();
                     }
+                    else {
+                        ToastBuilder.create(getApplicationContext(), "Ошибка, не удалось открыть книгу!");
+                    }
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             };
 
@@ -104,12 +104,19 @@ public class FileManagerActivity extends ListActivity {
                 }
             };
 
-            new AlertDialog.Builder(this)
-                    .setTitle("Подтверждение") //title
-                    .setMessage("Хотите открыть файл "+ aDirectory.getName() + "?") //message
-                    .setPositiveButton("Да", okButtonListener) //positive button
-                    .setNegativeButton("Нет", cancelButtonListener) //negative button
-                    .show(); //show dialog
+            if (FileFormat.getFormat(aDirectory.getName()).equals(FileFormat.FB2)){
+                new AlertDialog.Builder(this)
+                        .setTitle("Подтверждение") //title
+                        .setMessage("Хотите добавить книгу "+ aDirectory.getName() + "?") //message
+                        .setPositiveButton("Да", okButtonListener) //positive button
+                        .setNegativeButton("Нет", cancelButtonListener) //negative button
+                        .show();
+            }
+            else {
+                ToastBuilder.create(getApplicationContext(), "Не является книгой!");
+            }
+
+
         }
     }
 
@@ -135,18 +142,23 @@ public class FileManagerActivity extends ListActivity {
             this.upOneLevel();
         }
         else {
-            File clickedFile;
-            clickedFile = new File(selectedFileString);
-            this.browseTo(clickedFile);
+            try {
+                File clickedFile;
+                clickedFile = new File(selectedFileString);
+                this.browseTo(clickedFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void searchButton(View view) {
         ToastBuilder.create(this, "Поиск");
+        //нужен класс поиска в отдельном потоке
     }
 
     public void helpButton(View view) {
-        ToastBuilder.create(this, "Помощь");
+        ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
     }
 
     private class FileManagerAdapter extends ArrayAdapter<String> {
@@ -204,6 +216,30 @@ public class FileManagerActivity extends ListActivity {
             }
             return row;
         }
+    }
+
+    private boolean castFileToBookAndAddToLibrary (File file){
+        try {
+            Opener opener = new Opener();
+            BookCreator bookCreator = new BookCreator();
+            Book book = bookCreator.create(getApplicationContext(), opener.open(file));
+            LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+            if(libraryHelper.addBook(book)){
+                ToastBuilder.create(getApplicationContext(), "Книга добавлена в библиотеку!)");
+                ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);
+            }
+            else {
+                ToastBuilder.create(getApplicationContext(), "Книга УЖЕ в библиотеке!!!");
+                return false;
+            }
+
+            //нужно исключить добавление одних и тех же книг, используй либрари хелпер
+        } catch (Exception e) {
+            ToastBuilder.create(getApplicationContext(), "Ошибка, не удалось открыть книгу!");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }
 

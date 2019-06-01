@@ -44,9 +44,19 @@
 
         <activity
             android:name=".activities.FileManagerActivity"
-            android:label="Library">
+            android:label="Search Book">
             <intent-filter>
                 <action android:name=".OpenBookActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.HelpActivity"
+            android:label="Help">
+            <intent-filter>
+                <action android:name=".HelpActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

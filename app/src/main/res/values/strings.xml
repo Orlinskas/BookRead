@@ -15,4 +15,6 @@
     <string name="nav_send_author">Связь с разработчиком</string>
     <string name="book_image">обложка книги</string>
     <string name="activity_title_search_book">Search Book</string>
+    <string name="help1">1. В разделе \"Добавить книгу\", укажите путь к файлу на вашем устройстве.</string>
+    <string name="help2">2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличительного стекла.</string>
 </resources>

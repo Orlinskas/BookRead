@@ -121,6 +121,8 @@ public class MainActivity extends AppCompatActivity
             ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);
         } else if (id == R.id.nav_settings) {
 
+        } else if (id == R.id.nav_help) {
+            ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send_author) {

@@ -16,51 +16,37 @@ public class LibraryHelper {
         this.context = context;
     }
 
-    public boolean addBook(Book book){
-        try {
-            LibraryData libraryData = new LibraryData(context);
-            Library library = libraryData.loadLibrary();
-            libraryBooks = library.getBooks();
-
-            if (containBookInLibrary(libraryBooks, book)){
-                return false;
-            }
-            else {
-                libraryBooks.add(book);
-                library.setBooks(libraryBooks);
-                libraryData.saveLibrary(library);
-
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public boolean addBook(Book book) throws Exception{
+        LibraryData libraryData = new LibraryData(context);
+        Library library = libraryData.loadLibrary();
+        libraryBooks = library.getBooks();
+        if (containBookInLibrary(libraryBooks, book)){
             return false;
+        }
+        else {
+            libraryBooks.add(book);
+            library.setBooks(libraryBooks);
+            libraryData.saveLibrary(library);
+            return true;
         }
     }
 
-    public Book getBook(int id){
-        try {
-            LibraryData libraryData = new LibraryData(context);
-            Library library = libraryData.loadLibrary();
-            libraryBooks = library.getBooks();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public Book getBook(int id) throws Exception {
+        LibraryData libraryData = new LibraryData(context);
+        Library library = libraryData.loadLibrary();
+        libraryBooks = library.getBooks();
+
         return libraryBooks.get(id);
     }
 
-    public Book getBook(Book book){
-        try {
-            LibraryData libraryData = new LibraryData(context);
-            Library library = libraryData.loadLibrary();
-            libraryBooks = library.getBooks();
-            for (Book libraryBook: libraryBooks) {
-                if (libraryBook.equals(book)){
-                    return libraryBook;
-                }
+    public Book getBook(Book book) throws Exception {
+        LibraryData libraryData = new LibraryData(context);
+        Library library = libraryData.loadLibrary();
+        libraryBooks = library.getBooks();
+        for (Book libraryBook: libraryBooks) {
+            if (libraryBook.equals(book)){
+                return libraryBook;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return null;
     }
