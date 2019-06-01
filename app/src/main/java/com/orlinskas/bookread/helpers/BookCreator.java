@@ -10,7 +10,7 @@ import org.xmlpull.v1.XmlPullParser;
 public class BookCreator {
 
     public Book create(Context context, XmlPullParser xml){
-        ParserFb2 parserFb2 = new ParserFb2();
+        ParserFb2 parserFb2 = new ParserFb2(context);
         return writeBookBodyToFile(context, parserFb2.parse(xml));
     }
 

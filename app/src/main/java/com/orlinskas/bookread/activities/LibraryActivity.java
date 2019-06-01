@@ -12,28 +12,28 @@ import android.view.MenuItem;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
+import com.orlinskas.bookread.ToastBuilder;
 import com.orlinskas.bookread.data.LibraryData;
 import com.orlinskas.bookread.fragments.LibraryBookFragment;
+import com.orlinskas.bookread.helpers.LibraryHelper;
 
 import java.util.ArrayList;
 
 public class LibraryActivity extends AppCompatActivity {
-
+    static int countFragments = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
 
-        ArrayList<Book> books = new ArrayList<>();
-        Library library;
-        LibraryData libraryData = new LibraryData(getApplicationContext());
         try {
-            library = libraryData.loadLibrary();
-            books = library.getBooks();
+            LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+            ArrayList<Book> books = libraryHelper.getBooks();
             showFragments(books);
         } catch (Exception e) {
             e.printStackTrace();
+            ToastBuilder.create(getApplicationContext(), "Ошибка в загрузке библиотеки, обратитесь в поддержку");
         }
     }
 
@@ -45,9 +45,11 @@ public class LibraryActivity extends AppCompatActivity {
             if (fragment == null) {
                 fragment = new LibraryBookFragment();
                 ((LibraryBookFragment) fragment).book = book;
+                ((LibraryBookFragment) fragment).countFragments = countFragments;
                 fm.beginTransaction()
                         .add(R.id.activity_library_ll_container, fragment)
                         .commit();
+                countFragments++;
             }
         }
 

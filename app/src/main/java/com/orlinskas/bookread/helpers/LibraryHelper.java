@@ -51,6 +51,12 @@ public class LibraryHelper {
         return null;
     }
 
+    public ArrayList<Book> getBooks() throws Exception {
+        LibraryData libraryData = new LibraryData(context);
+        Library library = libraryData.loadLibrary();
+        return libraryBooks = library.getBooks();
+    }
+
     private boolean containBookInLibrary(ArrayList<Book> libraryBooks, Book book) {
         for (Book libraryBook: libraryBooks) {
             if (libraryBook.equals(book)){

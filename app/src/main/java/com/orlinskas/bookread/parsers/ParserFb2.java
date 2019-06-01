@@ -4,14 +4,23 @@ package com.orlinskas.bookread.parsers;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.constants.BookConstant;
 import com.orlinskas.bookread.constants.XML_TAG;
+import com.orlinskas.bookread.helpers.BookImageFileWriter;
 
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+
+import android.content.Context;
+import android.util.Base64;
 
 public class ParserFb2 {
+    private Context context;
+
+    public ParserFb2(Context context){
+        this.context = context;
+    }
 
     public Book parse (XmlPullParser parser) {
         //нужно исключить неправильные имена авторов!
@@ -19,6 +28,7 @@ public class ParserFb2 {
         String bookTitle = BookConstant.NA_BOOK_TITLE;
         StringBuilder annotation = new StringBuilder();
         StringBuilder body = new StringBuilder();
+        String imageBase64 = null;
 
         int eventType;
         String tag;
@@ -90,6 +100,9 @@ public class ParserFb2 {
             e.printStackTrace();
         }
 
+        Book book = new Book(authorName.toString(), bookTitle, annotation.toString(), body.toString());
+        book.setCoverImage(decodeImage(book.getBookTitle(), book.getDate(), imageBase64));
+
         return new Book(authorName.toString(), bookTitle, annotation.toString(), body.toString());
     }
 
@@ -103,4 +116,18 @@ public class ParserFb2 {
         return true;
     }
 
+    private File decodeImage(String bookTitle, String bookDate, String imageBase64) {
+        BookImageFileWriter bookImageFileWriter = new BookImageFileWriter();
+        File imageFile = bookImageFileWriter.write(context, bookTitle, bookDate, imageBase64);
+        try {
+            byte data[] = Base64.decode(imageBase64, Base64.DEFAULT);
+            FileOutputStream fos = new FileOutputStream(imageFile);
+            fos.write(data);
+            fos.close();
+            return imageFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

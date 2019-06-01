@@ -18,6 +18,7 @@ public class Book implements Serializable {
     private String date = BookConstant.NOT_AVAILABILITY;
     private String bookBody = BookConstant.NOT_AVAILABILITY;
     private File bookBodyFile;
+    private File coverImage;
 
     public Book(String authorName, String bookTitle, String annotation, String bookBody){
         this.authorName = authorName;
@@ -100,5 +101,13 @@ public class Book implements Serializable {
 
     public void setBookBodyFile(File bookBodyFile) {
         this.bookBodyFile = bookBodyFile;
+    }
+
+    public File getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(File coverImage) {
+        this.coverImage = coverImage;
     }
 }

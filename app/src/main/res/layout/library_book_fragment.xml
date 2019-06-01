@@ -5,14 +5,20 @@
     android:id="@+id/library_book_fragment_rl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
+    android:layout_marginBottom="0dp"
+    android:clickable="true"
+    android:focusable="true"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    android:clickable="true"
+    app:layout_constraintStart_toStartOf="parent">
 
-    android:focusable="true">
 
+    <ProgressBar
+        android:id="@+id/library_book_fragment_pb"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true" />
 
     <ImageView
         android:id="@+id/library_book_fragment_iv"
@@ -61,7 +67,7 @@
         android:text="Дата добавления" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/library_book_fragment_btn"
         android:layout_width="401dp"
         android:layout_height="125dp"
         android:layout_centerInParent="true"
