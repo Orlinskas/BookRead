@@ -78,25 +78,35 @@ public class ParserXmlToBook {
                         parser.next();
                     }
                 }
-                if (tag != null && tag.equals(XML_TAG.BODY)) {
-                    while (checkEndTag(XML_TAG.BODY, parser.getName(), parser.getEventType())) {
+                //if (tag != null && tag.equals(XML_TAG.BODY)) { //очень долго!
+                //    while (checkEndTag(XML_TAG.BODY, parser.getName(), parser.getEventType())) {
+                //        try {
+                //            body.append("   ").append(parser.nextText());
+                //        } catch (Exception ignored) {}
+                //        if (parser.getName() != null && parser.getName().equals(XML_TAG.P)){
+                //            body.append("\n");
+                //        }
+                //        if (parser.getName() != null && parser.getName().equals(XML_TAG.TITLE)){
+                //            body.append("\n" + "\n");
+                //        }
+                //        if (parser.getName() != null && parser.getName().equals(XML_TAG.EMPTY_LINE)){
+                //            body.append("\n" + "\n");
+                //        }
+                //        parser.next();
+                //    }
+                //}
+                if (tag != null && tag.equals(XML_TAG.IMAGE_BINARY)) {
+                    //while (checkEndTag(XML_TAG.IMAGE_BINARY, parser.getName(), parser.getEventType())) {
                         try {
-                            body.append("   ").append(parser.nextText());
+                            imageBase64 = parser.nextText();
                         } catch (Exception ignored) {}
-                        if (parser.getName() != null && parser.getName().equals(XML_TAG.P)){
-                            body.append("\n");
-                        }
-                        if (parser.getName() != null && parser.getName().equals(XML_TAG.TITLE)){
-                            body.append("\n" + "\n");
-                        }
-                        if (parser.getName() != null && parser.getName().equals(XML_TAG.EMPTY_LINE)){
-                            body.append("\n" + "\n");
-                        }
                         parser.next();
-                    }
+
                 }
 
-            } while (eventType != parser.END_DOCUMENT);
+            } while (eventType != parser.END_DOCUMENT
+                    /*| !checkEndTag(XML_TAG.IMAGE_BINARY, parser.getName(), parser.getEventType())
+                    | !checkEndTag(XML_TAG.FICTION_BOOK, parser.getName(), parser.getEventType())*/);
         } catch (Exception e) {
             e.printStackTrace();
         }

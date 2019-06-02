@@ -1,5 +1,6 @@
 package com.orlinskas.bookread.fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -40,6 +41,11 @@ public class LibraryBookFragment extends Fragment {
         title = view.findViewById(R.id.library_book_fragment_tv_title);
         date = view.findViewById(R.id.library_book_fragment_tv_date);
 
+        try {
+            image.setImageURI(Uri.parse(book.getCoverImage().getAbsolutePath()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         author.setText(book.getAuthorName());
         title.setText(book.getBookTitle());
         date.setText(book.getDate());

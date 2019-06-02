@@ -10,4 +10,6 @@ public class XML_TAG {
     public final static String P = "p";
     public final static String TITLE = "title";
     public final static String EMPTY_LINE = "empty-line";
+    public final static String IMAGE_BINARY = "binary";
+    public final static String FICTION_BOOK = "FictionBook";
 }
