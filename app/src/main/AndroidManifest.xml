@@ -19,12 +19,13 @@
         android:theme="@style/AppTheme"
 
         tools:ignore="GoogleAppIndexingWarning"
-        >
+        android:fullBackupContent="true">
 
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +35,8 @@
 
         <activity
             android:name=".activities.LibraryActivity"
-            android:label="Library">
+            android:label="Library"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name=".LibraryActivity" />
 
@@ -44,7 +46,8 @@
 
         <activity
             android:name=".activities.FileManagerActivity"
-            android:label="Search Book">
+            android:label="Search Book"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name=".OpenBookActivity" />
 
@@ -54,7 +57,8 @@
 
         <activity
             android:name=".activities.HelpActivity"
-            android:label="Help">
+            android:label="Help"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name=".HelpActivity" />
 

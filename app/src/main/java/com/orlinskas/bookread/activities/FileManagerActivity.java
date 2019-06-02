@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -40,6 +41,8 @@ import static com.orlinskas.bookread.fileManager.FileFormat.TXT;
 
 public class FileManagerActivity extends ListActivity {
     private List<String> directoryEntries = new ArrayList<>();
+    private String pathRoot = Environment.getExternalStorageDirectory().getAbsolutePath();
+    private String pathPrefix = "";
     private File currentDirectory = new File("/");
     private ProgressBar progressBar;
 
@@ -47,18 +50,21 @@ public class FileManagerActivity extends ListActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_file_manager);
-        browseTo(new File("/sdcard/Download/"));
+        browseTo(new File(pathRoot));
 
         ImageView rowIconHelp = findViewById(R.id.activity_file_manager_iv_help);
         ImageView rowIconSearch = findViewById(R.id.activity_file_manager_iv_search);
         RelativeLayout rowRelativeLayout = findViewById(R.id.activity_file_manager_rl);
         progressBar = findViewById(R.id.activity_file_manager_pb);
+        ImageView downloadImage = findViewById(R.id.activity_file_manager_iv_download);
+        ImageView phoneImage = findViewById(R.id.activity_file_manager_iv_phone);
 
         rowIconHelp.setImageResource(R.drawable.ic_file_manager_help);
         rowIconSearch.setImageResource(R.drawable.ic_file_manager_search);
         rowRelativeLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         progressBar.setVisibility(View.INVISIBLE);
-
+        downloadImage.setImageResource(R.drawable.ic_file_manager_downloads);
+        phoneImage.setImageResource(R.drawable.ic_file_manager_phone);
     }
 
     private void upOneLevel(){
@@ -75,8 +81,11 @@ public class FileManagerActivity extends ListActivity {
                 this.currentDirectory = aDirectory;
                 fill(aDirectory.listFiles());
 
-                TextView titleManager = findViewById(R.id.titleManager);
-                titleManager.setText(aDirectory.getAbsolutePath());
+                TextView titleManager = findViewById(R.id.activity_file_manager_titleManager);
+                titleManager.setTextColor(getResources().getColor(R.color.colorFileManager));
+                titleManager.setText(cutPath(aDirectory.getAbsolutePath()));
+                pathPrefix = titleManager.getText().toString();
+
             } catch (Exception e) {
                 e.printStackTrace();
                 ToastBuilder.create(getApplicationContext(), "Невозможно открыть, сейчас будет вылет, не волнуйтесь)");
@@ -124,7 +133,7 @@ public class FileManagerActivity extends ListActivity {
 
         this.directoryEntries.clear();
 
-        if (this.currentDirectory.getParent() != null)
+        if (!this.currentDirectory.getAbsolutePath().equals(pathRoot))
             this.directoryEntries.add("..");
 
         for (File file : files) {
@@ -153,12 +162,20 @@ public class FileManagerActivity extends ListActivity {
     }
 
     public void searchButton(View view) {
-        ToastBuilder.create(this, "Поиск");
+        ToastBuilder.create(this, "Укажите путь самостоятельно");
         //нужен класс поиска в отдельном потоке
     }
 
     public void helpButton(View view) {
         ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
+    }
+
+    public void onClickDownload(View view) {
+        browseTo(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()));
+    }
+
+    public void onClickHome(View view) {
+        browseTo(new File(pathRoot));
     }
 
     private class FileManagerAdapter extends ArrayAdapter<String> {
@@ -173,8 +190,9 @@ public class FileManagerActivity extends ListActivity {
             LayoutInflater inflater = getLayoutInflater();
             @SuppressLint("ViewHolder") View row = inflater.inflate(R.layout.file_manager_row, parent, false);
             TextView rowText = row.findViewById(R.id.file_manager_row_tv);
+            rowText.setTextColor(getResources().getColor(R.color.colorFileManager));
             String path = directoryEntries.get(position);
-            rowText.setText(path);
+            rowText.setText(cutPath(path));
             ImageView rowIcon = row.findViewById(R.id.file_manager_row_image);
 
             if (position%2 == 0) {
@@ -240,6 +258,11 @@ public class FileManagerActivity extends ListActivity {
             return false;
         }
         return true;
+    }
+
+    private String cutPath(String path) {
+        String cutPath = path.replaceAll(pathRoot, "");
+        return cutPath.replaceAll(pathPrefix, "");
     }
 }
 
