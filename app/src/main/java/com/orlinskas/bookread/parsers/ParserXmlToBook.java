@@ -22,18 +22,18 @@ public class ParserXmlToBook {
     private String imageName = null;
     private int[] defaultCoverImages = new int[] {R.drawable.ic_book_blue, R.drawable.ic_book_fiolet,
             R.drawable.ic_book_green, R.drawable.ic_book_orange, R.drawable.ic_book_red};
+    private boolean almostFinishParseBook = false;
+    private StringBuilder authorName = new StringBuilder();
+    private String bookTitle = BookConstant.NA_BOOK_TITLE;
+    private StringBuilder annotation = new StringBuilder();
+    private StringBuilder body = new StringBuilder();
+    private String imageBase64 = null;
 
     public ParserXmlToBook(Context context){
         this.context = context;
     }
 
     public Book parse (XmlPullParser parser, String bookPath) {
-        //нужно исключить неправильные имена авторов!
-        StringBuilder authorName = new StringBuilder();
-        String bookTitle = BookConstant.NA_BOOK_TITLE;
-        StringBuilder annotation = new StringBuilder();
-        StringBuilder body = new StringBuilder();
-        String imageBase64 = null;
 
         int eventType;
         String tag;
@@ -125,10 +125,12 @@ public class ParserXmlToBook {
                          parser.next();
                      }
                 }
+                if (eventType == parser.END_DOCUMENT){
+                    almostFinishParseBook = true;
+                    //break;
+                }
 
-            } while (eventType != parser.END_DOCUMENT
-                    /*| !checkEndTag(XML_TAG.IMAGE_BINARY, parser.getName(), parser.getEventType())
-                    | !checkEndTag(XML_TAG.FICTION_BOOK, parser.getName(), parser.getEventType())*/);
+            } while (/*eventType != parser.END_DOCUMENT*/ !almostFinishParseBook);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,6 +138,16 @@ public class ParserXmlToBook {
         if(bookTitle.equals("Unknown") | bookTitle.equals(BookConstant.NA_BOOK_TITLE)){
             bookTitle = bookPath;
         }
+
+        if(almostFinishParseBook){
+            return createBook();
+        }else {
+            return null;
+        }
+    }
+
+    private Book createBook(){
+
 
         Book book = new Book(authorName.toString(), bookTitle, annotation.toString());
         book.setBookBodyFile(writeBookBodyToFile(book, body.toString()));

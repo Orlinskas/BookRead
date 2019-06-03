@@ -66,8 +66,15 @@ public class LibraryBookFragment extends Fragment {
 
             }
         });
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorMiddleGREY));
+                return true;
+                //добавить удаление книги
+            }
+        });
         return view;
     }
-
 
 }
