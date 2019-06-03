@@ -41,10 +41,10 @@ public class LibraryBookFragment extends Fragment {
         title = view.findViewById(R.id.library_book_fragment_tv_title);
         date = view.findViewById(R.id.library_book_fragment_tv_date);
 
-        try {
+        if (book.getCoverImage() == null) {
+            image.setImageResource(book.getCoverImagePath());
+        }else {
             image.setImageURI(Uri.parse(book.getCoverImage().getAbsolutePath()));
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         author.setText(book.getAuthorName());
         title.setText(book.getBookTitle());
@@ -68,4 +68,6 @@ public class LibraryBookFragment extends Fragment {
         });
         return view;
     }
+
+
 }

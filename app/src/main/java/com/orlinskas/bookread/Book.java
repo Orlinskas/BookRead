@@ -17,6 +17,7 @@ public class Book implements Serializable {
     private String annotation = BookConstant.DEFAULT_ANNOTATION;
     private String date = BookConstant.NOT_AVAILABILITY;
     private String bookBody = BookConstant.NOT_AVAILABILITY;
+    private int coverImagePath;
     private File bookBodyFile;
     private File coverImage;
 
@@ -109,5 +110,13 @@ public class Book implements Serializable {
 
     public void setCoverImage(File coverImage) {
         this.coverImage = coverImage;
+    }
+
+    public int getCoverImagePath() {
+        return coverImagePath;
+    }
+
+    public void setCoverImagePath(int coverImagePath) {
+        this.coverImagePath = coverImagePath;
     }
 }

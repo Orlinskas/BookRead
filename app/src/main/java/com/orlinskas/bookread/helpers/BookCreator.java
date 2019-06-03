@@ -16,7 +16,7 @@ public class BookCreator {
         ParserFb2ToXML parserFb2ToXML = new ParserFb2ToXML();
         XmlPullParser xml = parserFb2ToXML.parse(book);
         ParserXmlToBook parserXmlToBook = new ParserXmlToBook(context);
-        return parserXmlToBook.parse(xml);
+        return parserXmlToBook.parse(xml, book.getName());
     }
 
 }

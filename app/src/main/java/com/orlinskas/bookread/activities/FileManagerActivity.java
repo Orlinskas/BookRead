@@ -96,7 +96,7 @@ public class FileManagerActivity extends ListActivity {
 
             DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface arg0, int arg1) {
-                    progressBar.setVisibility(View.VISIBLE);
+
 
                     if(castFileToBookAndAddToLibrary(aDirectory)){
                         ToastBuilder.create(getApplicationContext(), "Книга добавлена в библиотеку!)");
@@ -237,6 +237,7 @@ public class FileManagerActivity extends ListActivity {
     }
 
     private boolean castFileToBookAndAddToLibrary (File file){
+
         try {
             BookCreator bookCreator = new BookCreator();
             Book book = bookCreator.create(getApplicationContext(), file);
@@ -251,7 +252,6 @@ public class FileManagerActivity extends ListActivity {
                 return false;
             }
 
-            //нужно исключить добавление одних и тех же книг, используй либрари хелпер
         } catch (Exception e) {
             ToastBuilder.create(getApplicationContext(), "Ошибка, не удалось открыть книгу!");
             e.printStackTrace();

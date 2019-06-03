@@ -12,4 +12,7 @@ public class XML_TAG {
     public final static String EMPTY_LINE = "empty-line";
     public final static String IMAGE_BINARY = "binary";
     public final static String FICTION_BOOK = "FictionBook";
+    public final static String COVER_IMAGE = "cover.jpg";
+    public final static String COVER_PAGE = "coverpage";
+    public final static String IMAGE = "image";
 }

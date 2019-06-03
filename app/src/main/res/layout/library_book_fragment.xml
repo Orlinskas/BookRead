@@ -43,6 +43,11 @@
         android:layout_marginStart="106dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="12dp"
+        android:shadowColor="@color/colorShadow"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:textColor="@color/colorGREY"
+        android:textSize="14sp"
         android:text="Название книги " />
 
     <TextView
@@ -54,6 +59,11 @@
         android:layout_marginStart="106dp"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="13dp"
+        android:shadowColor="@color/colorShadow"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:textColor="@color/colorGREY"
+        android:textSize="14sp"
         android:text="Имя автора Фамилия автора" />
 
     <TextView
@@ -64,6 +74,11 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="12dp"
+        android:shadowColor="@color/colorShadow"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:textColor="@color/colorGREY"
+        android:textSize="12sp"
         android:text="Дата добавления" />
 
     <Button
