@@ -1,25 +1,26 @@
 package com.orlinskas.bookread.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.orlinskas.bookread.Book;
-import com.orlinskas.bookread.Library;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.ToastBuilder;
-import com.orlinskas.bookread.data.LibraryData;
 import com.orlinskas.bookread.fragments.LibraryBookFragment;
+import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.LibraryHelper;
+import com.orlinskas.bookread.interfaces.FragmentLibraryBookActions;
 
 import java.util.ArrayList;
 
-public class LibraryActivity extends AppCompatActivity {
+public class LibraryActivity extends AppCompatActivity implements FragmentLibraryBookActions {
     static int countFragments = 1;
 
     @Override
@@ -30,7 +31,15 @@ public class LibraryActivity extends AppCompatActivity {
         try {
             LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
             ArrayList<Book> books = libraryHelper.getBooks();
+            for(Book book : books){
+                if(book==null){
+                    libraryHelper.deleteAllBook();
+                    ToastBuilder.create(getApplicationContext(), "Произошла ошибка, загрузите книги заново");
+                    ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);
+                }
+            }
             showFragments(books);
+
         } catch (Exception e) {
             e.printStackTrace();
             ToastBuilder.create(getApplicationContext(), "Ошибка в загрузке библиотеки, обратитесь в поддержку");
@@ -45,6 +54,7 @@ public class LibraryActivity extends AppCompatActivity {
             if (fragment == null) {
                 fragment = new LibraryBookFragment();
                 ((LibraryBookFragment) fragment).book = book;
+               //((LibraryBookFragment) fragment).context = getApplicationContext() ;
                 ((LibraryBookFragment) fragment).countFragments = countFragments;
                 fm.beginTransaction()
                         .add(R.id.activity_library_ll_container, fragment)
@@ -53,7 +63,6 @@ public class LibraryActivity extends AppCompatActivity {
             }
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,5 +84,46 @@ public class LibraryActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean deleteBook(final Book book) {
+
+        DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface arg0, int arg1) {
+                LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+
+                try {
+                    if(libraryHelper.deleteBook(book)){
+                        ToastBuilder.create(getApplicationContext(), "Удалено");
+                        ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastBuilder.create(getApplicationContext(), "Не удалось выполнить удаление");
+                }
+
+            }
+        };
+
+        DialogInterface.OnClickListener cancelButtonListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                ToastBuilder.create(getApplicationContext(), "Ну и правильно, много читать не бывает)");
+            }
+        };
+
+        try {
+            new AlertDialog.Builder(this)
+                    .setTitle("Подтверждение") //title
+                    .setMessage("Хотите удалить книгу из библиотеки "
+                            + book.getBookTitle().substring(0, 10) + "...?") //message
+                    .setPositiveButton("Да", okButtonListener) //positive button
+                    .setNegativeButton("Нет", cancelButtonListener) //negative button
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastBuilder.create(getApplicationContext(), "Не надо)");
+        }
+        return false;
     }
 }

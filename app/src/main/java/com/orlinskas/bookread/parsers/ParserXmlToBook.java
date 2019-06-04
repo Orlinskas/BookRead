@@ -148,7 +148,6 @@ public class ParserXmlToBook {
 
     private Book createBook(){
 
-
         Book book = new Book(authorName.toString(), bookTitle, annotation.toString());
         book.setBookBodyFile(writeBookBodyToFile(book, body.toString()));
         if(imageBase64 != null){
@@ -192,7 +191,10 @@ public class ParserXmlToBook {
     }
 
     private boolean containCoverImage(String searchText) {
-        return searchText.contains(imageName);
+        if (searchText != null & imageName != null){
+            return searchText.contains(imageName);
+        }
+        return false;
     }
 
     private static int randomNumber(int max)

@@ -1,11 +1,11 @@
 package com.orlinskas.bookread.fragments;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +17,18 @@ import android.widget.TextView;
 
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
+import com.orlinskas.bookread.interfaces.FragmentLibraryBookActions;
 
 public class LibraryBookFragment extends Fragment {
 
-    private ImageView image;
+    private ImageView image, delete;
     private TextView title, author, date;
     private Button button;
     private RelativeLayout relativeLayout;
     private ProgressBar progressBar;
     public Book book;
     public int countFragments;
+    private FragmentLibraryBookActions listenerDelete;
 
     @Nullable
     @Override
@@ -35,17 +37,19 @@ public class LibraryBookFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.library_book_fragment_pb);
         relativeLayout = view.findViewById(R.id.library_book_fragment_rl);
-        button = (Button) view.findViewById(R.id.library_book_fragment_btn);
+        button = view.findViewById(R.id.library_book_fragment_btn);
         image = view.findViewById(R.id.library_book_fragment_iv);
         author = view.findViewById(R.id.library_book_fragment_tv_author);
         title = view.findViewById(R.id.library_book_fragment_tv_title);
         date = view.findViewById(R.id.library_book_fragment_tv_date);
+        delete = view.findViewById(R.id.library_book_fragment_iv_delete);
 
         if (book.getCoverImage() == null) {
             image.setImageResource(book.getCoverImagePath());
         }else {
             image.setImageURI(Uri.parse(book.getCoverImage().getAbsolutePath()));
         }
+        delete.setImageResource(R.drawable.ic_delete);
         author.setText(book.getAuthorName());
         title.setText(book.getBookTitle());
         date.setText(book.getDate());
@@ -60,21 +64,24 @@ public class LibraryBookFragment extends Fragment {
         button.setAlpha(0.0f);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 progressBar.setVisibility(View.VISIBLE);
                 relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorMiddleGREY));
 
             }
         });
-        button.setOnLongClickListener(new View.OnLongClickListener() {
+        delete.setAlpha(0.5f);
+        delete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorMiddleGREY));
-                return true;
-                //добавить удаление книги
+            public void onClick(View v) {
+                listenerDelete.deleteBook(book);
             }
         });
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listenerDelete = (FragmentLibraryBookActions) context;
+    }
 }

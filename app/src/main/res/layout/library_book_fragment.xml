@@ -35,20 +35,20 @@
 
     <TextView
         android:id="@+id/library_book_fragment_tv_title"
-        android:layout_width="293dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="47dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="106dp"
         android:layout_marginTop="18dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="31dp"
         android:shadowColor="@color/colorShadow"
         android:shadowDy="2"
         android:shadowRadius="4"
+        android:text="Название книги "
         android:textColor="@color/colorGREY"
-        android:textSize="14sp"
-        android:text="Название книги " />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/library_book_fragment_tv_author"
@@ -56,15 +56,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="106dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginStart="107dp"
+        android:layout_marginTop="74dp"
         android:layout_marginEnd="13dp"
         android:shadowColor="@color/colorShadow"
         android:shadowDy="2"
         android:shadowRadius="4"
+        android:text="Имя автора Фамилия автора"
         android:textColor="@color/colorGREY"
-        android:textSize="14sp"
-        android:text="Имя автора Фамилия автора" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/library_book_fragment_tv_date"
@@ -83,9 +83,27 @@
 
     <Button
         android:id="@+id/library_book_fragment_btn"
-        android:layout_width="401dp"
+        android:layout_width="match_parent"
         android:layout_height="125dp"
-        android:layout_centerInParent="true"
+        android:layout_alignStart="@+id/library_book_fragment_iv"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="-15dp"
+        android:layout_marginEnd="30dp"
         android:text="" />
+
+    <ImageView
+        android:id="@+id/library_book_fragment_iv_delete"
+        android:layout_width="30dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="3dp"
+        app:srcCompat="@drawable/ic_delete" />
 
 </RelativeLayout>

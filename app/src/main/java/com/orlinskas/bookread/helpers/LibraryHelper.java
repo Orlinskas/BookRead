@@ -24,10 +24,15 @@ public class LibraryHelper {
             return false;
         }
         else {
-            libraryBooks.add(book);
-            library.setBooks(libraryBooks);
-            libraryData.saveLibrary(library);
-            return true;
+            if(book!=null) {
+                libraryBooks.add(book);
+                library.setBooks(libraryBooks);
+                libraryData.saveLibrary(library);
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
 
@@ -55,6 +60,33 @@ public class LibraryHelper {
         LibraryData libraryData = new LibraryData(context);
         Library library = libraryData.loadLibrary();
         return libraryBooks = library.getBooks();
+    }
+
+    public boolean deleteBook(Book book) throws Exception {
+        LibraryData libraryData = new LibraryData(context);
+        Library library = libraryData.loadLibrary();
+        libraryBooks = library.getBooks();
+        if(libraryBooks.remove(book)){
+            library.setBooks(libraryBooks);
+            libraryData.saveLibrary(library);
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public boolean deleteAllBook() {
+        try {
+            LibraryData libraryData = new LibraryData(context);
+            Library library = libraryData.loadLibrary();
+            libraryBooks = new ArrayList<>();
+            library.setBooks(libraryBooks);
+            libraryData.saveLibrary(library);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private boolean containBookInLibrary(ArrayList<Book> libraryBooks, Book book) {
