@@ -45,26 +45,29 @@ public class FileManagerActivity extends ListActivity {
     private String pathPrefix = "";
     private File currentDirectory = new File("/");
     private ProgressBar progressBar;
+    ImageView downloadImage;
+    ImageView phoneImage;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_file_manager);
-        browseTo(new File(pathRoot));
 
         ImageView rowIconHelp = findViewById(R.id.activity_file_manager_iv_help);
         ImageView rowIconSearch = findViewById(R.id.activity_file_manager_iv_search);
         RelativeLayout rowRelativeLayout = findViewById(R.id.activity_file_manager_rl);
         progressBar = findViewById(R.id.activity_file_manager_pb);
-        ImageView downloadImage = findViewById(R.id.activity_file_manager_iv_download);
-        ImageView phoneImage = findViewById(R.id.activity_file_manager_iv_phone);
+        downloadImage = findViewById(R.id.activity_file_manager_iv_download);
+        phoneImage = findViewById(R.id.activity_file_manager_iv_phone);
 
-        rowIconHelp.setImageResource(R.drawable.ic_file_manager_help);
+        rowIconHelp.setImageResource(R.drawable.ic_help_2_0);
         rowIconSearch.setImageResource(R.drawable.ic_file_manager_search);
         rowRelativeLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         progressBar.setVisibility(View.INVISIBLE);
         downloadImage.setImageResource(R.drawable.ic_file_manager_downloads);
         phoneImage.setImageResource(R.drawable.ic_file_manager_phone);
+
+        browseTo(new File(pathRoot));
     }
 
     private void upOneLevel(){
@@ -75,7 +78,17 @@ public class FileManagerActivity extends ListActivity {
 
     private void browseTo(final File aDirectory){
 
-        assert aDirectory != null;
+        if(aDirectory.getAbsolutePath().equals(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath())){
+            downloadImage.setAlpha(0.5f);
+        }else {
+            downloadImage.setAlpha(1.0f);
+        }
+        if(aDirectory.getAbsolutePath().equals(pathRoot)){
+            phoneImage.setAlpha(0.5f);
+        }else{
+            phoneImage.setAlpha(1.0f);
+        }
+
         if (aDirectory.isDirectory()){
             try {
                 this.currentDirectory = aDirectory;
@@ -162,7 +175,7 @@ public class FileManagerActivity extends ListActivity {
     }
 
     public void searchButton(View view) {
-        ToastBuilder.create(this, "Укажите путь самостоятельно");
+        //ToastBuilder.create(this, "Укажите путь самостоятельно");
         //нужен класс поиска в отдельном потоке
     }
 

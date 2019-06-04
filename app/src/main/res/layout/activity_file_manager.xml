@@ -41,6 +41,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="60dp"
+                android:alpha="0.0"
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="searchButton"
@@ -53,13 +54,16 @@
                 android:layout_height="50dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="0dp"
+                android:layout_margin="3dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="helpButton"
                 android:padding="5dp"
-                app:srcCompat="@drawable/ic_file_manager_help" />
+                app:srcCompat="@drawable/ic_help_2_0" />
 
         </RelativeLayout>
 
