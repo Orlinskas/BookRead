@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/book_info_page_fragment_fl"
+    android:layout_width="match_parent"
+    android:layout_height="10dp">
+
+
+    <ProgressBar
+        android:id="@+id/book_info_page_fragment_pb_pages"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp" />
+
+    <TextView
+        android:id="@+id/book_info_page_fragment_tv_pages_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="5dp"
+        android:text="124/600"
+        android:textSize="6sp"
+        tools:ignore="SmallSp" />
+</FrameLayout>

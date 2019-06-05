@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
+import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.interfaces.FragmentLibraryBookActions;
 
 public class LibraryBookFragment extends Fragment {
@@ -29,6 +30,7 @@ public class LibraryBookFragment extends Fragment {
     public Book book;
     public int countFragments;
     private FragmentLibraryBookActions listenerDelete;
+    private FragmentLibraryBookActions listenerOpen;
 
     @Nullable
     @Override
@@ -66,7 +68,7 @@ public class LibraryBookFragment extends Fragment {
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
                 relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorMiddleGREY));
-
+                listenerOpen.openBook(book);
             }
         });
         delete.setAlpha(0.5f);
@@ -83,5 +85,6 @@ public class LibraryBookFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         listenerDelete = (FragmentLibraryBookActions) context;
+        listenerOpen = (FragmentLibraryBookActions) context;
     }
 }

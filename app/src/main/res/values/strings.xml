@@ -17,4 +17,27 @@
     <string name="activity_title_search_book">Search Book</string>
     <string name="help1">1. В разделе \"Добавить книгу\", укажите путь к файлу на вашем устройстве.</string>
     <string name="help2">2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличительного стекла.</string>
+    <string name="testText">2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи2. Вы можете выполнить поиск, в указанной директории, нажав на значок увеличи TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say); TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say); TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say); TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say); TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say); TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say); TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say); TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say); TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say); TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say); TextView say = new TextView(this);
+        say.setText(getString(R.string.testText));
+        containerText.addView(say);</string>
 </resources>

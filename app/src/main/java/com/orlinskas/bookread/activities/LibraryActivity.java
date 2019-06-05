@@ -2,6 +2,7 @@ package com.orlinskas.bookread.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -125,5 +126,12 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
             ToastBuilder.create(getApplicationContext(), "Не надо)");
         }
         return false;
+    }
+
+    @Override
+    public void openBook(Book book) {
+        Intent i = new Intent(getApplicationContext(), ReadActivity.class);
+        i.putExtra("book", book);
+        startActivity(i);
     }
 }
