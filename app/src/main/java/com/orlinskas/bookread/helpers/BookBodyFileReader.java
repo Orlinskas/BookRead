@@ -8,37 +8,25 @@ import java.util.ArrayList;
 
 public class BookBodyFileReader {
 
-    public ArrayList<String> read (File file) {
-        BufferedReader bufferedReader = null;
+    public ArrayList<String> read (File file) throws Exception {
+        BufferedReader bufferedReader;
+        bufferedReader = new BufferedReader(new FileReader(file));
+
         ArrayList<String> words = new ArrayList<>();
         StringBuilder word = new StringBuilder();
 
-        try {
-            bufferedReader = new BufferedReader(new FileReader(file));
-            int c;
-            while ((c = bufferedReader.read()) != -1) {
-
-                if ((char) c == ' '){
-                    word.append((char) c);
-                    words.add(word.toString());
-                    word = new StringBuilder();
-                }
-                else {
-                    word.append((char) c);
-                }
+        int c;
+        while ((c = bufferedReader.read()) != -1) {
+            if ((char) c == ' '){
+                word.append((char) c);
+                words.add(word.toString());
+                word = new StringBuilder();
             }
-            bufferedReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            else {
+                word.append((char) c);
             }
         }
+        bufferedReader.close();
 
         return words;
     }
