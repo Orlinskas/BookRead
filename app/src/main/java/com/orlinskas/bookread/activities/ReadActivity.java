@@ -25,16 +25,16 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class ReadActivity extends AppCompatActivity {
-    LinearLayout invisibleLayout, fragmentContainer;
+    LinearLayout fragmentContainer;
     Button btnBack, btnNext, btnSettings;
     ScrollView scrollView;
     TextView bookText;
     Book book;
     ArrayList<String> words;
 
-    boolean listening = true;
     int screenHeight;
     int scrollHeight;
+    int fragmentHeight;
     int countPages;
     int realCountPages;
     int currentPage = 0;
@@ -46,7 +46,6 @@ public class ReadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_read_test);
 
         try {
-            invisibleLayout = findViewById(R.id.activity_read_test_ll_invisible);
             btnBack = findViewById(R.id.activity_read_test_btn_back_page);
             btnNext = findViewById(R.id.activity_read_test_btn_next_page);
             btnSettings = findViewById(R.id.activity_read_test_btn_settings);
@@ -54,7 +53,6 @@ public class ReadActivity extends AppCompatActivity {
             scrollView = findViewById(R.id.activity_read_test_sv);
             fragmentContainer = findViewById(R.id.activity_read_test_ll_container_book_info);
 
-            invisibleLayout.setAlpha(0.0f);
             btnBack.setAlpha(0.0f);
             btnNext.setAlpha(0.0f);
             btnSettings.setAlpha(0.0f);
@@ -87,43 +85,44 @@ public class ReadActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if(listening) { //ждет отображения, все самое важное происходит тут
-            invisibleLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    if (invisibleLayout.getMeasuredHeight() != 0 & bookText.getMeasuredHeight() != 0) {
-                        try {
-                            final int screenHeightFINAL = invisibleLayout.getMeasuredHeight();
-                            final int scrollHeightFINAL = bookText.getMeasuredHeight();
+        setTextParams();
 
-                            screenHeight = correctedScreenHeight(screenHeightFINAL);
-                            scrollHeight = scrollHeightFINAL;
+            //ждет отображения, все самое важное происходит тут
+        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (scrollView.getMeasuredHeight() != 0 & bookText.getMeasuredHeight() != 0) {
+                    try {
+                        final int screenHeightFINAL = scrollView.getMeasuredHeight();
+                        final int scrollHeightFINAL = bookText.getMeasuredHeight();
+                        screenHeight = correctedScreenHeight(screenHeightFINAL);
+                        scrollHeight = scrollHeightFINAL;
 
-                            countPages = countPages(screenHeight, scrollHeight);
-                            pagePositions = createScrollPositions(screenHeight);
-                            realCountPages = pagePositions.size();
-                            showPagesInfoFragment(currentPage, realCountPages);
-                            listening = false;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        invisibleLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        invisibleLayout.setVisibility(View.GONE);
-                        invisibleLayout.setAlpha(0.0f);
+                        countPages = countPages(screenHeight, scrollHeight);
+                        pagePositions = createScrollPositions(screenHeight);
+                        realCountPages = pagePositions.size();
+
+                        showPagesInfoFragment(currentPage, realCountPages);
+                        final int fragmentHeightFinal = fragmentContainer.getHeight();
+                        fragmentHeight = fragmentHeightFinal;
+
+                        //делаю красиво тут
+                        RelativeLayout.LayoutParams scrollParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
+                        scrollParams.height = screenHeight;
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
-            });
-        }
-
+            }
+        });
     }
+
     private int correctedScreenHeight(int screenHeight) {
         int lineHeight = bookText.getLineHeight();
         int correctScreenHeight = screenHeight - screenHeight % lineHeight;
         return correctScreenHeight;
     }
-
-    //private int correctedScrollHeight(int scrollHeight) {
-    //}
 
     private int countPages(int screenHeight, int scrollHeight) {
         int countPages = 0;
@@ -140,7 +139,7 @@ public class ReadActivity extends AppCompatActivity {
         ArrayList<Integer> pagePositions = new ArrayList<>();
         pagePositions.add(0);
         for (int i = 1; i < countPages; i++){
-            pagePositions.add(screenHeight * i);
+            pagePositions.add((screenHeight * i) + 7); //КОСТЫЛЬ С ЦИФРОЙ, так буквы не обрываются
         }
         if (pagePositions.get(pagePositions.size() - 1) < scrollHeight) {
             pagePositions.add(scrollHeight);
@@ -216,5 +215,9 @@ public class ReadActivity extends AppCompatActivity {
         }
     }
 
+    private void setTextParams() {
+        bookText.setTextSize(16.0f);
+        bookText.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
+    }
 
 }
