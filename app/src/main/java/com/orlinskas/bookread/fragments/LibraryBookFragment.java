@@ -82,6 +82,18 @@ public class LibraryBookFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        progressBar.setVisibility(View.INVISIBLE);
+        if(countFragments%2 == 0) {
+            relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorWHITE));
+        }
+        else {
+            relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
+        }
+        super.onResume();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         listenerDelete = (FragmentLibraryBookActions) context;

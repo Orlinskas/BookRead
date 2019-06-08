@@ -36,7 +36,7 @@
     <TextView
         android:id="@+id/library_book_fragment_tv_title"
         android:layout_width="wrap_content"
-        android:layout_height="47dp"
+        android:layout_height="52dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"

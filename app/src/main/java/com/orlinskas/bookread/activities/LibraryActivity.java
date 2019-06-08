@@ -3,6 +3,7 @@ package com.orlinskas.bookread.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
@@ -23,11 +26,16 @@ import java.util.ArrayList;
 
 public class LibraryActivity extends AppCompatActivity implements FragmentLibraryBookActions {
     static int countFragments = 1;
+    LinearLayout linearLayout;
+    ScrollView scrollView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
+
+        scrollView = findViewById(R.id.activity_library_ll);
+        linearLayout = findViewById(R.id.activity_library_ll_container);
 
         try {
             LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
@@ -44,6 +52,21 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
         } catch (Exception e) {
             e.printStackTrace();
             ToastBuilder.create(getApplicationContext(), "Ошибка в загрузке библиотеки, обратитесь в поддержку");
+        }
+
+        setBackGroundColor();
+    }
+
+    private void setBackGroundColor() {
+        try {
+            if(countFragments%2 == 0) {
+                scrollView.setBackgroundColor(getResources().getColor(R.color.colorWHITE));
+            }
+            else {
+                scrollView.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
+            }
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
         }
     }
 

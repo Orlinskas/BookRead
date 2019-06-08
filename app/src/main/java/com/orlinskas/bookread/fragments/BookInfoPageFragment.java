@@ -30,8 +30,11 @@ public class BookInfoPageFragment extends Fragment {
 
         pagesProgress.setMax(pageCount);
         pagesProgress.setProgress(pageNumber);
+        pagesProgress.setAlpha(0.6f);
 
         pagesInfo.setText(String.format("%d/%d", pageNumber, pageCount));
+        pagesInfo.setTextSize(7.0f);
+        pagesInfo.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorPrimaryDark));
 
         return view;
     }
