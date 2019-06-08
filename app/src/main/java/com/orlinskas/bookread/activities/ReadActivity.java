@@ -7,9 +7,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -34,9 +36,9 @@ public class ReadActivity extends AppCompatActivity {
     int screenHeight;
     int scrollHeight;
     int countPages;
+    int realCountPages;
     int currentPage = 0;
     ArrayList<Integer> pagePositions;
-    int realCountPages;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,7 +87,7 @@ public class ReadActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if(listening) {
+        if(listening) { //ждет отображения, все самое важное происходит тут
             invisibleLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -93,8 +95,10 @@ public class ReadActivity extends AppCompatActivity {
                         try {
                             final int screenHeightFINAL = invisibleLayout.getMeasuredHeight();
                             final int scrollHeightFINAL = bookText.getMeasuredHeight();
-                            screenHeight = screenHeightFINAL;
+
+                            screenHeight = correctedScreenHeight(screenHeightFINAL);
                             scrollHeight = scrollHeightFINAL;
+
                             countPages = countPages(screenHeight, scrollHeight);
                             pagePositions = createScrollPositions(screenHeight);
                             realCountPages = pagePositions.size();
@@ -105,11 +109,43 @@ public class ReadActivity extends AppCompatActivity {
                         }
                         invisibleLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         invisibleLayout.setVisibility(View.GONE);
+                        invisibleLayout.setAlpha(0.0f);
                     }
                 }
             });
         }
 
+    }
+    private int correctedScreenHeight(int screenHeight) {
+        int lineHeight = bookText.getLineHeight();
+        int correctScreenHeight = screenHeight - screenHeight % lineHeight;
+        return correctScreenHeight;
+    }
+
+    //private int correctedScrollHeight(int scrollHeight) {
+    //}
+
+    private int countPages(int screenHeight, int scrollHeight) {
+        int countPages = 0;
+        try {
+            countPages = (scrollHeight/screenHeight) + 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 999;
+        }
+        return countPages;
+    }
+
+    private ArrayList<Integer> createScrollPositions(int screenHeight) {
+        ArrayList<Integer> pagePositions = new ArrayList<>();
+        pagePositions.add(0);
+        for (int i = 1; i < countPages; i++){
+            pagePositions.add(screenHeight * i);
+        }
+        if (pagePositions.get(pagePositions.size() - 1) < scrollHeight) {
+            pagePositions.add(scrollHeight);
+        }
+        return pagePositions;
     }
 
     private void showPagesInfoFragment(int pageNumber, int pageCount) {
@@ -142,17 +178,6 @@ public class ReadActivity extends AppCompatActivity {
 
     }
 
-    private int countPages(int screenHeight, int scrollHeight) {
-        int countPages = 0;
-        try {
-            countPages = (scrollHeight/screenHeight) + 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 999;
-        }
-        return countPages;
-    }
-
     public void onClickBackPage(View view) {
         if(scrollToBackPage()){
             currentPage--;
@@ -173,9 +198,7 @@ public class ReadActivity extends AppCompatActivity {
 
     private boolean scrollToBackPage() {
         try {
-            int testValue = pagePositions.get(currentPage - 1);
             scrollView.scrollTo(0, pagePositions.get(currentPage - 1));
-            ToastBuilder.create(this, "back");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -185,9 +208,7 @@ public class ReadActivity extends AppCompatActivity {
 
     private boolean scrollToNextPage() {
         try {
-            int testValue = pagePositions.get(currentPage + 1);
             scrollView.scrollTo(0, pagePositions.get(currentPage + 1));
-            ToastBuilder.create(this, "next");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -195,15 +216,5 @@ public class ReadActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList<Integer> createScrollPositions(int screenHeight) {
-        ArrayList<Integer> pagePositions = new ArrayList<>();
-        pagePositions.add(0);
-        for (int i = 1; i < countPages; i++){
-            pagePositions.add(screenHeight*i);
-        }
-        if (pagePositions.get(pagePositions.size() - 1) < scrollHeight) {
-            pagePositions.add(scrollHeight);
-        }
-        return pagePositions;
-    }
+
 }
