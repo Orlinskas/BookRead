@@ -28,7 +28,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -39,7 +38,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name=".LibraryActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -49,23 +47,30 @@
             android:label="Search Book"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name=".OpenBookActivity" />
-
+                <action android:name=".FileManagerActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".activities.HelpActivity"
-            android:label="Help"
-            android:screenOrientation="portrait">
+        android:name=".activities.HelpActivity"
+        android:label="Help"
+        android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name=".HelpActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ReadActivity" />
+
+        <activity
+            android:name=".activities.ReadActivity"
+
+            >
+            <intent-filter>
+                <action android:name=".ReadActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
     </application>
 

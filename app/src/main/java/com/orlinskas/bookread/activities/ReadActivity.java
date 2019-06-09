@@ -6,8 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -44,6 +42,8 @@ public class ReadActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_test);
+
+        //нужен отдельный поток на загрузке
 
         try {
             btnBack = findViewById(R.id.activity_read_test_btn_back_page);
