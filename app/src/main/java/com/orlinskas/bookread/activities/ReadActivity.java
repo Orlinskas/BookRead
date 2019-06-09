@@ -1,5 +1,7 @@
 package com.orlinskas.bookread.activities;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ public class ReadActivity extends AppCompatActivity {
     TextView bookText;
     Book book;
     ArrayList<String> words;
+    ProgressBar progressBar;
 
     int screenHeight;
     int scrollHeight;
@@ -44,28 +48,20 @@ public class ReadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_read_test);
 
         //нужен отдельный поток на загрузке
+        btnBack = findViewById(R.id.activity_read_test_btn_back_page);
+        btnNext = findViewById(R.id.activity_read_test_btn_next_page);
+        btnSettings = findViewById(R.id.activity_read_test_btn_settings);
+        bookText = findViewById(R.id.activity_read_test_ll_container_text);
+        scrollView = findViewById(R.id.activity_read_test_sv);
+        fragmentContainer = findViewById(R.id.activity_read_test_ll_container_book_info);
+        progressBar = findViewById(R.id.activity_read_test_pb);
 
-        try {
-            btnBack = findViewById(R.id.activity_read_test_btn_back_page);
-            btnNext = findViewById(R.id.activity_read_test_btn_next_page);
-            btnSettings = findViewById(R.id.activity_read_test_btn_settings);
-            bookText = findViewById(R.id.activity_read_test_ll_container_text);
-            scrollView = findViewById(R.id.activity_read_test_sv);
-            fragmentContainer = findViewById(R.id.activity_read_test_ll_container_book_info);
+        LoadBook loadBook = new LoadBook();
+        loadBook.execute();
 
-            btnBack.setAlpha(0.0f);
-            btnNext.setAlpha(0.0f);
-            btnSettings.setAlpha(0.0f);
-
-            book = (Book) getIntent().getSerializableExtra("book");
-            words = readBookFile(book.getBookBodyFile());
-
-            showBookText(words);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            ToastBuilder.create(this, "Неудалось открыть книгу, попробуйте удалить из библиотеки");
-        }
+        btnBack.setAlpha(0.0f);
+        btnNext.setAlpha(0.0f);
+        btnSettings.setAlpha(0.0f);
     }
 
     private ArrayList<String> readBookFile(File file) throws Exception {
@@ -86,46 +82,43 @@ public class ReadActivity extends AppCompatActivity {
         super.onStart();
 
         setTextParams();
-
             //ждет отображения, все самое важное происходит тут
-        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (scrollView.getMeasuredHeight() != 0 & bookText.getMeasuredHeight() != 0) {
-                    try {
-                        final int screenHeightFINAL = scrollView.getMeasuredHeight();
-                        final int scrollHeightFINAL = bookText.getMeasuredHeight();
-                        screenHeight = correctedScreenHeight(screenHeightFINAL);
-                        scrollHeight = scrollHeightFINAL;
+            scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (scrollView.getMeasuredHeight() != 0 & bookText.getMeasuredHeight() != 0) {
+                        try {
+                            final int screenHeightFINAL = scrollView.getMeasuredHeight();
+                            final int scrollHeightFINAL = bookText.getMeasuredHeight();
+                            screenHeight = correctedScreenHeight(screenHeightFINAL);
+                            scrollHeight = scrollHeightFINAL;
 
-                        countPages = countPages(screenHeight, scrollHeight);
-                        pagePositions = createScrollPositions(screenHeight);
-                        realCountPages = pagePositions.size();
+                            countPages = countPages(screenHeight, scrollHeight);
+                            pagePositions = createScrollPositions(screenHeight);
+                            realCountPages = pagePositions.size();
 
-                        showPagesInfoFragment(currentPage, realCountPages);
-                        final int fragmentHeightFinal = fragmentContainer.getHeight();
-                        fragmentHeight = fragmentHeightFinal;
+                            showPagesInfoFragment(currentPage, realCountPages);
+                            fragmentHeight = fragmentContainer.getHeight();
 
-                        //делаю красиво тут
-                        RelativeLayout.LayoutParams scrollParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
-                        scrollParams.height = screenHeight;
+                            //делаю красиво тут
+                            RelativeLayout.LayoutParams scrollParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
+                            scrollParams.height = screenHeight;
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-        });
+            });
     }
 
     private int correctedScreenHeight(int screenHeight) {
         int lineHeight = bookText.getLineHeight();
-        int correctScreenHeight = screenHeight - screenHeight % lineHeight;
-        return correctScreenHeight;
+        return screenHeight - screenHeight % lineHeight;
     }
 
     private int countPages(int screenHeight, int scrollHeight) {
-        int countPages = 0;
+        int countPages;
         try {
             countPages = (scrollHeight/screenHeight) + 1;
         } catch (Exception e) {
@@ -218,6 +211,43 @@ public class ReadActivity extends AppCompatActivity {
     private void setTextParams() {
         bookText.setTextSize(16.0f);
         bookText.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class LoadBook extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            fragmentContainer.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... parameter) {
+            try {
+                book = (Book) getIntent().getSerializableExtra("book");
+                words = readBookFile(book.getBookBodyFile());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showBookText(words);
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            fragmentContainer.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+
+        }
+
     }
 
 }

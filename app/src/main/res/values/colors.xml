@@ -10,5 +10,6 @@
     <color name="colorLowGREY">#EEEEEE</color>
     <color name="colorWHITE">#FCFCFC</color>
     <color name="colorShadow">#94000000</color>
+    <color name="colorPrimaryDarkAlpha">#8A2B4570</color>
 
 </resources>
