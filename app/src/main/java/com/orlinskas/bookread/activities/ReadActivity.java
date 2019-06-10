@@ -1,6 +1,8 @@
 package com.orlinskas.bookread.activities;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,8 +22,11 @@ import android.widget.TextView;
 
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
+import com.orlinskas.bookread.Settings;
 import com.orlinskas.bookread.ToastBuilder;
+import com.orlinskas.bookread.data.SettingsData;
 import com.orlinskas.bookread.fragments.BookInfoPageFragment;
+import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
 
 import java.io.File;
@@ -29,8 +34,9 @@ import java.util.ArrayList;
 
 public class ReadActivity extends AppCompatActivity {
     LinearLayout fragmentContainer;
+    RelativeLayout relativeLayout;
     Button btnBack, btnNext, btnSettings;
-    ScrollView scrollView;
+    ScrollView scrollView; //вылазит строка прокрутки сбоку, убрать
     TextView bookText;
     Book book;
     ArrayList<String> words;
@@ -43,6 +49,7 @@ public class ReadActivity extends AppCompatActivity {
     int realCountPages;
     int currentPage = 0;
     ArrayList<Integer> pagePositions;
+    Settings settings;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +64,17 @@ public class ReadActivity extends AppCompatActivity {
         scrollView = findViewById(R.id.activity_read_test_sv);
         fragmentContainer = findViewById(R.id.activity_read_test_ll_container_book_info);
         progressBar = findViewById(R.id.activity_read_test_pb);
+        relativeLayout = findViewById(R.id.activity_read_test_fl);
+
+        SettingsData settingsData = new SettingsData(this);
+        settings = settingsData.loadSettings();
+
+        if(settings.isPortraitOrientation()){
+            setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         LoadBook loadBook = new LoadBook();
         loadBook.execute();
@@ -76,6 +94,7 @@ public class ReadActivity extends AppCompatActivity {
         for(String word : words) {
             stringBuilder.append(word);
         }
+        setExampleParams();
         bookText.setText(stringBuilder);
     }
 
@@ -83,7 +102,6 @@ public class ReadActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        setTextParams();
             //ждет отображения, все самое важное происходит тут
             scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -210,11 +228,6 @@ public class ReadActivity extends AppCompatActivity {
         }
     }
 
-    private void setTextParams() {
-        bookText.setTextSize(16.0f);
-        bookText.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
-    }
-
     @SuppressLint("StaticFieldLeak")
     private class LoadBook extends AsyncTask<Void, Void, Void> {
         @Override
@@ -268,10 +281,52 @@ public class ReadActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            ActivityOpenHelper.openActivity(this, SettingsActivity.class);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Typeface getTypeFaceCode(int number) {
+        switch (number) {
+            case 0:
+                return Typeface.DEFAULT;
+            case 1:
+                return Typeface.DEFAULT_BOLD;
+            case 2:
+                return Typeface.SERIF;
+            case 3:
+                return Typeface.SANS_SERIF;
+            case 4:
+                return Typeface.MONOSPACE;
+            default:return Typeface.DEFAULT;
+        }
+    }
+
+    private void setExampleParams() {
+        bookText.setTextSize(settings.getTextSize());
+        bookText.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
+        bookText.setTypeface(getTypeFaceCode(settings.getTypeface()));
+
+        switch (settings.getTheme()){
+            case 1:
+                scrollView.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
+                bookText.setTextColor(getResources().getColor(R.color.colorLowBlack));
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
+                break;
+            case 2:
+                scrollView.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
+                bookText.setTextColor(getResources().getColor(R.color.colorWHITE));
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
+                break;
+            case 3:
+                scrollView.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
+                bookText.setTextColor(getResources().getColor(R.color.colorLowBlack));
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
+                break;
+        }
+
     }
 
 }

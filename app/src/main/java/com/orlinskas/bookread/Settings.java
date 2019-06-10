@@ -1,16 +1,20 @@
 package com.orlinskas.bookread;
 
+import android.graphics.Typeface;
+
 import java.io.Serializable;
 
 public class Settings implements Serializable {
     private boolean portraitOrientation = true;
     private int theme = 1;
     private int textSize = 14;
+    private int typeface = 0;
 
-    public Settings (boolean portraitOrientation, int theme, int textSize){
+    public Settings (boolean portraitOrientation, int theme, int textSize, int typeface){
        this.portraitOrientation = portraitOrientation;
        this.theme = theme;
        this.textSize = textSize;
+       this.typeface = typeface;
     }
 
     public Settings(){
@@ -39,5 +43,13 @@ public class Settings implements Serializable {
 
     public void setTextSize(int textSize) {
         this.textSize = textSize;
+    }
+
+    public int getTypeface() {
+        return typeface;
+    }
+
+    public void setTypeface(int typeface) {
+        this.typeface = typeface;
     }
 }

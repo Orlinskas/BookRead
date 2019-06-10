@@ -38,16 +38,12 @@ public class SettingsData {
         return new Settings();
     }
 
-    public void saveSettings(Settings settings) {
+    public void saveSettings(Settings settings) throws Exception {
         String filePath = context.getFilesDir().getPath() + "/" + FILE_LICENCE_NAME;
         File file = new File(filePath);
 
-        try (FileOutputStream fos = new FileOutputStream(file);
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(settings);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        FileOutputStream fos = new FileOutputStream(file);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(settings);
     }
 }

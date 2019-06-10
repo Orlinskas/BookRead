@@ -23,7 +23,7 @@
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="Ориентация экрана"
-            android:textColor="@color/colorLowBlack"
+            android:textColor="@color/colorAccent"
             android:textSize="18sp" />
 
         <RelativeLayout
@@ -77,7 +77,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/space_bottons_otientations"
                 android:layout_marginLeft="40dp"
-                android:layout_toRightOf="@+id/space_bottons_otientations" />
+                android:layout_toRightOf="@+id/space_bottons_otientations"
+                android:onClick="onClickScreenOrientation"/>
 
         </RelativeLayout>
 
@@ -92,7 +93,7 @@
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="Цветовая тема во время чтения"
-            android:textColor="@color/colorLowBlack"
+            android:textColor="@color/colorAccent"
             android:textSize="18sp" />
 
         <LinearLayout
@@ -171,7 +172,31 @@
                 android:layout_weight="1"
                 android:background="@android:color/holo_blue_dark"
                 android:visibility="invisible" />
+
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:text="Шрифт"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/activity_settings_spn_fonts"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:entries="@array/fontList"
+            android:layout_gravity="center"
+            />
 
         <TextView
             android:id="@+id/textView5"
@@ -184,7 +209,7 @@
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="Размер шрифта книги"
-            android:textColor="@color/colorLowBlack"
+            android:textColor="@color/colorAccent"
             android:textSize="18sp" />
 
         <SeekBar
@@ -196,16 +221,55 @@
             android:max="28"
             android:progress="4" />
 
+        <TextView
+            android:id="@+id/activity_settings_tv_text_size_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:text="Пример:" />
+
+        <TextView
+            android:id="@+id/activity_settings_tv_example"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:freezesText="false"
+            android:gravity="center"
+            android:text="— Доктор, я не могу больше! Куда бы я ни посмотрел,
+о чём бы ни подумал, мне везде мерещится одно —
+шрифты, шрифты, шрифты!
+— Да не переживайте вы так. Сядьте, успокойтесь,
+выпейте чаю, съешьте ещё этих мягких
+французских булок…" />
+
+
         <Button
             android:id="@+id/activity_settings_btn_apply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:background="@color/colorAccent"
-            android:textColor="@color/colorLowGREY"
+            android:onClick="onClickApply"
             android:text="Принять"
-            android:onClick="onClickApply"/>
+            android:textColor="@color/colorLowGREY" />
     </LinearLayout>
 </ScrollView>
 

@@ -1,17 +1,24 @@
 package com.orlinskas.bookread.activities;
 
+import android.annotation.SuppressLint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.Settings;
+import com.orlinskas.bookread.ToastBuilder;
 import com.orlinskas.bookread.data.SettingsData;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -19,7 +26,12 @@ public class SettingsActivity extends AppCompatActivity {
     RadioButton album, portair;
     Settings settings;
     Button apply;
+    SeekBar seekBar;
+    TextView example, textSizeNumber;
+    Spinner spinner;
 
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +43,15 @@ public class SettingsActivity extends AppCompatActivity {
         album = findViewById(R.id.activity_read_test_rb_album);
         portair = findViewById(R.id.activity_read_test_rb_portair);
         apply = findViewById(R.id.activity_settings_btn_apply);
+        seekBar = findViewById(R.id.activity_settings_sb_text_size);
+        example = findViewById(R.id.activity_settings_tv_example);
+        textSizeNumber = findViewById(R.id.activity_settings_tv_text_size_number);
+        spinner = findViewById(R.id.activity_settings_spn_fonts);
 
         SettingsData settingsData = new SettingsData(this);
         settings = settingsData.loadSettings();
+
+        setExampleParams();
 
         if(settings.isPortraitOrientation()) {
             portair.setChecked(true);
@@ -55,12 +73,81 @@ public class SettingsActivity extends AppCompatActivity {
                 changeVisibleElement(vintageLine);
                 break;
         }
+
+
+        spinner.setSelection(settings.getTypeface());
+        textSizeNumber.setText(Integer.toString(settings.getTextSize()));
+        seekBar.setProgress(settings.getTextSize() - 8);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+               String valueText;
+               int value = progress + 8;
+               valueText = Integer.toString(value);
+               textSizeNumber.setText(valueText);
+               settings.setTextSize(value);
+               setExampleParams();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                switch (pos){
+                    case 0:
+                        settings.setTypeface(0);
+                        setExampleParams();
+                        settings.setTypeface(0);
+                        break;
+                    case 1:
+                        settings.setTypeface(1);
+                        setExampleParams();
+                        settings.setTypeface(1);
+                        break;
+                    case 2:
+                        settings.setTypeface(2);
+                        setExampleParams();
+                        settings.setTypeface(2);
+                        break;
+                    case 3:
+                        settings.setTypeface(3);
+                        setExampleParams();
+                        settings.setTypeface(3);
+                        break;
+                    case 4:
+                        settings.setTypeface(4);
+                        setExampleParams();
+                        settings.setTypeface(4);
+                        break;
+                }
+
+            }
+        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        saveSettings();
+        try {
+            saveSettings();
+            ToastBuilder.create(this, "Настройки приняты");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastBuilder.create(this, "Ошибка");
+        }
     }
 
     @Override
@@ -85,11 +172,7 @@ public class SettingsActivity extends AppCompatActivity {
                 telegramLine.setVisibility(View.INVISIBLE);
                 defaultLine.setVisibility(View.INVISIBLE);
                 break;
-
         }
-
-
-
     }
 
     @Override
@@ -117,43 +200,86 @@ public class SettingsActivity extends AppCompatActivity {
     public void onClickVintageTheme(View view) {
        changeVisibleElement(vintageLine);
        settings.setTheme(3);
+        setExampleParams();
     }
 
     public void onClickTelegramTheme(View view) {
        changeVisibleElement(telegramLine);
         settings.setTheme(2);
+        setExampleParams();
     }
 
     public void onClickDefaultTheme(View view) {
         changeVisibleElement(defaultLine);
         settings.setTheme(1);
+        setExampleParams();
     }
 
     public void onClickScreenOrientation(View view) {
         switch (view.getId()) {
             case R.id.activity_read_test_rb_album:
                 portair.setChecked(false);
+                album.setChecked(true);
                 settings.setPortraitOrientation(false);
                 break;
             case R.id.activity_read_test_rb_portair:
                 album.setChecked(false);
+                portair.setChecked(true);
                 settings.setPortraitOrientation(true);
                 break;
         }
     }
 
     public void onClickApply(View view) {
-        saveSettings();
-    }
-
-    private boolean saveSettings(){
         try {
-            SettingsData settingsData = new SettingsData(this);
-            settingsData.saveSettings(settings);
+            saveSettings();
+            ToastBuilder.create(this, "Настройки приняты");
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            ToastBuilder.create(this, "Ошибка");
         }
+    }
+
+    private boolean saveSettings() throws Exception{
+        SettingsData settingsData = new SettingsData(this);
+        settingsData.saveSettings(settings);
         return true;
+    }
+
+    private Typeface getTypeFaceCode(int number) {
+        switch (number) {
+            case 0:
+                return Typeface.DEFAULT;
+            case 1:
+                return Typeface.DEFAULT_BOLD;
+            case 2:
+                return Typeface.SERIF;
+            case 3:
+                return Typeface.SANS_SERIF;
+            case 4:
+                return Typeface.MONOSPACE;
+            default:return Typeface.DEFAULT;
+        }
+    }
+
+    private void setExampleParams() {
+        example.setTextSize(settings.getTextSize());
+        example.setTypeface(getTypeFaceCode(settings.getTypeface()));
+
+        switch (settings.getTheme()){
+            case 1:
+                example.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
+                example.setTextColor(getResources().getColor(R.color.colorLowBlack));
+                break;
+            case 2:
+                example.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
+                example.setTextColor(getResources().getColor(R.color.colorWHITE));
+                break;
+            case 3:
+                example.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
+                example.setTextColor(getResources().getColor(R.color.colorLowBlack));
+                break;
+        }
+
     }
 }
