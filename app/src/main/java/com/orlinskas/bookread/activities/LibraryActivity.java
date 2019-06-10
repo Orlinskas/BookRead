@@ -104,6 +104,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            ActivityOpenHelper.openActivity(getApplicationContext(), SettingsActivity.class);
             return true;
         }
 

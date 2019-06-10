@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_read_test_rl_settings"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/activity_read_test_rl_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/activity_read_test_tv_orientation"
+            android:id="@+id/activity_settings_tv_orientation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:shadowColor="@color/colorShadow"
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="Ориентация экрана"
-            android:textColor="@color/colorGREY"
-            android:textSize="14sp" />
+            android:textColor="@color/colorLowBlack"
+            android:textSize="18sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -52,7 +58,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/space_bottons_otientations"
                 android:layout_marginRight="45dp"
-                android:layout_toLeftOf="@+id/space_bottons_otientations" />
+                android:layout_toLeftOf="@+id/space_bottons_otientations"
+                android:focusable="true"
+                android:clickable="true"
+                android:onClick="onClickScreenOrientation"/>
 
             <Space
                 android:id="@+id/space_bottons_otientations"
@@ -70,5 +79,133 @@
                 android:layout_marginLeft="40dp"
                 android:layout_toRightOf="@+id/space_bottons_otientations" />
 
-   </RelativeLayout>
-</LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:text="Цветовая тема во время чтения"
+            android:textColor="@color/colorLowBlack"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/activity_settings_btn_theme_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorLowGREY"
+                android:text="Default"
+                android:textColor="@color/colorLowBlack"
+                android:focusable="true"
+                android:clickable="true"
+                android:onClick="onClickDefaultTheme"/>
+
+            <Button
+                android:id="@+id/activity_settings_btn_theme_telegram"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorThemeTelegramBackground"
+                android:text="TelegaNight"
+                android:textColor="@color/colorWHITE"
+                android:focusable="true"
+                android:clickable="true"
+                android:onClick="onClickTelegramTheme"/>
+
+            <Button
+                android:id="@+id/activity_settings_btn_theme_vintage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorThemeVintageBackground"
+                android:text="Vintage"
+                android:textColor="@color/colorLowBlack"
+                android:focusable="true"
+                android:clickable="true"
+                android:onClick="onClickVintageTheme"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/activity_settings_btn_theme_default_line"
+                android:layout_width="wrap_content"
+                android:layout_height="3dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_blue_dark"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/activity_settings_btn_theme_telegram_line"
+                android:layout_width="wrap_content"
+                android:layout_height="3dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_blue_dark"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/activity_settings_btn_theme_vintage_line"
+                android:layout_width="wrap_content"
+                android:layout_height="3dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_blue_dark"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:text="Размер шрифта книги"
+            android:textColor="@color/colorLowBlack"
+            android:textSize="18sp" />
+
+        <SeekBar
+            android:id="@+id/activity_settings_sb_text_size"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:max="28"
+            android:progress="4" />
+
+        <Button
+            android:id="@+id/activity_settings_btn_apply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorLowGREY"
+            android:text="Принять"
+            android:onClick="onClickApply"/>
+    </LinearLayout>
+</ScrollView>
+

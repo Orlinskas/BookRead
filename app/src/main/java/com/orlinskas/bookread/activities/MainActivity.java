@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            ActivityOpenHelper.openActivity(getApplicationContext(), SettingsActivity.class);
             return true;
         }
 
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_library) {
             ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);
         } else if (id == R.id.nav_settings) {
-
+            ActivityOpenHelper.openActivity(getApplicationContext(), SettingsActivity.class);
         } else if (id == R.id.nav_help) {
             ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
         } else if (id == R.id.nav_share) {

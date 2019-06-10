@@ -64,10 +64,19 @@
 
         <activity
             android:name=".activities.ReadActivity"
-
             >
             <intent-filter>
                 <action android:name=".ReadActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="Settings"
+            >
+            <intent-filter>
+                <action android:name=".SettingsActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
