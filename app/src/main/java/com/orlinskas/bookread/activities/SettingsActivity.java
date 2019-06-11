@@ -30,7 +30,6 @@ public class SettingsActivity extends AppCompatActivity {
     TextView example, textSizeNumber;
     Spinner spinner;
 
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,13 +140,13 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        try {
-            saveSettings();
-            ToastBuilder.create(this, "Настройки приняты");
-        } catch (Exception e) {
-            e.printStackTrace();
-            ToastBuilder.create(this, "Ошибка");
-        }
+       // try {
+       //     saveSettings();
+       //     ToastBuilder.create(this, "Настройки приняты");
+       // } catch (Exception e) {
+       //     e.printStackTrace();
+       //     ToastBuilder.create(this, "Ошибка");
+       // }
     }
 
     @Override

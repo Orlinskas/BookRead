@@ -1,7 +1,5 @@
 package com.orlinskas.bookread;
 
-import android.graphics.Typeface;
-
 import java.io.Serializable;
 
 public class Settings implements Serializable {

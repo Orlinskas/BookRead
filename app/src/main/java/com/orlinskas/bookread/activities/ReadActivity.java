@@ -31,6 +31,7 @@ import com.orlinskas.bookread.helpers.BookBodyFileReader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ReadActivity extends AppCompatActivity {
     LinearLayout fragmentContainer;
@@ -51,10 +52,14 @@ public class ReadActivity extends AppCompatActivity {
     ArrayList<Integer> pagePositions;
     Settings settings;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_test);
+
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         //нужен отдельный поток на загрузке
         btnBack = findViewById(R.id.activity_read_test_btn_back_page);
@@ -69,6 +74,18 @@ public class ReadActivity extends AppCompatActivity {
         SettingsData settingsData = new SettingsData(this);
         settings = settingsData.loadSettings();
 
+        switch (settings.getTheme()){
+            case 1:
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
+                break;
+            case 2:
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
+                break;
+            case 3:
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
+                break;
+        }
+
         if(settings.isPortraitOrientation()){
             setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
@@ -82,6 +99,14 @@ public class ReadActivity extends AppCompatActivity {
         btnBack.setAlpha(0.0f);
         btnNext.setAlpha(0.0f);
         btnSettings.setAlpha(0.0f);
+
+        btnSettings.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Objects.requireNonNull(getSupportActionBar()).show();
+                return true;
+            }
+        });
     }
 
     private ArrayList<String> readBookFile(File file) throws Exception {
@@ -327,6 +352,30 @@ public class ReadActivity extends AppCompatActivity {
                 break;
         }
 
+        if(settings.isPortraitOrientation()){
+            setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SettingsData settingsData = new SettingsData(this);
+        Settings currentSettings = settingsData.loadSettings();
+        if(settings.isPortraitOrientation() != currentSettings.isPortraitOrientation()
+                | settings.getTheme() != currentSettings.getTheme()
+                | settings.getTextSize() != currentSettings.getTextSize()
+                | settings.getTypeface() != currentSettings.getTypeface()){
+            try {
+                settings = currentSettings;
+                setExampleParams();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
