@@ -20,6 +20,7 @@ public class Book implements Serializable {
     private int coverImagePath;
     private File bookBodyFile;
     private File coverImage;
+    private int bookPercentProgress = 0;
 
     public Book(String authorName, String bookTitle, String annotation){
         this.authorName = authorName;
@@ -118,5 +119,13 @@ public class Book implements Serializable {
 
     public void setCoverImagePath(int coverImagePath) {
         this.coverImagePath = coverImagePath;
+    }
+
+    public int getBookPercentProgress() {
+        return bookPercentProgress;
+    }
+
+    public void setBookPercentProgress(int bookPercentProgress) {
+        this.bookPercentProgress = bookPercentProgress;
     }
 }

@@ -52,8 +52,6 @@ public class ReadActivity extends AppCompatActivity {
     ArrayList<Integer> pagePositions;
     Settings settings;
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +105,24 @@ public class ReadActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+    }
+
+    private void openPage(int pageNumber) {
+        try {
+            currentPage = pageNumber;
+            scrollView.scrollTo(0, pagePositions.get(currentPage));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int getPageNumber(int percentProgress, int allPages) {
+        return (allPages * percentProgress) / 100;
+    }
+
+    private int getPersentProgress(int pageNumber, int allPages) {
+        return (100 * pageNumber) / allPages;
     }
 
     private ArrayList<String> readBookFile(File file) throws Exception {
@@ -155,6 +171,7 @@ public class ReadActivity extends AppCompatActivity {
                     }
                 }
             });
+
     }
 
     private int correctedScreenHeight(int screenHeight) {
@@ -230,6 +247,7 @@ public class ReadActivity extends AppCompatActivity {
     }
 
     public void onClickSettings(View view) {
+        openPage(150);
         ToastBuilder.create(this, "Настройки");
     }
 
