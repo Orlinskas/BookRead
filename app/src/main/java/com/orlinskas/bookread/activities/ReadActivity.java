@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.orlinskas.bookread.Book;
@@ -35,13 +36,15 @@ import java.util.Objects;
 
 public class ReadActivity extends AppCompatActivity {
     LinearLayout fragmentContainer;
-    RelativeLayout relativeLayout;
-    Button btnBack, btnNext, btnSettings;
+    RelativeLayout relativeLayout, settingsLayout, settingsTopLayout;
+    Button btnBack, btnNext, btnSettings, btnCloseSettings;
     ScrollView scrollView; //вылазит строка прокрутки сбоку, убрать
-    TextView bookText;
+    TextView bookText, currentPageSettings, bookInfoSettings;
     Book book;
     ArrayList<String> words;
     ProgressBar progressBar;
+    SeekBar seekBar;
+
 
     int screenHeight;
     int scrollHeight;
@@ -49,8 +52,10 @@ public class ReadActivity extends AppCompatActivity {
     int countPages;
     int realCountPages;
     int currentPage = 0;
+    int oldCurrentPage;
     ArrayList<Integer> pagePositions;
     Settings settings;
+    boolean settingsOpen = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +73,12 @@ public class ReadActivity extends AppCompatActivity {
         fragmentContainer = findViewById(R.id.activity_read_test_ll_container_book_info);
         progressBar = findViewById(R.id.activity_read_test_pb);
         relativeLayout = findViewById(R.id.activity_read_test_fl);
+        seekBar = findViewById(R.id.activity_read_test_sb_page_scroller);
+        currentPageSettings = findViewById(R.id.activity_read_test_tv_current_page);
+        settingsLayout = findViewById(R.id.activity_read_test_ll_settings);
+        settingsTopLayout = findViewById(R.id.activity_read_test_ll_settings_top);
+        bookInfoSettings = findViewById(R.id.activity_read_test_tv_book_info);
+        btnCloseSettings = findViewById(R.id.activity_read_test_btn_close_settings);
 
         SettingsData settingsData = new SettingsData(this);
         settings = settingsData.loadSettings();
@@ -97,12 +108,49 @@ public class ReadActivity extends AppCompatActivity {
         btnBack.setAlpha(0.0f);
         btnNext.setAlpha(0.0f);
         btnSettings.setAlpha(0.0f);
+        seekBar.setVisibility(View.INVISIBLE);
+        currentPageSettings.setVisibility(View.INVISIBLE);
+        settingsLayout.setVisibility(View.INVISIBLE);
+        settingsLayout.setAlpha(0.9f);
+        settingsTopLayout.setVisibility(View.INVISIBLE);
+        settingsTopLayout.setAlpha(0.9f);
+        bookInfoSettings.setMaxLines(1);
+        btnCloseSettings.setVisibility(View.INVISIBLE);
+
 
         btnSettings.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Objects.requireNonNull(getSupportActionBar()).show();
+
                 return true;
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (settingsOpen) {
+                    try {
+                        oldCurrentPage = currentPage;
+                        seekBar.setMax(realCountPages - 1);
+                        seekBar.setProgress(currentPage + 1);
+                        currentPageSettings.setText(String.format("%d/%d", progress + 1, realCountPages - 1));
+                        openPage(progress);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 
@@ -172,6 +220,52 @@ public class ReadActivity extends AppCompatActivity {
                 }
             });
 
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void openSettings() {
+        try {
+            btnCloseSettings.setVisibility(View.VISIBLE);
+
+            settingsTopLayout.setVisibility(View.VISIBLE);
+
+            bookInfoSettings.setText(book.getBookTitle());
+            currentPageSettings.setText(String.format("%d/%d", currentPage + 1, realCountPages - 1));
+
+            seekBar.setVisibility(View.VISIBLE);
+            seekBar.setMax(realCountPages - 1);
+            seekBar.setProgress(currentPage + 1);
+            currentPageSettings.setVisibility(View.VISIBLE);
+            settingsLayout.setVisibility(View.VISIBLE);
+            btnBack .setVisibility(View.INVISIBLE);
+            btnNext .setVisibility(View.INVISIBLE);
+            btnSettings.setVisibility(View.INVISIBLE);
+
+            settingsOpen = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            settingsOpen = false;
+        }
+
+    }
+
+    private void closeSettings() {
+        try {
+            settingsTopLayout.setVisibility(View.INVISIBLE);
+
+            btnCloseSettings.setVisibility(View.INVISIBLE);
+
+            seekBar.setVisibility(View.INVISIBLE);
+            currentPageSettings.setVisibility(View.INVISIBLE);
+            settingsLayout.setVisibility(View.INVISIBLE);
+            btnBack .setVisibility(View.VISIBLE);
+            btnNext .setVisibility(View.VISIBLE);
+            btnSettings.setVisibility(View.VISIBLE);
+            settingsOpen = false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            settingsOpen = false;
+        }
     }
 
     private int correctedScreenHeight(int screenHeight) {
@@ -247,8 +341,12 @@ public class ReadActivity extends AppCompatActivity {
     }
 
     public void onClickSettings(View view) {
-        openPage(150);
-        ToastBuilder.create(this, "Настройки");
+        if(settingsOpen){
+            closeSettings();
+        }
+        else {
+            openSettings();
+        }
     }
 
     private boolean scrollToBackPage() {
@@ -269,6 +367,19 @@ public class ReadActivity extends AppCompatActivity {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void onClickBackBtnSettings(View view) {
+        openPage(oldCurrentPage);
+        closeSettings();
+    }
+
+    public void onClickGoToSettings(View view) {
+        ActivityOpenHelper.openActivity(this, SettingsActivity.class);
+    }
+
+    public void onClickBtnCloseSettings(View view) {
+        closeSettings();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -306,29 +417,6 @@ public class ReadActivity extends AppCompatActivity {
 
         }
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            ActivityOpenHelper.openActivity(this, SettingsActivity.class);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private Typeface getTypeFaceCode(int number) {

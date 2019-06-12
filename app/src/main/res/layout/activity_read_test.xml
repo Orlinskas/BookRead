@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_read_test_fl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -51,7 +52,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:fadeScrollbars="true">
 
         <TextView
             android:id="@+id/activity_read_test_ll_container_text"
@@ -71,5 +73,97 @@
         android:orientation="vertical">
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/activity_read_test_ll_settings"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorGREY"
+        android:orientation="vertical">
+
+        <SeekBar
+            android:id="@+id/activity_read_test_sb_page_scroller"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp" />
+
+        <TextView
+            android:id="@+id/activity_read_test_tv_current_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_read_test_sb_page_scroller"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:text="Страница"
+            android:textColor="@color/colorWHITE"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/activity_read_test_tv_current_page"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorAccent"
+            android:onClick="onClickBackBtnSettings"
+            android:text="Назад"
+            android:textColor="@color/colorLowGREY" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/activity_read_test_ll_settings_top"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorGREY"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/activity_read_test_tv_book_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="50dp"
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:text="Страница"
+            android:textColor="@color/colorWHITE"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:background="@color/colorAccent"
+            android:layout_marginEnd="4dp"
+            android:layout_centerVertical="true"
+            android:onClick="onClickGoToSettings"
+            app:srcCompat="@drawable/ic_menu_manage" />
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/activity_read_test_btn_close_settings"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/activity_read_test_ll_container_book_info"
+        android:layout_below="@+id/activity_read_test_ll_settings_top"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="143dp"
+        android:alpha="0"
+        android:onClick="onClickBtnCloseSettings"
+        android:text="Button" />
 
 </RelativeLayout>
