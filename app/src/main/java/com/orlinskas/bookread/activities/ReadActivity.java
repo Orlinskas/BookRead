@@ -1,6 +1,7 @@
 package com.orlinskas.bookread.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,7 +39,7 @@ import java.util.Objects;
 public class ReadActivity extends AppCompatActivity {
     LinearLayout fragmentContainer;
     RelativeLayout relativeLayout, settingsLayout, settingsTopLayout;
-    Button btnBack, btnNext, btnSettings, btnCloseSettings;
+    Button btnBack, btnNext, btnSettings, btnCloseSettings, btnCancelSettingsScroll;
     ScrollView scrollView; //вылазит строка прокрутки сбоку, убрать
     TextView bookText, currentPageSettings, bookInfoSettings;
     Book book;
@@ -56,6 +58,7 @@ public class ReadActivity extends AppCompatActivity {
     ArrayList<Integer> pagePositions;
     Settings settings;
     boolean settingsOpen = false;
+    boolean openCurrentProgress = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +82,7 @@ public class ReadActivity extends AppCompatActivity {
         settingsTopLayout = findViewById(R.id.activity_read_test_ll_settings_top);
         bookInfoSettings = findViewById(R.id.activity_read_test_tv_book_info);
         btnCloseSettings = findViewById(R.id.activity_read_test_btn_close_settings);
+        btnCancelSettingsScroll = findViewById(R.id.activity_read_test_btn_cancel_scroll_settings);
 
         SettingsData settingsData = new SettingsData(this);
         settings = settingsData.loadSettings();
@@ -116,7 +120,11 @@ public class ReadActivity extends AppCompatActivity {
         settingsTopLayout.setAlpha(0.9f);
         bookInfoSettings.setMaxLines(1);
         btnCloseSettings.setVisibility(View.INVISIBLE);
-
+        scrollView.setClickable(false);
+        scrollView.setFocusable(false);
+        scrollView.setVerticalScrollBarEnabled(false);
+        settingsTopLayout.setClickable(true);
+        settingsLayout.setClickable(true);
 
         btnSettings.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -132,7 +140,7 @@ public class ReadActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (settingsOpen) {
                     try {
-                        oldCurrentPage = currentPage;
+                        btnCancelSettingsScroll.setVisibility(View.VISIBLE);
                         seekBar.setMax(realCountPages - 1);
                         seekBar.setProgress(currentPage + 1);
                         currentPageSettings.setText(String.format("%d/%d", progress + 1, realCountPages - 1));
@@ -222,16 +230,20 @@ public class ReadActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        return super.onCreateView(name, context, attrs);
+    }
+
     @SuppressLint("DefaultLocale")
     private void openSettings() {
         try {
+            btnCancelSettingsScroll.setVisibility(View.INVISIBLE);
+            oldCurrentPage = currentPage;
             btnCloseSettings.setVisibility(View.VISIBLE);
-
             settingsTopLayout.setVisibility(View.VISIBLE);
-
             bookInfoSettings.setText(book.getBookTitle());
             currentPageSettings.setText(String.format("%d/%d", currentPage + 1, realCountPages - 1));
-
             seekBar.setVisibility(View.VISIBLE);
             seekBar.setMax(realCountPages - 1);
             seekBar.setProgress(currentPage + 1);
@@ -240,7 +252,6 @@ public class ReadActivity extends AppCompatActivity {
             btnBack .setVisibility(View.INVISIBLE);
             btnNext .setVisibility(View.INVISIBLE);
             btnSettings.setVisibility(View.INVISIBLE);
-
             settingsOpen = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -252,9 +263,7 @@ public class ReadActivity extends AppCompatActivity {
     private void closeSettings() {
         try {
             settingsTopLayout.setVisibility(View.INVISIBLE);
-
             btnCloseSettings.setVisibility(View.INVISIBLE);
-
             seekBar.setVisibility(View.INVISIBLE);
             currentPageSettings.setVisibility(View.INVISIBLE);
             settingsLayout.setVisibility(View.INVISIBLE);
@@ -369,9 +378,19 @@ public class ReadActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     public void onClickBackBtnSettings(View view) {
-        openPage(oldCurrentPage);
-        closeSettings();
+        if (settingsOpen) {
+            try {
+                seekBar.setMax(realCountPages - 1);
+                seekBar.setProgress(oldCurrentPage);
+                currentPageSettings.setText(String.format("%d/%d", oldCurrentPage, realCountPages - 1));
+                openPage(oldCurrentPage);
+                seekBar.setProgress(currentPage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void onClickGoToSettings(View view) {
@@ -400,6 +419,9 @@ public class ReadActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         showBookText(words);
+                        if(!openCurrentProgress) {
+                            openPageBookProgress();
+                        }
                     }
                 });
 
@@ -414,7 +436,6 @@ public class ReadActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
             fragmentContainer.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
-
         }
 
     }
@@ -484,4 +505,28 @@ public class ReadActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        book.setBookPercentProgress(getPersentProgress(currentPage, realCountPages));
+    }
+
+    private void openPageBookProgress() {
+        try {
+            openPage(getPageNumber(book.getBookPercentProgress(), realCountPages));
+            openCurrentProgress = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (settingsOpen){
+            closeSettings();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
 }

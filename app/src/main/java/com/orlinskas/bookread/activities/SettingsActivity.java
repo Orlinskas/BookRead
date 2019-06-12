@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -29,6 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
     SeekBar seekBar;
     TextView example, textSizeNumber;
     Spinner spinner;
+    ProgressBar progressBar;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -46,6 +48,8 @@ public class SettingsActivity extends AppCompatActivity {
         example = findViewById(R.id.activity_settings_tv_example);
         textSizeNumber = findViewById(R.id.activity_settings_tv_text_size_number);
         spinner = findViewById(R.id.activity_settings_spn_fonts);
+        progressBar = findViewById(R.id.activity_settings_pb);
+        //progressBar.setVisibility(View.INVISIBLE);
 
         SettingsData settingsData = new SettingsData(this);
         settings = settingsData.loadSettings();
@@ -138,20 +142,21 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
-       // try {
-       //     saveSettings();
-       //     ToastBuilder.create(this, "Настройки приняты");
-       // } catch (Exception e) {
-       //     e.printStackTrace();
-       //     ToastBuilder.create(this, "Ошибка");
-       // }
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     private void changeVisibleElement(View view){
@@ -237,6 +242,13 @@ public class SettingsActivity extends AppCompatActivity {
             e.printStackTrace();
             ToastBuilder.create(this, "Ошибка");
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ToastBuilder.create(this, "Подождите..");
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     private boolean saveSettings() throws Exception{

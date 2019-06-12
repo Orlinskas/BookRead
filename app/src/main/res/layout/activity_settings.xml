@@ -260,12 +260,21 @@
 французских булок…" />
 
 
+        <ProgressBar
+            android:id="@+id/activity_settings_pb"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible"
+            android:indeterminate="true" />
+
         <Button
             android:id="@+id/activity_settings_btn_apply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:background="@color/colorAccent"
             android:onClick="onClickApply"
             android:text="Принять"

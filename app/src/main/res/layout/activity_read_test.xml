@@ -77,7 +77,7 @@
     <RelativeLayout
         android:id="@+id/activity_read_test_ll_settings"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="125dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorGREY"
         android:orientation="vertical">
@@ -88,7 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp" />
 
         <TextView
@@ -106,7 +106,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/activity_read_test_btn_cancel_scroll_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/activity_read_test_tv_current_page"
