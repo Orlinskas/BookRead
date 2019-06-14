@@ -252,12 +252,7 @@
             android:layout_marginTop="10dp"
             android:freezesText="false"
             android:gravity="center"
-            android:text="— Доктор, я не могу больше! Куда бы я ни посмотрел,
-о чём бы ни подумал, мне везде мерещится одно —
-шрифты, шрифты, шрифты!
-— Да не переживайте вы так. Сядьте, успокойтесь,
-выпейте чаю, съешьте ещё этих мягких
-французских булок…" />
+            android:text="@string/franceText" />
 
 
         <ProgressBar
