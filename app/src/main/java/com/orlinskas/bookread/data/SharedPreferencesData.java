@@ -37,6 +37,16 @@ public class SharedPreferencesData {
             editor.apply();
         }
 
+        public static void savePreferenceUsingKey(String key, float value){
+            android.content.SharedPreferences.Editor editor = preferences.edit();
+            editor.putFloat(key, value);
+            editor.apply();
+        }
+
+        public static Float getPreferenceUsingKey(String key, float defValue){
+            return preferences.getFloat(key, defValue);
+        }
+
         public static String getPreferenceUsingKey(String key, String defValue){
             return preferences.getString(key, defValue);
         }

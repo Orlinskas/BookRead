@@ -1,7 +1,6 @@
 package com.orlinskas.bookread.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -10,9 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -26,11 +22,12 @@ import android.widget.TextView;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.Settings;
-import com.orlinskas.bookread.ToastBuilder;
 import com.orlinskas.bookread.data.SettingsData;
+import com.orlinskas.bookread.data.SharedPreferencesData;
 import com.orlinskas.bookread.fragments.BookInfoPageFragment;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
+import com.orlinskas.bookread.presenters.PercentProgress;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,13 +37,12 @@ public class ReadActivity extends AppCompatActivity {
     LinearLayout fragmentContainer;
     RelativeLayout relativeLayout, settingsLayout, settingsTopLayout;
     Button btnBack, btnNext, btnSettings, btnCloseSettings, btnCancelSettingsScroll;
-    ScrollView scrollView; //вылазит строка прокрутки сбоку, убрать
+    ScrollView scrollView;
     TextView bookText, currentPageSettings, bookInfoSettings;
     Book book;
     ArrayList<String> words;
     ProgressBar progressBar;
     SeekBar seekBar;
-
 
     int screenHeight;
     int scrollHeight;
@@ -58,7 +54,10 @@ public class ReadActivity extends AppCompatActivity {
     ArrayList<Integer> pagePositions;
     Settings settings;
     boolean settingsOpen = false;
-    boolean openCurrentProgress = false;
+    boolean needSaveProgress = false;
+    float bookProgress;
+    PercentProgress percentProgress = new PercentProgress();
+    boolean isOpenNeedProgressPage = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -173,14 +172,6 @@ public class ReadActivity extends AppCompatActivity {
         }
     }
 
-    private int getPageNumber(int percentProgress, int allPages) {
-        return (allPages * percentProgress) / 100;
-    }
-
-    private int getPersentProgress(int pageNumber, int allPages) {
-        return (100 * pageNumber) / allPages;
-    }
-
     private ArrayList<String> readBookFile(File file) throws Exception {
         BookBodyFileReader bookBodyFileReader = new BookBodyFileReader();
         return bookBodyFileReader.read(file);
@@ -221,18 +212,20 @@ public class ReadActivity extends AppCompatActivity {
                             RelativeLayout.LayoutParams scrollParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
                             scrollParams.height = screenHeight;
 
+                            if (!isOpenNeedProgressPage) {
+                                try {
+                                    openPageWithProgress(bookProgress);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
             });
-
-    }
-
-    @Override
-    public View onCreateView(String name, Context context, AttributeSet attrs) {
-        return super.onCreateView(name, context, attrs);
     }
 
     @SuppressLint("DefaultLocale")
@@ -297,7 +290,7 @@ public class ReadActivity extends AppCompatActivity {
         ArrayList<Integer> pagePositions = new ArrayList<>();
         pagePositions.add(0);
         for (int i = 1; i < countPages; i++){
-            pagePositions.add((screenHeight * i) + 7); //КОСТЫЛЬ С ЦИФРОЙ, так буквы не обрываются
+            pagePositions.add((screenHeight * i) + 7); //КОСТЫЛЬ С ЦИФРОЙ, так буквы не обрываются (почти)
         }
         if (pagePositions.get(pagePositions.size() - 1) < scrollHeight) {
             pagePositions.add(scrollHeight);
@@ -361,6 +354,7 @@ public class ReadActivity extends AppCompatActivity {
     private boolean scrollToBackPage() {
         try {
             scrollView.scrollTo(0, pagePositions.get(currentPage - 1));
+            needSaveProgress = true;
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -371,6 +365,7 @@ public class ReadActivity extends AppCompatActivity {
     private boolean scrollToNextPage() {
         try {
             scrollView.scrollTo(0, pagePositions.get(currentPage + 1));
+            needSaveProgress = true;
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -419,11 +414,11 @@ public class ReadActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         showBookText(words);
-                        if(!openCurrentProgress) {
-                            openPageBookProgress();
-                        }
                     }
                 });
+
+                SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
+                bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -506,17 +501,10 @@ public class ReadActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        book.setBookPercentProgress(getPersentProgress(currentPage, realCountPages));
-    }
-
-    private void openPageBookProgress() {
-        try {
-            openPage(getPageNumber(book.getBookPercentProgress(), realCountPages));
-            openCurrentProgress = true;
-        } catch (Exception e) {
-            e.printStackTrace();
+    protected void onStop() {
+        super.onStop();
+        if (needSaveProgress) {
+            SharedPreferencesData.savePreferenceUsingKey(book.getBookTitle(), percentProgress.getPercentProgress(currentPage, realCountPages));
         }
     }
 
@@ -527,6 +515,21 @@ public class ReadActivity extends AppCompatActivity {
         }
         else {
             super.onBackPressed();
+        }
+    }
+
+    private void openPageWithProgress (float bookProgress) {
+        try {
+            int needPage = percentProgress.getPageNumber(bookProgress, realCountPages);
+
+            if(needPage != 0){
+                openPage(needPage);
+                if(currentPage == needPage){
+                   isOpenNeedProgressPage = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         //parse();
 
 
-        SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
+        //SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
         AppContext.setContext(getApplicationContext());
 
         permissionStatus = ContextCompat.checkSelfPermission
