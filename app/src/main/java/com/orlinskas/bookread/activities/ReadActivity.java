@@ -36,31 +36,33 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ReadActivity extends AppCompatActivity {
-    LinearLayout fragmentContainer;
-    RelativeLayout relativeLayout, settingsLayout, settingsTopLayout;
-    Button btnBack, btnNext, btnSettings, btnCloseSettings, btnCancelSettingsScroll;
-    ScrollView scrollView;
-    TextView bookText, currentPageSettings, bookInfoSettings, animationPageScroll;
-    Book book;
-    ArrayList<String> words;
-    ProgressBar progressBar;
-    SeekBar seekBar;
+    private LinearLayout fragmentContainer;
+    private RelativeLayout relativeLayout, settingsLayout, settingsTopLayout;
+    private Button btnBack, btnNext, btnSettings, btnCloseSettings, btnCancelSettingsScroll;
+    private ScrollView scrollView;
+    private TextView bookText, currentPageSettings, bookInfoSettings, animationPageScroll;
+    private Book book;
+    private ArrayList<String> words;
+    private ProgressBar progressBar;
+    private SeekBar seekBar;
 
-    int screenHeight;
-    int scrollHeight;
-    int fragmentHeight;
-    int countPages;
-    int realCountPages;
-    int currentPage = 0;
-    int oldCurrentPage;
-    ArrayList<Integer> pagePositions;
-    Settings settings;
-    boolean settingsOpen = false;
-    boolean needSaveProgress = false;
-    float bookProgress;
-    PercentProgress percentProgress = new PercentProgress();
-    boolean isOpenNeedProgressPage = false;
+    private int screenHeight;
+    private int scrollHeight;
+    public  int fragmentHeight;
+    private int countPages;
+    private int realCountPages;
+    private int currentPage = 0;
+    private int oldCurrentPage;
+    private ArrayList<Integer> pagePositions;
+    private Settings settings;
+    private boolean settingsOpen = false;
+    private boolean needSaveProgress = false;
+    private float bookProgress;
+    private PercentProgress percentProgress = new PercentProgress();
+    private boolean isOpenNeedProgressPage = false;
 
+
+    //первая часть отображения
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,16 +165,45 @@ public class ReadActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
-    private void openPage(int pageNumber) {
-        try {
-            currentPage = pageNumber;
-            scrollView.scrollTo(0, pagePositions.get(currentPage));
-        } catch (Exception e) {
-            e.printStackTrace();
+    @SuppressLint("StaticFieldLeak")
+    private class LoadBook extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            fragmentContainer.setVisibility(View.INVISIBLE);
         }
+
+        @Override
+        protected Void doInBackground(Void... parameter) {
+            try {
+                book = (Book) getIntent().getSerializableExtra("book");
+                words = readBookFile(book.getBookBodyFile());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showBookText(words);
+                    }
+                });
+
+                SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
+                bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            fragmentContainer.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     private ArrayList<String> readBookFile(File file) throws Exception {
@@ -189,10 +220,81 @@ public class ReadActivity extends AppCompatActivity {
         bookText.setText(stringBuilder);
     }
 
+    private void setExampleParams() {
+        bookText.setTextSize(settings.getTextSize());
+        bookText.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
+        bookText.setTypeface(getTypeFaceCode(settings.getTypeface()));
+
+        try {
+            animationPageScroll.setTextSize(settings.getTextSize());
+            animationPageScroll.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
+            animationPageScroll.setTypeface(getTypeFaceCode(settings.getTypeface()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        switch (settings.getTheme()){
+            case 1:
+                scrollView.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
+                bookText.setTextColor(getResources().getColor(R.color.colorLowBlack));
+                animationPageScroll.setTextColor(getResources().getColor(R.color.colorLowBlack));
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
+                animationPageScroll.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
+                break;
+            case 2:
+                scrollView.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
+                bookText.setTextColor(getResources().getColor(R.color.colorWHITE));
+                animationPageScroll.setTextColor(getResources().getColor(R.color.colorWHITE));
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
+                animationPageScroll.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
+                break;
+            case 3:
+                scrollView.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
+                bookText.setTextColor(getResources().getColor(R.color.colorLowBlack));
+                animationPageScroll.setTextColor(getResources().getColor(R.color.colorLowBlack));
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
+                animationPageScroll.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
+                break;
+        }
+
+        if(settings.isPortraitOrientation()){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
+
+    private Typeface getTypeFaceCode(int number) {
+        switch (number) {
+            case 0:
+                return Typeface.DEFAULT;
+            case 1:
+                return Typeface.DEFAULT_BOLD;
+            case 2:
+                return Typeface.SERIF;
+            case 3:
+                return Typeface.SANS_SERIF;
+            case 4:
+                return Typeface.MONOSPACE;
+            default:return Typeface.DEFAULT;
+        }
+    }
+
+    private void openPage(int pageNumber) {
+        try {
+            currentPage = pageNumber;
+            scrollView.scrollTo(0, pagePositions.get(currentPage));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //вторая часть отображения
     @Override
     protected void onStart() {
         super.onStart();
-
             //ждет отображения, все самое важное происходит тут
             scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -222,55 +324,12 @@ public class ReadActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
             });
-    }
-
-    @SuppressLint("DefaultLocale")
-    private void openSettings() {
-        try {
-            btnCancelSettingsScroll.setVisibility(View.INVISIBLE);
-            oldCurrentPage = currentPage;
-            btnCloseSettings.setVisibility(View.VISIBLE);
-            settingsTopLayout.setVisibility(View.VISIBLE);
-            bookInfoSettings.setText(book.getBookTitle());
-            currentPageSettings.setText(String.format("%d/%d", currentPage + 1, realCountPages - 1));
-            seekBar.setVisibility(View.VISIBLE);
-            seekBar.setMax(realCountPages - 1);
-            seekBar.setProgress(currentPage + 1);
-            currentPageSettings.setVisibility(View.VISIBLE);
-            settingsLayout.setVisibility(View.VISIBLE);
-            btnBack .setVisibility(View.INVISIBLE);
-            btnNext .setVisibility(View.INVISIBLE);
-            btnSettings.setVisibility(View.INVISIBLE);
-            settingsOpen = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            settingsOpen = false;
-        }
-
-    }
-
-    private void closeSettings() {
-        try {
-            settingsTopLayout.setVisibility(View.INVISIBLE);
-            btnCloseSettings.setVisibility(View.INVISIBLE);
-            seekBar.setVisibility(View.INVISIBLE);
-            currentPageSettings.setVisibility(View.INVISIBLE);
-            settingsLayout.setVisibility(View.INVISIBLE);
-            btnBack .setVisibility(View.VISIBLE);
-            btnNext .setVisibility(View.VISIBLE);
-            btnSettings.setVisibility(View.VISIBLE);
-            settingsOpen = false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            settingsOpen = false;
-        }
     }
 
     private int correctedScreenHeight(int screenHeight) {
@@ -331,16 +390,37 @@ public class ReadActivity extends AppCompatActivity {
 
     }
 
+    private void openPageWithProgress (float bookProgress) {
+        try {
+            int needPage = percentProgress.getPageNumber(bookProgress, realCountPages);
+
+            if(needPage != 0){
+                openPage(needPage);
+                if(currentPage == needPage){
+                    isOpenNeedProgressPage = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //активная фаза чтения
+    @SuppressLint("DefaultLocale")
     public void onClickBackPage(View view) {
-        if(scrollToBackPage()){
-            currentPage--;
+        if (currentPage >= 1) {
+            OpenPreviosPage openPreviosPage = new OpenPreviosPage();
+            openPreviosPage.execute();
         }
         showPagesInfoFragment(currentPage, realCountPages);
     }
 
     public void onClickNextPage(View view) {
-        if(scrollToNextPage()){
-            currentPage++;
+        if (currentPage < realCountPages) {
+            OpenNextPage openNextPage = new OpenNextPage();
+            openNextPage.execute();
+
         }
         showPagesInfoFragment(currentPage, realCountPages);
     }
@@ -350,36 +430,165 @@ public class ReadActivity extends AppCompatActivity {
             closeSettings();
         }
         else {
+
             openSettings();
         }
     }
 
-    private boolean scrollToBackPage() {
-        try {
-            if (currentPage >= 1) {
-                OpenPreviosPage openPreviosPage = new OpenPreviosPage();
-                openPreviosPage.execute();
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    @SuppressLint("StaticFieldLeak")
+    private class OpenNextPage extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            animationPageScroll.setHeight(screenHeight);
+            animationPageScroll.setVisibility(View.VISIBLE);
         }
-        return false;
+
+        @Override
+        protected Boolean doInBackground(Void... parameter) {
+            try {
+                Animation animation;
+                animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.next_page_anim);
+                animationPageScroll.startAnimation(animation);
+                scrollView.scrollTo(0, pagePositions.get(currentPage + 1));
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if(result){
+                currentPage++;
+                needSaveProgress = true;
+            }
+            animationPageScroll.setVisibility(View.INVISIBLE);
+        }
     }
 
-    private boolean scrollToNextPage() {
-        try {
-            if (currentPage < realCountPages) {
-                OpenNextPage openNextPage = new OpenNextPage();
-                openNextPage.execute();
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    @SuppressLint("StaticFieldLeak")
+    private class OpenPreviosPage extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            animationPageScroll.setHeight(screenHeight);
+            animationPageScroll.setVisibility(View.VISIBLE);
         }
-        return false;
+
+        @Override
+        protected Boolean doInBackground(Void... parameter) {
+            try {
+                Animation animation;
+                animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.previos_page_anim);
+                animationPageScroll.startAnimation(animation);
+                scrollView.scrollTo(0, pagePositions.get(currentPage - 1));
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if(result){
+                currentPage--;
+                needSaveProgress = true;
+            }
+            animationPageScroll.setVisibility(View.INVISIBLE);
+        }
     }
 
+    @SuppressLint("DefaultLocale")
+    private void openSettings() {
+        try {
+            btnCancelSettingsScroll.setVisibility(View.INVISIBLE);
+            oldCurrentPage = currentPage;
+            btnCloseSettings.setVisibility(View.VISIBLE);
+            settingsTopLayout.setVisibility(View.VISIBLE);
+            bookInfoSettings.setText(book.getBookTitle());
+            currentPageSettings.setText(String.format("%d/%d", currentPage + 1, realCountPages - 1));
+            seekBar.setVisibility(View.VISIBLE);
+            seekBar.setMax(realCountPages - 1);
+            seekBar.setProgress(currentPage + 1);
+            currentPageSettings.setVisibility(View.VISIBLE);
+            settingsLayout.setVisibility(View.VISIBLE);
+            btnBack .setVisibility(View.INVISIBLE);
+            btnNext .setVisibility(View.INVISIBLE);
+            btnSettings.setVisibility(View.INVISIBLE);
+
+            Animation animationTop = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.open_settings_top);
+            settingsTopLayout.startAnimation(animationTop);
+            Animation animationBot = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.open_settings_bottom);
+            settingsLayout.startAnimation(animationBot);
+
+            settingsOpen = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            settingsOpen = false;
+        }
+
+    }
+
+    private void closeSettings() {
+        CloseSettings closeSettings = new CloseSettings();
+        closeSettings.execute();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class CloseSettings extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            settingsOpen = false;
+            Animation animationTop = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.close_settings_top);
+            settingsTopLayout.startAnimation(animationTop);
+            Animation animationBot = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.close_settigs_bottom);
+            settingsLayout.startAnimation(animationBot);
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... parameter) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        settingsTopLayout.setVisibility(View.INVISIBLE);
+                        btnCloseSettings.setVisibility(View.INVISIBLE);
+                        seekBar.setVisibility(View.INVISIBLE);
+                        currentPageSettings.setVisibility(View.INVISIBLE);
+                        settingsLayout.setVisibility(View.INVISIBLE);
+                        btnBack .setVisibility(View.VISIBLE);
+                        btnNext .setVisibility(View.VISIBLE);
+                        btnSettings.setVisibility(View.VISIBLE);
+                        settingsOpen = false;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        settingsOpen = false;
+                    }
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+    }
+
+
+    //активная фаза открытого меню настроек
     @SuppressLint("DefaultLocale")
     public void onClickBackBtnSettings(View view) {
         if (settingsOpen) {
@@ -397,7 +606,7 @@ public class ReadActivity extends AppCompatActivity {
 
     public void onClickGoToSettings(View view) {
         try {
-            SharedPreferencesData.savePreferenceUsingKey(book.getBookTitle(), percentProgress.getPercentProgress(currentPage, realCountPages));
+            //SharedPreferencesData.savePreferenceUsingKey(book.getBookTitle(), percentProgress.getPercentProgress(currentPage, realCountPages));
             ActivityOpenHelper.openActivity(this, SettingsActivity.class);
         } catch (Exception e) {
             e.printStackTrace();
@@ -408,106 +617,8 @@ public class ReadActivity extends AppCompatActivity {
         closeSettings();
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class LoadBook extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            fragmentContainer.setVisibility(View.INVISIBLE);
-        }
 
-        @Override
-        protected Void doInBackground(Void... parameter) {
-            try {
-                book = (Book) getIntent().getSerializableExtra("book");
-                words = readBookFile(book.getBookBodyFile());
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showBookText(words);
-                    }
-                });
-
-                SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
-                bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            fragmentContainer.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
-        }
-
-    }
-
-    private Typeface getTypeFaceCode(int number) {
-        switch (number) {
-            case 0:
-                return Typeface.DEFAULT;
-            case 1:
-                return Typeface.DEFAULT_BOLD;
-            case 2:
-                return Typeface.SERIF;
-            case 3:
-                return Typeface.SANS_SERIF;
-            case 4:
-                return Typeface.MONOSPACE;
-            default:return Typeface.DEFAULT;
-        }
-    }
-
-    private void setExampleParams() {
-        bookText.setTextSize(settings.getTextSize());
-        bookText.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
-        bookText.setTypeface(getTypeFaceCode(settings.getTypeface()));
-
-        try {
-           animationPageScroll.setTextSize(settings.getTextSize());
-           animationPageScroll.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
-           animationPageScroll.setTypeface(getTypeFaceCode(settings.getTypeface()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        switch (settings.getTheme()){
-            case 1:
-                scrollView.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
-                bookText.setTextColor(getResources().getColor(R.color.colorLowBlack));
-                animationPageScroll.setTextColor(getResources().getColor(R.color.colorLowBlack));
-                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
-                animationPageScroll.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
-                break;
-            case 2:
-                scrollView.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
-                bookText.setTextColor(getResources().getColor(R.color.colorWHITE));
-                animationPageScroll.setTextColor(getResources().getColor(R.color.colorWHITE));
-                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
-                animationPageScroll.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
-                break;
-            case 3:
-                scrollView.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
-                bookText.setTextColor(getResources().getColor(R.color.colorLowBlack));
-                animationPageScroll.setTextColor(getResources().getColor(R.color.colorLowBlack));
-                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
-                animationPageScroll.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
-                break;
-        }
-
-        if(settings.isPortraitOrientation()){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-        else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
-    }
-
+    //фаза закрытия
     @Override
     protected void onResume() {
         super.onResume();
@@ -527,11 +638,19 @@ public class ReadActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         if (needSaveProgress) {
             SharedPreferencesData.savePreferenceUsingKey(book.getBookTitle(), percentProgress.getPercentProgress(currentPage, realCountPages));
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // if (needSaveProgress) {
+        //     SharedPreferencesData.savePreferenceUsingKey(book.getBookTitle(), percentProgress.getPercentProgress(currentPage, realCountPages));
+        // }
     }
 
     @Override
@@ -542,82 +661,5 @@ public class ReadActivity extends AppCompatActivity {
         else {
             super.onBackPressed();
         }
-    }
-
-    private void openPageWithProgress (float bookProgress) {
-        try {
-            int needPage = percentProgress.getPageNumber(bookProgress, realCountPages);
-
-            if(needPage != 0){
-                openPage(needPage);
-                if(currentPage == needPage){
-                   isOpenNeedProgressPage = true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class OpenNextPage extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            animationPageScroll.setHeight(screenHeight);
-            animationPageScroll.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Void doInBackground(Void... parameter) {
-            try {
-                Animation animation;
-                animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.next_page_anim);
-                animationPageScroll.startAnimation(animation);
-                scrollView.scrollTo(0, pagePositions.get(currentPage + 1));
-                needSaveProgress = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            animationPageScroll.setVisibility(View.INVISIBLE);
-        }
-
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class OpenPreviosPage extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            animationPageScroll.setHeight(screenHeight);
-            animationPageScroll.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Void doInBackground(Void... parameter) {
-            try {
-                Animation animation;
-                animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.previos_page_anim);
-                animationPageScroll.startAnimation(animation);
-                scrollView.scrollTo(0, pagePositions.get(currentPage - 1));
-                needSaveProgress = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            animationPageScroll.setVisibility(View.INVISIBLE);
-        }
-
     }
 }
