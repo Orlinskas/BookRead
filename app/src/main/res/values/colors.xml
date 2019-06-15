@@ -12,7 +12,7 @@
     <color name="colorWHITE">#FCFCFC</color>
     <color name="colorShadow">#94000000</color>
     <color name="colorPrimaryDarkAlpha">#8A2B4570</color>
-    <color name="colorThemeTelegramBackground">#182533</color>
-    <color name="colorThemeVintageBackground">#B9A37B</color>
+    <color name="colorThemeTelegramBackground">#202D41</color>
+    <color name="colorThemeVintageBackground">#C0A885</color>
 
 </resources>

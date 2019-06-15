@@ -222,12 +222,12 @@ public class ReadActivity extends AppCompatActivity {
 
     private void setExampleParams() {
         bookText.setTextSize(settings.getTextSize());
-        bookText.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
+        //bookText.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
         bookText.setTypeface(getTypeFaceCode(settings.getTypeface()));
 
         try {
             animationPageScroll.setTextSize(settings.getTextSize());
-            animationPageScroll.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
+            //animationPageScroll.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
             animationPageScroll.setTypeface(getTypeFaceCode(settings.getTypeface()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,8 +243,8 @@ public class ReadActivity extends AppCompatActivity {
                 break;
             case 2:
                 scrollView.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
-                bookText.setTextColor(getResources().getColor(R.color.colorWHITE));
-                animationPageScroll.setTextColor(getResources().getColor(R.color.colorWHITE));
+                bookText.setTextColor(getResources().getColor(R.color.colorLowGREY));
+                animationPageScroll.setTextColor(getResources().getColor(R.color.colorLowGREY));
                 relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
                 animationPageScroll.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
                 break;
