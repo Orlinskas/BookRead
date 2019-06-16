@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/activity_library_rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/activity_library_ll"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/activity_library_ll_container"
@@ -14,5 +21,144 @@
             android:orientation="vertical" />
     </ScrollView>
 
+    <LinearLayout
+        android:id="@+id/activity_library_pelena"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorAlphaGrey">
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/activity_library_rl_annotation_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <Button
+            android:id="@+id/activity_library_btn_close_mannotation_menu"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:alpha="0.0"
+            android:onClick="onClickCloseMenu"
+           />
+
+        <RelativeLayout
+            android:id="@+id/activity_library_rl_annotation_menu_window"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/activity_library_btn_close_mannotation_menu"
+            android:background="@color/colorAlphaPrimary">
+
+            <ProgressBar
+                android:id="@+id/activity_library_rl_annotation_menu_pb"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/activity_library_rl_annotation_menu_image"
+                android:layout_width="125dp"
+                android:layout_height="121dp"
+                android:layout_below="@+id/activity_library_rl_annotation_menu_pb"
+                android:layout_marginTop="5dp"
+                app:srcCompat="@drawable/ic_book_red" />
+
+            <TextView
+                android:id="@+id/activity_library_rl_annotation_menu_author"
+                android:layout_width="261dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/activity_library_rl_annotation_menu_pb"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="0dp"
+                android:layout_toEndOf="@+id/activity_library_rl_annotation_menu_image"
+                android:shadowColor="@color/colorShadow"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:text="Автор"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/activity_library_rl_annotation_menu_title"
+                android:layout_width="261dp"
+                android:layout_height="68dp"
+                android:layout_below="@+id/activity_library_rl_annotation_menu_author"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="0dp"
+                android:layout_toEndOf="@+id/activity_library_rl_annotation_menu_image"
+                android:shadowColor="@color/colorShadow"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:text="название книги"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp" />
+
+            <ScrollView
+                android:id="@+id/activity_library_rl_annotation_menu_scroll_viev"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/activity_library_rl_annotation_menu_button_read"
+                android:layout_below="@+id/activity_library_rl_annotation_menu_image"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        android:shadowColor="@color/colorShadow"
+                        android:shadowDy="2"
+                        android:shadowRadius="4"
+                        android:text="Аннотация"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/activity_library_rl_annotation_menu_annotation_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="15dp"
+                        android:shadowColor="@color/colorShadow"
+                        android:shadowDy="2"
+                        android:shadowRadius="4"
+                        android:text="Текст анотации"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </ScrollView>
+
+            <Button
+                android:id="@+id/activity_library_rl_annotation_menu_button_read"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
+                android:background="@color/colorPrimary"
+                android:onClick="onClickReadBook"
+                android:text="Читать"
+                android:textColor="@color/colorWHITE" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>
 
 

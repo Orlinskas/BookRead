@@ -31,6 +31,7 @@ public class LibraryBookFragment extends Fragment {
     public int countFragments;
     private FragmentLibraryBookActions listenerDelete;
     private FragmentLibraryBookActions listenerOpen;
+    private FragmentLibraryBookActions listenerShowAnnotation;
 
     @Nullable
     @Override
@@ -66,9 +67,10 @@ public class LibraryBookFragment extends Fragment {
         button.setAlpha(0.0f);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorMiddleGREY));
-                listenerOpen.openBook(book);
+                //progressBar.setVisibility(View.VISIBLE);
+                //relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorMiddleGREY));
+                listenerShowAnnotation.showBookAnnotation(book);
+                //listenerOpen.openBook(book);
             }
         });
         delete.setAlpha(0.5f);
@@ -98,5 +100,6 @@ public class LibraryBookFragment extends Fragment {
         super.onAttach(context);
         listenerDelete = (FragmentLibraryBookActions) context;
         listenerOpen = (FragmentLibraryBookActions) context;
+        listenerShowAnnotation = (FragmentLibraryBookActions) context;
     }
 }

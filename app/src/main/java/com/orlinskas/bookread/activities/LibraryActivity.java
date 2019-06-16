@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,12 +12,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.ToastBuilder;
+import com.orlinskas.bookread.data.SharedPreferencesData;
 import com.orlinskas.bookread.fragments.LibraryBookFragment;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.LibraryHelper;
@@ -26,8 +35,15 @@ import java.util.ArrayList;
 
 public class LibraryActivity extends AppCompatActivity implements FragmentLibraryBookActions {
     static int countFragments = 1;
-    LinearLayout linearLayout;
+    LinearLayout linearLayout, backgrounOnOpenMenu;
     ScrollView scrollView;
+    RelativeLayout parentMenuAnnotation;
+    ImageView menuImageBook;
+    TextView authorName, bookTitle, annotation;
+    Book clickedBook;
+    boolean isOpenMenu = false;
+    ProgressBar progressBar;
+    private Float bookProgress = 0.0f;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +52,17 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
 
         scrollView = findViewById(R.id.activity_library_ll);
         linearLayout = findViewById(R.id.activity_library_ll_container);
+
+        parentMenuAnnotation = findViewById(R.id.activity_library_rl_annotation_menu);
+        menuImageBook = findViewById(R.id.activity_library_rl_annotation_menu_image);
+        authorName = findViewById(R.id.activity_library_rl_annotation_menu_author);
+        bookTitle = findViewById(R.id.activity_library_rl_annotation_menu_title);
+        progressBar = findViewById(R.id.activity_library_rl_annotation_menu_pb);
+        annotation = findViewById(R.id.activity_library_rl_annotation_menu_annotation_text);
+        backgrounOnOpenMenu = findViewById(R.id.activity_library_pelena);
+
+        progressBar.setIndeterminate(false);
+        backgrounOnOpenMenu.setVisibility(View.INVISIBLE);
 
         try {
             LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
@@ -97,18 +124,84 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             ActivityOpenHelper.openActivity(getApplicationContext(), SettingsActivity.class);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override //или показать меню
+    public boolean showBookAnnotation(Book book) {
+        try {
+            bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (bookProgress > 0.0f){
+            openBook(book);
+        }
+        else {
+            try {
+                Animation animation;
+                animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.open_library_menu);
+                parentMenuAnnotation.startAnimation(animation);
+                backgrounOnOpenMenu.setVisibility(View.VISIBLE);
+                if (book.getCoverImage() == null) {
+                    menuImageBook.setImageResource(book.getCoverImagePath());
+                }else {
+                    menuImageBook.setImageURI(Uri.parse(book.getCoverImage().getAbsolutePath()));
+                }
+                authorName.setText(book.getAuthorName());
+                bookTitle.setText(book.getBookTitle());
+
+                if(book.getAnnotation().length() < 10){
+                    annotation.setText("Приятного чтения!");
+                }
+                else {
+                    annotation.setText(book.getAnnotation());
+                }
+
+                clickedBook = book;
+                parentMenuAnnotation.setVisibility(View.VISIBLE);
+                isOpenMenu = true;
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+                openBook(book);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public void onClickCloseMenu(View view) {
+        closeMenu();
+    }
+
+    public void onClickReadBook(View view) {
+        progressBar.setIndeterminate(true);
+        openBook(clickedBook);
+    }
+
+    private void closeMenu(){
+        if(isOpenMenu) {
+            Animation animation;
+            animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.close_library_menu);
+            parentMenuAnnotation.startAnimation(animation);
+            backgrounOnOpenMenu.setVisibility(View.INVISIBLE);
+            parentMenuAnnotation.setVisibility(View.INVISIBLE);
+            isOpenMenu = false;
+        }
+    }
+
+    @Override
+    public void openBook(Book book) {
+        Intent i = new Intent(getApplicationContext(), ReadActivity.class);
+        i.putExtra("book", book);
+        startActivity(i);
     }
 
     @Override
@@ -153,9 +246,18 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
     }
 
     @Override
-    public void openBook(Book book) {
-        Intent i = new Intent(getApplicationContext(), ReadActivity.class);
-        i.putExtra("book", book);
-        startActivity(i);
+    public void onBackPressed() {
+        if(isOpenMenu){
+            closeMenu();
+        }
+        else {
+            ActivityOpenHelper.openActivity(this, MainActivity.class);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progressBar.setIndeterminate(false);
     }
 }
