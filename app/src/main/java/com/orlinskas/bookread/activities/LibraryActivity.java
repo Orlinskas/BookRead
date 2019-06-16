@@ -133,9 +133,10 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
         return super.onOptionsItemSelected(item);
     }
 
-    @Override //или показать меню
+    @Override //показать меню
     public boolean showBookAnnotation(Book book) {
         try {
+            SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
             bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f);
         } catch (Exception e) {
             e.printStackTrace();

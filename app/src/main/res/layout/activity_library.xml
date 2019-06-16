@@ -105,8 +105,8 @@
                 android:layout_height="match_parent"
                 android:layout_above="@+id/activity_library_rl_annotation_menu_button_read"
                 android:layout_below="@+id/activity_library_rl_annotation_menu_image"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp">
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -132,7 +132,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="5dp"
                         android:shadowColor="@color/colorShadow"
                         android:shadowDy="2"
                         android:shadowRadius="4"
@@ -150,7 +150,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="5dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorAccent"
                 android:onClick="onClickReadBook"
                 android:text="Читать"
                 android:textColor="@color/colorWHITE" />

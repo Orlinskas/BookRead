@@ -430,7 +430,6 @@ public class ReadActivity extends AppCompatActivity {
             closeSettings();
         }
         else {
-
             openSettings();
         }
     }
@@ -606,7 +605,7 @@ public class ReadActivity extends AppCompatActivity {
 
     public void onClickGoToSettings(View view) {
         try {
-            //SharedPreferencesData.savePreferenceUsingKey(book.getBookTitle(), percentProgress.getPercentProgress(currentPage, realCountPages));
+            SharedPreferencesData.savePreferenceUsingKey(book.getBookTitle(), percentProgress.getPercentProgress(currentPage, realCountPages));
             ActivityOpenHelper.openActivity(this, SettingsActivity.class);
         } catch (Exception e) {
             e.printStackTrace();
