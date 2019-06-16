@@ -9,6 +9,7 @@ import com.orlinskas.bookread.helpers.BookBodyFileWriter;
 import com.orlinskas.bookread.helpers.BookImageFileWriter;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -98,19 +99,23 @@ public class ParserXmlToBook {
                         }
                     }
                 }
-                if (tag != null && tag.equals(XML_TAG.BODY)) { //очень долго!
+                if (tag != null && tag.equals(XML_TAG.BODY)) {//очень долго!
+
                     while (checkEndTag(XML_TAG.BODY, parser.getName(), parser.getEventType())) {
                         try {
-                            body.append("   ").append(parser.nextText());
+                            String text = parser.getText();
+                            if(text != null) {
+                                body.append(text);
+                            }
                         } catch (Exception ignored) {}
-                        if (parser.getName() != null && parser.getName().equals(XML_TAG.P)){
-                            body.append("\n");
+                        if (parser.getName() != null && parser.getName().equals(XML_TAG.P) && parser.getEventType() == XmlPullParser.START_TAG){
+                            body.append("    ");
                         }
                         if (parser.getName() != null && parser.getName().equals(XML_TAG.TITLE)){
-                            body.append("\n" + "\n");
+                            body.append("\n");
                         }
                         if (parser.getName() != null && parser.getName().equals(XML_TAG.EMPTY_LINE)){
-                            body.append("\n" + "\n");
+                            body.append("\n");
                         }
                         parser.next();
                     }
