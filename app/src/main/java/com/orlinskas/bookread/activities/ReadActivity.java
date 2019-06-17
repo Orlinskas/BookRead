@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -87,6 +89,8 @@ public class ReadActivity extends AppCompatActivity {
         btnCloseSettings = findViewById(R.id.activity_read_test_btn_close_settings);
         btnCancelSettingsScroll = findViewById(R.id.activity_read_test_btn_cancel_scroll_settings);
         animationPageScroll = findViewById(R.id.activity_read_test_tv_animation_scroll_page);
+
+        //registerForContextMenu(bookText);
 
         SettingsData settingsData = new SettingsData(this);
         settings = settingsData.loadSettings();
@@ -317,9 +321,11 @@ public class ReadActivity extends AppCompatActivity {
                             RelativeLayout.LayoutParams scrollParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
                             scrollParams.height = screenHeight;
 
-                            if (!isOpenNeedProgressPage) {
+                            if (!isOpenNeedProgressPage & progressBar.getVisibility() == View.INVISIBLE & realCountPages > 50) {
                                 try {
-                                    openPageWithProgress(bookProgress);
+                                    OpenPageWithProgress openPageWithProgress = new OpenPageWithProgress();
+                                    openPageWithProgress.execute();
+                                    //openPageWithProgress(bookProgress);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -390,21 +396,49 @@ public class ReadActivity extends AppCompatActivity {
 
     }
 
-    private void openPageWithProgress (float bookProgress) {
-        try {
-            int needPage = percentProgress.getPageNumber(bookProgress, realCountPages);
-
-            if(needPage != 0){
-                openPage(needPage);
-                if(currentPage == needPage){
-                    isOpenNeedProgressPage = true;
-                }
+    @SuppressLint("StaticFieldLeak")
+    private class OpenPageWithProgress extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        @Override
+        protected Void doInBackground(Void... parameter) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    openPageWithProgress(bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f));
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
     }
 
+    private void openPageWithProgress (float bookProgress) {
+         try {
+             int needPage = percentProgress.getPageNumber(bookProgress, realCountPages);
+             if(needPage != 0){
+                 openPage(needPage);
+                 if(currentPage == needPage){
+                     isOpenNeedProgressPage = true;
+                 }
+             }
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+     }
 
     //активная фаза чтения
     @SuppressLint("DefaultLocale")
@@ -586,6 +620,18 @@ public class ReadActivity extends AppCompatActivity {
 
     }
 
+   // @Override
+   // public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+   //     super.onCreateContextMenu(menu, v, menuInfo);
+   //     bookText.setSelectAllOnFocus(true);
+   //     menu.add(0,v.getId(),0,"Привет");
+//
+   // }
+//
+   // @Override
+   // public boolean onContextItemSelected(MenuItem item) {
+   //     return super.onContextItemSelected(item);
+   // }
 
     //активная фаза открытого меню настроек
     @SuppressLint("DefaultLocale")
@@ -630,6 +676,11 @@ public class ReadActivity extends AppCompatActivity {
             try {
                 settings = currentSettings;
                 setExampleParams();
+                try {
+                    openPageWithProgress(bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
