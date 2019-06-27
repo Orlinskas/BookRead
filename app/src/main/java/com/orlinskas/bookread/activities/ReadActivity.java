@@ -26,8 +26,12 @@ import android.widget.TextView;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.Settings;
+import com.orlinskas.bookread.Word;
+import com.orlinskas.bookread.bookReadAlgorithm.WordHandler;
+import com.orlinskas.bookread.data.DatabaseAdapter;
 import com.orlinskas.bookread.data.SettingsData;
 import com.orlinskas.bookread.data.SharedPreferencesData;
+import com.orlinskas.bookread.data.WordsDatabase;
 import com.orlinskas.bookread.fragments.BookInfoPageFragment;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
@@ -37,6 +41,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
+//баг с открытием нужной страницы. видно первую, но открыта нужная
 public class ReadActivity extends AppCompatActivity {
     private LinearLayout fragmentContainer;
     private RelativeLayout relativeLayout, settingsLayout, settingsTopLayout;
@@ -50,7 +55,7 @@ public class ReadActivity extends AppCompatActivity {
 
     private int screenHeight;
     private int scrollHeight;
-    public  int fragmentHeight;
+    public int fragmentHeight;
     private int countPages;
     private int realCountPages;
     private int currentPage = 0;
@@ -62,6 +67,7 @@ public class ReadActivity extends AppCompatActivity {
     private float bookProgress;
     private PercentProgress percentProgress = new PercentProgress();
     private boolean isOpenNeedProgressPage = false;
+    String tableName;
 
 
     //первая часть отображения
@@ -95,7 +101,7 @@ public class ReadActivity extends AppCompatActivity {
         SettingsData settingsData = new SettingsData(this);
         settings = settingsData.loadSettings();
 
-        switch (settings.getTheme()){
+        switch (settings.getTheme()) {
             case 1:
                 relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
                 break;
@@ -107,10 +113,9 @@ public class ReadActivity extends AppCompatActivity {
                 break;
         }
 
-        if(settings.isPortraitOrientation()){
-            setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-        else {
+        if (settings.isPortraitOrientation()) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
@@ -222,6 +227,26 @@ public class ReadActivity extends AppCompatActivity {
         }
         setExampleParams();
         bookText.setText(stringBuilder);
+    }
+
+    private void containWordsInDatabase(String word) {
+        tableName = "tableBookWords5";
+        DatabaseAdapter databaseAdapter = new DatabaseAdapter(this, tableName);
+        databaseAdapter.open();
+
+        Word wordData = new Word();
+        //WordHandler wordHandler = new WordHandler();
+        //wordHandler.process(word);
+        wordData.setRussian(word);
+
+        if (wordData.getRussian().length() > 3 & databaseAdapter.isContain(wordData, tableName)) {
+            wordData = databaseAdapter.getWord(wordData, tableName);
+            wordData.setCount(wordData.getCount() + 1);
+            databaseAdapter.update(wordData, tableName);
+        } else {
+            databaseAdapter.insert(wordData, tableName);
+        }
+        databaseAdapter.close();
     }
 
     private void setExampleParams() {

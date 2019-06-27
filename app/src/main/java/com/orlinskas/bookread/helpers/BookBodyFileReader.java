@@ -18,8 +18,53 @@ public class BookBodyFileReader {
         int c;
         while ((c = bufferedReader.read()) != -1) {
             if ((char) c == ' '){
-                word.append((char) c);
-                words.add(word.toString());
+                if(word.length() > 0) {
+                    words.add(word.toString());
+                    words.add(" ");
+                }
+                else {
+                    words.add(" ");
+                }
+                word = new StringBuilder();
+            }
+            else if (c == 10){
+                if(word.length() > 0) {
+                    words.add(word.toString());
+                    words.add("\n");
+                }
+                else {
+                    words.add("\n");
+                }
+                word = new StringBuilder();
+            }
+            else if ((char) c == ','){
+                if(word.length() > 0) {
+                    words.add(word.toString());
+                    words.add(",");
+                }
+                else {
+                    words.add(",");
+                }
+                word = new StringBuilder();
+            }
+            else if ((char) c == '.'){
+                if(word.length() > 0) {
+                    words.add(word.toString());
+                    words.add(".");
+                }
+                else {
+                    words.add(".");
+                }
+                word = new StringBuilder();
+            }
+            else if ((char) c == '!'){
+                if(word.length() > 0) {
+                    words.add(word.toString());
+                    words.add("!");
+                }
+                else {
+                    words.add("!");
+                }
                 word = new StringBuilder();
             }
             else {
