@@ -67,8 +67,6 @@ public class ReadActivity extends AppCompatActivity {
     private float bookProgress;
     private PercentProgress percentProgress = new PercentProgress();
     private boolean isOpenNeedProgressPage = false;
-    String tableName;
-
 
     //первая часть отображения
     @Override
@@ -227,26 +225,6 @@ public class ReadActivity extends AppCompatActivity {
         }
         setExampleParams();
         bookText.setText(stringBuilder);
-    }
-
-    private void containWordsInDatabase(String word) {
-        tableName = "tableBookWords5";
-        DatabaseAdapter databaseAdapter = new DatabaseAdapter(this, tableName);
-        databaseAdapter.open();
-
-        Word wordData = new Word();
-        //WordHandler wordHandler = new WordHandler();
-        //wordHandler.process(word);
-        wordData.setRussian(word);
-
-        if (wordData.getRussian().length() > 3 & databaseAdapter.isContain(wordData, tableName)) {
-            wordData = databaseAdapter.getWord(wordData, tableName);
-            wordData.setCount(wordData.getCount() + 1);
-            databaseAdapter.update(wordData, tableName);
-        } else {
-            databaseAdapter.insert(wordData, tableName);
-        }
-        databaseAdapter.close();
     }
 
     private void setExampleParams() {

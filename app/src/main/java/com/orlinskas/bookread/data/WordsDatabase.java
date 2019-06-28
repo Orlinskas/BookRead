@@ -12,6 +12,7 @@ public class WordsDatabase extends SQLiteOpenHelper {
     public static final String COLUMN_RUSSIAN = "original";
     public static final String COLUMN_ENGLISH = "translate";
     public static final String COLUMN_COUNT = "count";
+    public static final String TABLE_TEMP = "tableTemp";
 
     public WordsDatabase(Context context, String tableName) {
         super(context, tableName + ".db", null, DATABASE_VERSION);

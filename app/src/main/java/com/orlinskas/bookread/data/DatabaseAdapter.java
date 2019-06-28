@@ -22,6 +22,18 @@ public class DatabaseAdapter {
         return this;
     }
 
+    public DatabaseAdapter openWithTransaction(){
+        database = dbHelper.getWritableDatabase();
+        database.beginTransaction();
+        return this;
+    }
+
+    public void closeWithTransaction(){
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        dbHelper.close();
+    }
+
     public void close(){
         dbHelper.close();
     }
@@ -108,6 +120,10 @@ public class DatabaseAdapter {
 
     public long getCount(String tableName){
         return DatabaseUtils.queryNumEntries(database, tableName);
+    }
+
+    public void removeAll(String tableName) {
+        database.delete(tableName, null, null);
     }
 
 }
