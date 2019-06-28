@@ -1,10 +1,12 @@
 package com.orlinskas.bookread;
 
+import java.util.Objects;
+
 public class Word {
     private int id;
     private String russian;
     private String english;
-    private int count;
+    private int count = 1;
 
     public Word(int id, String russian, String english, int count) {
         this.id = id;
@@ -13,6 +15,18 @@ public class Word {
         this.count = count;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Word word = (Word) o;
+        return Objects.equals(russian, word.russian);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(russian);
+    }
 
     public Word() {
     }

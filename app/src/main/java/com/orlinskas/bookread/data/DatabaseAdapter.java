@@ -42,6 +42,7 @@ public class DatabaseAdapter {
         ContentValues cv = new ContentValues();
         cv.put(WordsDatabase.COLUMN_RUSSIAN, word.getRussian());
         cv.put(WordsDatabase.COLUMN_ENGLISH, word.getEnglish());
+        cv.put(WordsDatabase.COLUMN_COUNT, word.getCount());
         return database.insert(tableName, null, cv);
     }
 

@@ -5,6 +5,7 @@ import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.Word;
 import com.orlinskas.bookread.bookReadAlgorithm.WordDataWriter;
+import com.orlinskas.bookread.bookReadAlgorithm.WordsHandler;
 import com.orlinskas.bookread.constants.BookConstant;
 import com.orlinskas.bookread.constants.XML_TAG;
 import com.orlinskas.bookread.data.DatabaseAdapter;
@@ -171,8 +172,9 @@ public class ParserXmlToBook {
         }
 
         BookBodyFileReader bookBodyFileReader = new BookBodyFileReader();
+        WordsHandler wordsHandler = new WordsHandler();
         try {
-            addWordsToDataTemp(bookBodyFileReader.read(book.getBookBodyFile()));
+            addWordsToDataTemp(wordsHandler.process(bookBodyFileReader.read(book.getBookBodyFile())));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -237,7 +239,31 @@ public class ParserXmlToBook {
         }
     }
 
-    public void addWordsToDataTemp(ArrayList<String> words) {
+   //public void addWordsToDataTemp(ArrayList<String> words) {
+   //    String tableTemp = WordsDatabase.TABLE_TEMP;
+   //    DatabaseAdapter databaseAdapter = new DatabaseAdapter(context, tableTemp);
+   //    try {
+   //        databaseAdapter.open();
+   //        databaseAdapter.removeAll(tableTemp);
+   //        databaseAdapter.close();
+   //    } catch (Exception e) {
+   //        e.printStackTrace();
+   //        databaseAdapter.close();
+   //    }
+   //    databaseAdapter.openWithTransaction();
+
+   //    try {
+   //        for (String word : words) {
+   //            Word wordData = new Word();
+   //            wordData.setRussian(word);
+   //            databaseAdapter.insert(wordData, tableTemp);
+   //        }
+   //    } finally {
+   //        databaseAdapter.closeWithTransaction();
+   //    }
+   //}
+
+    public void addWordsToDataTemp(ArrayList<Word> words) {
         String tableTemp = WordsDatabase.TABLE_TEMP;
         DatabaseAdapter databaseAdapter = new DatabaseAdapter(context, tableTemp);
         try {
@@ -251,12 +277,8 @@ public class ParserXmlToBook {
         databaseAdapter.openWithTransaction();
 
         try {
-            for (String word : words) {
-                if (word.length() > 3) {
-                    Word wordData = new Word();
-                    wordData.setRussian(word);
-                    databaseAdapter.insert(wordData, tableTemp);
-                }
+            for (Word word : words) {
+                databaseAdapter.insert(word, tableTemp);
             }
         } finally {
             databaseAdapter.closeWithTransaction();
