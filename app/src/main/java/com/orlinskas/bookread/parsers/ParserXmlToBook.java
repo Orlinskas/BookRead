@@ -4,25 +4,22 @@ package com.orlinskas.bookread.parsers;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.Word;
-import com.orlinskas.bookread.bookReadAlgorithm.WordDataWriter;
+import com.orlinskas.bookread.bookReadAlgorithm.WordHandler;
 import com.orlinskas.bookread.bookReadAlgorithm.WordsHandler;
 import com.orlinskas.bookread.constants.BookConstant;
 import com.orlinskas.bookread.constants.XML_TAG;
 import com.orlinskas.bookread.data.DatabaseAdapter;
-import com.orlinskas.bookread.data.WordsDatabase;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
 import com.orlinskas.bookread.helpers.BookBodyFileWriter;
 import com.orlinskas.bookread.helpers.BookImageFileWriter;
 
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.util.Base64;
 
@@ -171,14 +168,15 @@ public class ParserXmlToBook {
             book.setCoverImagePath(defaultCoverImages[randomNumber(defaultCoverImages.length)]);
         }
 
+        book.setDataTableName("tab" + 10 + (int) (Math.random() * 1000));
+
         BookBodyFileReader bookBodyFileReader = new BookBodyFileReader();
         WordsHandler wordsHandler = new WordsHandler();
         try {
-            addWordsToDataTemp(wordsHandler.process(bookBodyFileReader.read(book.getBookBodyFile())));
+            addWordsToData(wordsHandler.process(bookBodyFileReader.read(book.getBookBodyFile())), book.getDataTableName());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //addWordsInDatabase(book);
 
         return book;
     }
@@ -225,60 +223,24 @@ public class ParserXmlToBook {
         return (int) (Math.random() * ++max);
     }
 
-    private void addWordsInDatabase(Book book) {
-        String tableName = "asgagag";
-        BookBodyFileReader bookBodyFileReader = new BookBodyFileReader();
-        WordDataWriter wordDataWriter = new WordDataWriter(tableName, context);
-        try {
-            ArrayList<String> words = bookBodyFileReader.read(book.getBookBodyFile());
-            for (String word : words){
-                wordDataWriter.containWordsInDatabase(word);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-   //public void addWordsToDataTemp(ArrayList<String> words) {
-   //    String tableTemp = WordsDatabase.TABLE_TEMP;
-   //    DatabaseAdapter databaseAdapter = new DatabaseAdapter(context, tableTemp);
-   //    try {
-   //        databaseAdapter.open();
-   //        databaseAdapter.removeAll(tableTemp);
-   //        databaseAdapter.close();
-   //    } catch (Exception e) {
-   //        e.printStackTrace();
-   //        databaseAdapter.close();
-   //    }
-   //    databaseAdapter.openWithTransaction();
-
-   //    try {
-   //        for (String word : words) {
-   //            Word wordData = new Word();
-   //            wordData.setRussian(word);
-   //            databaseAdapter.insert(wordData, tableTemp);
-   //        }
-   //    } finally {
-   //        databaseAdapter.closeWithTransaction();
-   //    }
-   //}
-
-    public void addWordsToDataTemp(ArrayList<Word> words) {
-        String tableTemp = WordsDatabase.TABLE_TEMP;
-        DatabaseAdapter databaseAdapter = new DatabaseAdapter(context, tableTemp);
+    private void addWordsToData(ArrayList<Word> words, String tableName) {
+        DatabaseAdapter databaseAdapter = new DatabaseAdapter(context, tableName);
         try {
             databaseAdapter.open();
-            databaseAdapter.removeAll(tableTemp);
+            databaseAdapter.removeAll(tableName);
             databaseAdapter.close();
         } catch (Exception e) {
             e.printStackTrace();
             databaseAdapter.close();
         }
         databaseAdapter.openWithTransaction();
+        WordHandler wordHandler = new WordHandler();
 
         try {
             for (Word word : words) {
-                databaseAdapter.insert(word, tableTemp);
+                if(wordHandler.processRussian(word)) {
+                    databaseAdapter.insert(word, tableName);
+                }
             }
         } finally {
             databaseAdapter.closeWithTransaction();

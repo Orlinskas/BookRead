@@ -21,7 +21,7 @@ public class Book implements Serializable {
     private File bookBodyFile;
     private File coverImage;
     private int bookPercentProgress = 0;
-    private int dataTableNumber = 1000 + (int) (Math.random() * 1000000);
+    private String dataTableName;
 
     public Book(String authorName, String bookTitle, String annotation){
         this.authorName = authorName;
@@ -130,7 +130,11 @@ public class Book implements Serializable {
         this.bookPercentProgress = bookPercentProgress;
     }
 
-    public int getDataTableNumber() {
-        return dataTableNumber;
+    public String getDataTableName() {
+        return dataTableName;
+    }
+
+    public void setDataTableName(String dataTableName) {
+        this.dataTableName = dataTableName;
     }
 }

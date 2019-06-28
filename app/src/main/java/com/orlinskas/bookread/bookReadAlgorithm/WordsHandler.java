@@ -10,7 +10,7 @@ public class WordsHandler {
 
         ArrayList<Word> wordsExclusive = new ArrayList<>();
         for(String w : words) {
-            if (w.length() > 3) {
+            if (w.length() > 3 ) {
                 Word word = new Word();
                 word.setRussian(w);
 
