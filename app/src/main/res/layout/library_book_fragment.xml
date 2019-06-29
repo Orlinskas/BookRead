@@ -66,20 +66,35 @@
         android:textColor="@color/colorGREY"
         android:textSize="14sp" />
 
+    <Switch
+        android:id="@+id/library_book_fragment_switch_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/library_book_fragment_tv_date"
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:checked="true"
+        android:shadowColor="@color/colorShadow"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:text="Режим обучения"
+        android:textColor="@color/colorAccent"
+        android:textSize="14sp" />
+
     <TextView
         android:id="@+id/library_book_fragment_tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="12dp"
+        android:layout_below="@+id/library_book_fragment_tv_author"
+        android:layout_alignStart="@+id/library_book_fragment_tv_title"
+        android:layout_marginTop="6dp"
         android:shadowColor="@color/colorShadow"
         android:shadowDy="2"
         android:shadowRadius="4"
+        android:text="Дата добавления"
         android:textColor="@color/colorGREY"
-        android:textSize="12sp"
-        android:text="Дата добавления" />
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/library_book_fragment_btn"
@@ -88,7 +103,7 @@
         android:layout_alignStart="@+id/library_book_fragment_iv"
         android:layout_centerVertical="true"
         android:layout_marginStart="-15dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="40dp"
         android:text="" />
 
     <ImageView

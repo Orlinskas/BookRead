@@ -21,6 +21,7 @@ import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.Settings;
 import com.orlinskas.bookread.ToastBuilder;
 import com.orlinskas.bookread.data.SettingsData;
+import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 
 public class SettingsActivity extends AppCompatActivity {
     Button vintageLine, telegramLine, defaultLine;
@@ -195,6 +196,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            ToastBuilder.create(this, "Уже здесь");
+            return true;
+        }
+        if (id == R.id.action_help) {
+            ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
             return true;
         }
 

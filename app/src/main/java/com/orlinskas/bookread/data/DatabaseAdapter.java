@@ -5,9 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.UserDictionary;
 
 import com.orlinskas.bookread.Word;
+
+import java.util.ArrayList;
 
 public class DatabaseAdapter {
     private WordsDatabase dbHelper;
@@ -71,6 +72,25 @@ public class DatabaseAdapter {
         }
         cursor.close();
         return new Word();
+    }
+
+    public ArrayList<Word> getWords(String tableName) {
+        Cursor cursor = getAllEntries(tableName);
+        ArrayList<Word> words = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(WordsDatabase.COLUMN_ID));
+                String russian = cursor.getString(cursor.getColumnIndex(WordsDatabase.COLUMN_RUSSIAN));
+                String english = cursor.getString(cursor.getColumnIndex(WordsDatabase.COLUMN_ENGLISH));
+                int count = cursor.getInt(cursor.getColumnIndex(WordsDatabase.COLUMN_COUNT));
+
+                words.add(new Word(id, russian, english, count));
+            }
+            while (cursor.moveToNext());
+        }
+        cursor.close();
+        return words;
     }
 
     public boolean isContain(Word word, String tableName) {

@@ -13,11 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
-import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.interfaces.FragmentLibraryBookActions;
 
 public class LibraryBookFragment extends Fragment {
@@ -32,6 +32,8 @@ public class LibraryBookFragment extends Fragment {
     private FragmentLibraryBookActions listenerDelete;
     private FragmentLibraryBookActions listenerOpen;
     private FragmentLibraryBookActions listenerShowAnnotation;
+    private FragmentLibraryBookActions listenerTrainingMode;
+    private Switch switchMode;
 
     @Nullable
     @Override
@@ -46,6 +48,7 @@ public class LibraryBookFragment extends Fragment {
         title = view.findViewById(R.id.library_book_fragment_tv_title);
         date = view.findViewById(R.id.library_book_fragment_tv_date);
         delete = view.findViewById(R.id.library_book_fragment_iv_delete);
+        switchMode = view.findViewById(R.id.library_book_fragment_switch_mode);
 
         if (book.getCoverImage() == null) {
             image.setImageResource(book.getCoverImagePath());
@@ -80,7 +83,15 @@ public class LibraryBookFragment extends Fragment {
                 listenerDelete.deleteBook(book);
             }
         });
+        switchMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenerTrainingMode.setTrainingMode(book, switchMode.isChecked());
+            }
+        });
+
         return view;
+
     }
 
     @Override
@@ -101,5 +112,6 @@ public class LibraryBookFragment extends Fragment {
         listenerDelete = (FragmentLibraryBookActions) context;
         listenerOpen = (FragmentLibraryBookActions) context;
         listenerShowAnnotation = (FragmentLibraryBookActions) context;
+        listenerTrainingMode = (FragmentLibraryBookActions) context;
     }
 }

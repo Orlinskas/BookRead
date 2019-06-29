@@ -22,6 +22,7 @@ public class Book implements Serializable {
     private File coverImage;
     private int bookPercentProgress = 0;
     private String dataTableName;
+    private boolean trainingMode;
 
     public Book(String authorName, String bookTitle, String annotation){
         this.authorName = authorName;
@@ -136,5 +137,13 @@ public class Book implements Serializable {
 
     public void setDataTableName(String dataTableName) {
         this.dataTableName = dataTableName;
+    }
+
+    public boolean isTrainingMode() {
+        return trainingMode;
+    }
+
+    public void setMode(boolean trainingMode) {
+        this.trainingMode = trainingMode;
     }
 }

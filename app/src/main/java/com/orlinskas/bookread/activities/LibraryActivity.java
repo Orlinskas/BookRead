@@ -130,6 +130,10 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
             ActivityOpenHelper.openActivity(getApplicationContext(), SettingsActivity.class);
             return true;
         }
+        if (id == R.id.action_help) {
+            ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -175,6 +179,12 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
             }
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean setTrainingMode(Book book, boolean mode) {
+        book.setMode(mode);
         return false;
     }
 
