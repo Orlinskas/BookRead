@@ -74,7 +74,6 @@
         android:layout_alignParentEnd="true"
         android:clickable="true"
         android:focusable="true"
-        android:checked="true"
         android:shadowColor="@color/colorShadow"
         android:shadowDy="2"
         android:shadowRadius="4"

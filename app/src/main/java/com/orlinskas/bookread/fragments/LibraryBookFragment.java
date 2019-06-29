@@ -49,6 +49,7 @@ public class LibraryBookFragment extends Fragment {
         date = view.findViewById(R.id.library_book_fragment_tv_date);
         delete = view.findViewById(R.id.library_book_fragment_iv_delete);
         switchMode = view.findViewById(R.id.library_book_fragment_switch_mode);
+        switchMode.setChecked(book.isTrainingMode());
 
         if (book.getCoverImage() == null) {
             image.setImageResource(book.getCoverImagePath());
@@ -86,7 +87,8 @@ public class LibraryBookFragment extends Fragment {
         switchMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listenerTrainingMode.setTrainingMode(book, switchMode.isChecked());
+                book.setMode(switchMode.isChecked());
+                //listenerTrainingMode.setTrainingMode(book, switchMode.isChecked());
             }
         });
 

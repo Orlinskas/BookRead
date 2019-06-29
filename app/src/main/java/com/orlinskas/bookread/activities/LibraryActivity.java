@@ -1,14 +1,18 @@
 package com.orlinskas.bookread.activities;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +29,8 @@ import android.widget.TextView;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.ToastBuilder;
+import com.orlinskas.bookread.bookReadAlgorithm.WordTranslater;
+import com.orlinskas.bookread.constants.PermissionConstant;
 import com.orlinskas.bookread.data.SharedPreferencesData;
 import com.orlinskas.bookread.fragments.LibraryBookFragment;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
@@ -44,6 +50,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
     boolean isOpenMenu = false;
     ProgressBar progressBar;
     private Float bookProgress = 0.0f;
+    int permissionStatus;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -209,10 +216,54 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
     }
 
     @Override
-    public void openBook(Book book) {
-        Intent i = new Intent(getApplicationContext(), ReadActivity.class);
-        i.putExtra("book", book);
-        startActivity(i);
+    public void openBook(final Book book) {
+        if(!book.isTranslate() & book.isTrainingMode()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Режим обучения")
+                    .setMessage("Некоторые слова будут заменены на английские")
+                    .setIcon(R.drawable.ic_help_2_0)
+                    .setCancelable(false)
+                    .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), book.getDataTableName());
+                            if (wordTranslater.checkNeedTranslate()) {
+                                permissionStatus = ContextCompat.checkSelfPermission
+                                        (getApplicationContext(), Manifest.permission.INTERNET);
+                                if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions
+                                            (LibraryActivity.this, new String[]{Manifest.permission.INTERNET},
+                                                    PermissionConstant.MY_REQUEST_CODE);
+                                }
+                                if(wordTranslater.go()){
+                                    book.setTranslate(true);
+                                    Intent i = new Intent(getApplicationContext(), ReadActivity.class);
+                                    i.putExtra("book", book);
+                                    startActivity(i);
+                                }
+                                else {
+                                    ToastBuilder.create(getApplicationContext(), "Ошибка подключения, режим обучения недоступен");
+                                }
+                            } else {
+                                Intent i = new Intent(getApplicationContext(), ReadActivity.class);
+                                i.putExtra("book", book);
+                                startActivity(i);
+                            }
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else {
+            Intent i = new Intent(getApplicationContext(), ReadActivity.class);
+            i.putExtra("book", book);
+            startActivity(i);
+        }
     }
 
     @Override
@@ -271,4 +322,5 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
         super.onResume();
         progressBar.setIndeterminate(false);
     }
+
 }

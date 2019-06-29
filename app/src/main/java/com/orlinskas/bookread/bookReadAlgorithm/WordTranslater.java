@@ -16,6 +16,16 @@ public class WordTranslater {
         this.tableName = tableName;
     }
 
+    public boolean checkNeedTranslate() {
+        ArrayList<Word> words = getWords(tableName);
+        if(words.get(1).getEnglish() == null){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public boolean go() {
         ArrayList<Word> words = getWords(tableName);
         if(translate(words)){
