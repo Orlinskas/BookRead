@@ -1,12 +1,14 @@
 package com.orlinskas.bookread.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -217,53 +219,41 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
 
     @Override
     public void openBook(final Book book) {
-        if(!book.isTranslate() & book.isTrainingMode()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Режим обучения")
-                    .setMessage("Некоторые слова будут заменены на английские")
-                    .setIcon(R.drawable.ic_help_2_0)
-                    .setCancelable(false)
-                    .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    })
-                    .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), book.getDataTableName());
-                            if (wordTranslater.checkNeedTranslate()) {
-                                permissionStatus = ContextCompat.checkSelfPermission
-                                        (getApplicationContext(), Manifest.permission.INTERNET);
-                                if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions
-                                            (LibraryActivity.this, new String[]{Manifest.permission.INTERNET},
-                                                    PermissionConstant.MY_REQUEST_CODE);
-                                }
-                                if(wordTranslater.go()){
-                                    book.setTranslate(true);
-                                    Intent i = new Intent(getApplicationContext(), ReadActivity.class);
-                                    i.putExtra("book", book);
-                                    startActivity(i);
-                                }
-                                else {
-                                    ToastBuilder.create(getApplicationContext(), "Ошибка подключения, режим обучения недоступен");
-                                }
-                            } else {
-                                Intent i = new Intent(getApplicationContext(), ReadActivity.class);
-                                i.putExtra("book", book);
-                                startActivity(i);
-                            }
-                            dialog.cancel();
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
+        permissionStatus = ContextCompat.checkSelfPermission
+                (getApplicationContext(), Manifest.permission.INTERNET);
+
+        if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions
+                    (LibraryActivity.this, new String[]{Manifest.permission.INTERNET},
+                            PermissionConstant.MY_REQUEST_CODE);
+
         }
-        else {
+
+        WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), book.getDataTableName());
+
+        if (wordTranslater.checkNeedTranslate() & book.isTrainingMode()) {
+            BookOpenerTask bookOpenerTask = new BookOpenerTask();
+            bookOpenerTask.execute(book);
+
+           // AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+           // builder.setTitle("Включите интернет")
+           //         .setMessage("Первый запуск в режиме обучения, получаем перевод...Может занять несколько минут, не выключайте приложение")
+           //         .setIcon(R.drawable.ic_help_2_0)
+           //         .setCancelable(false)
+           //         .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
+           //             public void onClick(DialogInterface dialog, int id) {
+           //                     dialog.cancel();
+           //                     ToastBuilder.create(getApplicationContext(), "Подождите пожалуйста");
+           //             }
+           //         });
+           // AlertDialog alert = builder.create();
+           // alert.show();
+        } else {
             Intent i = new Intent(getApplicationContext(), ReadActivity.class);
             i.putExtra("book", book);
             startActivity(i);
         }
+
     }
 
     @Override
@@ -323,4 +313,35 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
         progressBar.setIndeterminate(false);
     }
 
+    @SuppressLint("StaticFieldLeak")
+    class BookOpenerTask extends AsyncTask<Book, Void, Boolean> {
+        public boolean root;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Book... books) {
+            WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), books[0].getDataTableName());
+            if(wordTranslater.go()){
+                Intent i = new Intent(getApplicationContext(), ReadActivity.class);
+                i.putExtra("book", books[0]);
+                startActivity(i);
+                return true;
+            }
+            else {
+                ToastBuilder.create(getApplicationContext(), "Ошибка подключения");
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean root) {
+            super.onPostExecute(root);
+            this.root = root;
+        }
+    }
 }
