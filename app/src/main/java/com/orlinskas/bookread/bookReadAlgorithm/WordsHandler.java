@@ -6,13 +6,17 @@ import java.util.ArrayList;
 
 public class WordsHandler {
     public ArrayList<Word> process(ArrayList<String> words) {
-        int countWords = (int) (words.size() * 0.03);
+        int maxCountWords = words.size() / 2;
+        int countWords = 0;
 
         ArrayList<Word> wordsExclusive = new ArrayList<>();
+        WordHandler wordHandler = new WordHandler();
+
         for(String w : words) {
-            if (w.length() > 3 ) {
+            if (w.length() > 4) {
                 Word word = new Word();
                 word.setRussian(w);
+                countWords++;
 
                 if(wordsExclusive.contains(word)){
                     for (Word wExclusive : wordsExclusive) {
@@ -23,12 +27,14 @@ public class WordsHandler {
                     }
                 }
                 else {
-                    if(wordsExclusive.size() < countWords) {
-                        wordsExclusive.add(word);
-                    }
-                    else {
-                        return wordsExclusive;
-                    }
+                     if(countWords < maxCountWords) {
+                         if (wordHandler.processRussian(word)) {
+                             wordsExclusive.add(word);
+                         }
+                     }
+                     else {
+                          return wordsExclusive;
+                     }
                 }
             }
         }

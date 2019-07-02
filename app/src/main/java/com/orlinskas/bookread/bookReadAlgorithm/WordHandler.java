@@ -4,11 +4,11 @@ import com.orlinskas.bookread.Word;
 
 public class WordHandler {
 
-    private static final int MIN_NEED_LENGTH = 3;
+    private static final int MIN_NEED_LENGTH = 3; //в вордс хэндлере есть дублируемое значение
     private static final int MIN_NEED_COUNT = 4;
 
     public boolean processRussian(Word word) {
-        return isLength(word.getRussian()) & !isUpperCase(word.getRussian()) & isCountRepeat(word.getCount());
+        return !isUpperCase(word.getRussian());
     }
 
     private boolean isLength(String word) {

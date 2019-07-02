@@ -234,20 +234,6 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
         if (wordTranslater.checkNeedTranslate() & book.isTrainingMode()) {
             BookOpenerTask bookOpenerTask = new BookOpenerTask();
             bookOpenerTask.execute(book);
-
-           // AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-           // builder.setTitle("Включите интернет")
-           //         .setMessage("Первый запуск в режиме обучения, получаем перевод...Может занять несколько минут, не выключайте приложение")
-           //         .setIcon(R.drawable.ic_help_2_0)
-           //         .setCancelable(false)
-           //         .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
-           //             public void onClick(DialogInterface dialog, int id) {
-           //                     dialog.cancel();
-           //                     ToastBuilder.create(getApplicationContext(), "Подождите пожалуйста");
-           //             }
-           //         });
-           // AlertDialog alert = builder.create();
-           // alert.show();
         } else {
             Intent i = new Intent(getApplicationContext(), ReadActivity.class);
             i.putExtra("book", book);
@@ -315,21 +301,19 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
 
     @SuppressLint("StaticFieldLeak")
     class BookOpenerTask extends AsyncTask<Book, Void, Boolean> {
-        public boolean root;
+        Book book = new Book();
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
+            ToastBuilder.create(getApplicationContext(), "Подождите перевода с сервера...");
         }
 
         @Override
         protected Boolean doInBackground(Book... books) {
+            book = books[0];
             WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), books[0].getDataTableName());
             if(wordTranslater.go()){
-                Intent i = new Intent(getApplicationContext(), ReadActivity.class);
-                i.putExtra("book", books[0]);
-                startActivity(i);
                 return true;
             }
             else {
@@ -341,7 +325,14 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
         @Override
         protected void onPostExecute(Boolean root) {
             super.onPostExecute(root);
-            this.root = root;
+            if(root){
+                Intent i = new Intent(getApplicationContext(), ReadActivity.class);
+                i.putExtra("book", book);
+                startActivity(i);
+            }
+            else {
+                ToastBuilder.create(getApplicationContext(), "Ошибка перевода, отключите режим обучения");
+            }
         }
     }
 }

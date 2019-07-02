@@ -28,18 +28,33 @@ public class WordTranslater {
     }
 
     public boolean checkNeedTranslate() {
-        ArrayList<Word> words = getWords(tableName);
-        if(words.get(1).getEnglish() == null | words.get(1).getEnglish().equals("") | words.get(1).getEnglish().equals(" ")){
-            return true;
-        }
-        else {
+        ArrayList<Word> words = null;
+        try {
+            words = getWords(tableName);
+            if(words.size() < 2){
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
+        }
+
+        try {
+            return words.get(1).getEnglish().length() < 2;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
         }
     }
 
     public boolean go() {
-        words = getWords(tableName);
-        saveTranslate(respliter(sendToTranslate(spliter(words))));
+        try {
+            words = getWords(tableName);
+            saveTranslate(respliter(sendToTranslate(spliter(words))));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         return transactionToData(words);
     }
 
@@ -133,27 +148,43 @@ public class WordTranslater {
 
     private ArrayList<String> respliter (String words) {
         ArrayList<String> englishWords = new ArrayList<>();
-        try {
-            char wordsChar[] = words.toCharArray();
-            StringBuilder translateWord = new StringBuilder();
+        char wordsChar[] = words.toCharArray();
+        StringBuilder translateWord = new StringBuilder();
 
-            for (int i = 0; i < wordsChar.length; i++) {
-                if(wordsChar[i] != '.' & wordsChar[i] != ' ' & wordsChar[i] != '?') {
-                    translateWord.append(wordsChar[i]);
-                }
-                if(wordsChar[i] == '.') {
-                    englishWords.add(translateWord.toString());
-                    translateWord = new StringBuilder();
-                }
-                if(wordsChar[i] == ' ' & translateWord.length() > 0 & wordsChar[i - 1] != '.') {
-                    englishWords.add(translateWord.toString());
-                    translateWord.append(wordsChar[i]);
-                }
+        for (char aWordsChar : wordsChar) {
+            if (aWordsChar != '.') {
+                translateWord.append(aWordsChar);
+            } else {
+                englishWords.add(signDeleter(spaceDeleter(translateWord.toString())));
+                translateWord = new StringBuilder();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
         return englishWords;
+    }
+
+    private String spaceDeleter(String word) {
+        char wordChar[] = word.toCharArray();
+
+        if(wordChar[0] == ' ' & wordChar[wordChar.length - 1] == ' '){
+            return word.substring(1, wordChar.length - 1);
+        }
+        if(wordChar[0] == ' '){
+            return word.substring(1, wordChar.length);
+        }
+        if(wordChar[wordChar.length - 1] == ' ') {
+            return word.substring(0, wordChar.length - 1);
+        }
+        return word;
+    }
+
+    private String signDeleter(String word) {
+        char wordChar[] = word.toCharArray();
+
+        if(wordChar[wordChar.length - 1] == '?') {
+            return word.substring(0, wordChar.length - 1);
+        }
+        return word;
     }
 
     private void saveTranslate (ArrayList<String> translateWords) {

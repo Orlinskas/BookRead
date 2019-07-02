@@ -234,12 +234,16 @@ public class ParserXmlToBook {
             databaseAdapter.close();
         }
         databaseAdapter.openWithTransaction();
-        WordHandler wordHandler = new WordHandler();
+        int countOfInsert = 0;
 
         try {
             for (Word word : words) {
-                if(wordHandler.processRussian(word)) {
+                if(word.getCount() > 4) {
                     databaseAdapter.insert(word, tableName);
+                    countOfInsert++;
+                }
+                if(countOfInsert > 400) { //количество слов для режима обучения
+                    break;
                 }
             }
         } finally {
