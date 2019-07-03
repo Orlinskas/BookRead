@@ -108,11 +108,10 @@ public class WordTranslater {
         return countOfSplit;
     }
 
-    private String sendToTranslate(int countOfSplit) {
+    private String sendToTranslate(int countOfSplit) throws Exception  {
         StringBuilder translateWords = new StringBuilder();
         TranslaterRequestSender translaterRequestSender = new TranslaterRequestSender();
         ParserJson parserJson = new ParserJson();
-        try {
             switch (countOfSplit) {
                 case 1:
                     translateWords.append(parserJson.parse(translaterRequestSender.request(alpha.toString())));
@@ -140,9 +139,6 @@ public class WordTranslater {
                     translateWords.append(parserJson.parse(translaterRequestSender.request(close.toString())));
                     break;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return translateWords.toString();
     }
 
@@ -155,8 +151,10 @@ public class WordTranslater {
             if (aWordsChar != '.') {
                 translateWord.append(aWordsChar);
             } else {
-                englishWords.add(signDeleter(spaceDeleter(translateWord.toString())));
-                translateWord = new StringBuilder();
+                if (translateWord.length() > 1) {
+                    englishWords.add(signDeleter(spaceDeleter(translateWord.toString())));
+                    translateWord = new StringBuilder();
+                }
             }
         }
 
@@ -166,14 +164,18 @@ public class WordTranslater {
     private String spaceDeleter(String word) {
         char wordChar[] = word.toCharArray();
 
-        if(wordChar[0] == ' ' & wordChar[wordChar.length - 1] == ' '){
-            return word.substring(1, wordChar.length - 1);
-        }
-        if(wordChar[0] == ' '){
-            return word.substring(1, wordChar.length);
-        }
-        if(wordChar[wordChar.length - 1] == ' ') {
-            return word.substring(0, wordChar.length - 1);
+        try {
+            if(wordChar[0] == ' ' & wordChar[wordChar.length - 1] == ' '){
+                return word.substring(1, wordChar.length - 1);
+            }
+            if(wordChar[0] == ' '){
+                return word.substring(1, wordChar.length);
+            }
+            if(wordChar[wordChar.length - 1] == ' ') {
+                return word.substring(0, wordChar.length - 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return word;
     }
@@ -181,13 +183,17 @@ public class WordTranslater {
     private String signDeleter(String word) {
         char wordChar[] = word.toCharArray();
 
-        if(wordChar[wordChar.length - 1] == '?') {
-            return word.substring(0, wordChar.length - 1);
+        try {
+            if(wordChar[wordChar.length - 1] == '?') {
+                return word.substring(0, wordChar.length - 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return word;
     }
 
-    private void saveTranslate (ArrayList<String> translateWords) {
+    private void saveTranslate (ArrayList<String> translateWords) throws Exception {
         for (int i = 0; i < words.size(); i++) {
             words.get(i).setEnglish(translateWords.get(i));
         }

@@ -315,13 +315,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
         protected Boolean doInBackground(Book... books) {
             book = books[0];
             WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), books[0].getDataTableName());
-            if(wordTranslater.go()){
-                return true;
-            }
-            else {
-                ToastBuilder.create(getApplicationContext(), "Ошибка подключения");
-                return false;
-            }
+            return wordTranslater.go();
         }
 
         @Override
@@ -333,7 +327,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
                 startActivity(i);
             }
             else {
-                ToastBuilder.create(getApplicationContext(), "Ошибка перевода, отключите режим обучения");
+                ToastBuilder.create(getApplicationContext(), "Ошибка перевода, отключите режим обучения и попробуйте позже");
             }
         }
     }

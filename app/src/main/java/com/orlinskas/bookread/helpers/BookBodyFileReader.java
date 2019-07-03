@@ -65,8 +65,17 @@ public class BookBodyFileReader {
                 case ')':
                     separateWord(")");
                     break;
-                case '-':
+                case '-': //минус
                     separateWord("-");
+                    break;
+                case '‐': //дефиз
+                    separateWord("‐");
+                    break;
+                case '–': //короткое тире
+                    separateWord("–");
+                    break;
+                case '—': //длинное тире
+                    separateWord("—");
                     break;
                 case '+':
                     separateWord("+");
