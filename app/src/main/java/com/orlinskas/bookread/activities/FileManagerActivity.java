@@ -6,6 +6,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -45,8 +46,10 @@ public class FileManagerActivity extends ListActivity {
     private String pathPrefix = "";
     private File currentDirectory = new File("/");
     private ProgressBar progressBar;
+    private boolean castComplite = true;
     ImageView downloadImage;
     ImageView phoneImage;
+
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -70,11 +73,46 @@ public class FileManagerActivity extends ListActivity {
         browseTo(new File(pathRoot));
     }
 
-    private void upOneLevel(){
-        if(this.currentDirectory.getParent() != null) {
-            this.browseTo(this.currentDirectory.getParentFile());
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        String selectedFileString = this.directoryEntries.get(position);
+
+        if(selectedFileString.equals("..")){
+            this.upOneLevel();
+        }
+        else {
+            try {
+                File clickedFile;
+                clickedFile = new File(selectedFileString);
+                this.browseTo(clickedFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+
+    public void searchButton(View view) {
+        //ToastBuilder.create(this, "Укажите путь самостоятельно");
+        //нужен класс поиска в отдельном потоке
+    }
+
+    public void helpButton(View view) {
+        if (castComplite) {
+            ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
+        }
+        else {
+            ToastBuilder.create(getApplicationContext(), "Процесс не закончен! Подождите..");
+        }
+    }
+
+    public void onClickDownload(View view) {
+        browseTo(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()));
+    }
+
+    public void onClickHome(View view) {
+        browseTo(new File(pathRoot));
+    }
+
 
     private void browseTo(final File aDirectory){
 
@@ -104,41 +142,41 @@ public class FileManagerActivity extends ListActivity {
                 ToastBuilder.create(getApplicationContext(), "Невозможно открыть, сейчас будет вылет, не волнуйтесь)");
             }
         }
-        else { //обработчик нажатий
-
-
-            DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface arg0, int arg1) {
-
-
-                    if(castFileToBookAndAddToLibrary(aDirectory)){
-                        ToastBuilder.create(getApplicationContext(), "Книга добавлена в библиотеку!)");
+        else {
+            if(castComplite) {//обработчик нажатий
+                DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        ToastBuilder.create(getApplicationContext(), "Подождите пожалуйста");
+                        CastFileToBookTask castFileToBookTask = new CastFileToBookTask();
+                        castFileToBookTask.execute(aDirectory);
                     }
-                    else {
-                        ToastBuilder.create(getApplicationContext(), "Ошибка, не удалось открыть книгу!");
+                };
+
+                DialogInterface.OnClickListener cancelButtonListener = new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
                     }
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            };
+                };
 
-            DialogInterface.OnClickListener cancelButtonListener = new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
+                if (FileFormat.getFormat(aDirectory.getName()).equals(FileFormat.FB2)) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Подтверждение") //title
+                            .setMessage("Хотите добавить книгу " + aDirectory.getName() + "?" + " Может занять несколько минут...") //message
+                            .setPositiveButton("Да", okButtonListener) //positive button
+                            .setNegativeButton("Нет", cancelButtonListener) //negative button
+                            .show();
+                } else {
+                    ToastBuilder.create(getApplicationContext(), "Не является книгой!");
                 }
-            };
-
-            if (FileFormat.getFormat(aDirectory.getName()).equals(FileFormat.FB2)){
-                new AlertDialog.Builder(this)
-                        .setTitle("Подтверждение") //title
-                        .setMessage("Хотите добавить книгу "+ aDirectory.getName() + "?") //message
-                        .setPositiveButton("Да", okButtonListener) //positive button
-                        .setNegativeButton("Нет", cancelButtonListener) //negative button
-                        .show();
             }
             else {
-                ToastBuilder.create(getApplicationContext(), "Не является книгой!");
+                ToastBuilder.create(getApplicationContext(), "Процесс не закончен! Подождите..");
             }
+        }
+    }
 
-
+    private void upOneLevel(){
+        if(this.currentDirectory.getParent() != null) {
+            this.browseTo(this.currentDirectory.getParentFile());
         }
     }
 
@@ -154,41 +192,6 @@ public class FileManagerActivity extends ListActivity {
         }
         //в параметр принимается только массив
         this.setListAdapter(new FileManagerAdapter(this, R.layout.file_manager_row, ListToArray.parse(directoryEntries)));
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        String selectedFileString = this.directoryEntries.get(position);
-
-        if(selectedFileString.equals("..")){
-            this.upOneLevel();
-        }
-        else {
-            try {
-                File clickedFile;
-                clickedFile = new File(selectedFileString);
-                this.browseTo(clickedFile);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void searchButton(View view) {
-        //ToastBuilder.create(this, "Укажите путь самостоятельно");
-        //нужен класс поиска в отдельном потоке
-    }
-
-    public void helpButton(View view) {
-        ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
-    }
-
-    public void onClickDownload(View view) {
-        browseTo(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()));
-    }
-
-    public void onClickHome(View view) {
-        browseTo(new File(pathRoot));
     }
 
     private class FileManagerAdapter extends ArrayAdapter<String> {
@@ -249,33 +252,57 @@ public class FileManagerActivity extends ListActivity {
         }
     }
 
-    private boolean castFileToBookAndAddToLibrary (File file){
+    private String cutPath(String path) {
+        String cutPath = path.replaceAll(pathRoot, "");
+        return cutPath.replaceAll(pathPrefix, "");
+    }
 
-        try {
-            BookCreator bookCreator = new BookCreator();
-            Book book = bookCreator.create(getApplicationContext(), file);
-            LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+    @SuppressLint("StaticFieldLeak")
+    class CastFileToBookTask extends AsyncTask<File, Void, Boolean> {
 
-            if(libraryHelper.addBook(book)){
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            castComplite = false;
+        }
+
+        @Override
+        protected Boolean doInBackground(File... files) {
+            try {
+                BookCreator bookCreator = new BookCreator();
+                Book book = bookCreator.create(getApplicationContext(), files[0]);
+                LibraryHelper libraryHelper = new LibraryHelper(getApplicationContext());
+                return libraryHelper.addBook(book);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean root) {
+            super.onPostExecute(root);
+            if(root) {
                 ToastBuilder.create(getApplicationContext(), "Книга добавлена в библиотеку!)");
                 ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);
             }
             else {
-                ToastBuilder.create(getApplicationContext(), "Книга УЖЕ в библиотеке!!!");
-                return false;
+                ToastBuilder.create(getApplicationContext(), "Не удалось добавить книгу");
             }
-
-        } catch (Exception e) {
-            ToastBuilder.create(getApplicationContext(), "Ошибка, не удалось открыть книгу!");
-            e.printStackTrace();
-            return false;
+            castComplite = true;
+            progressBar.setVisibility(View.INVISIBLE);
         }
-        return true;
     }
 
-    private String cutPath(String path) {
-        String cutPath = path.replaceAll(pathRoot, "");
-        return cutPath.replaceAll(pathPrefix, "");
+    @Override
+    public void onBackPressed() {
+        if(castComplite){
+            super.onBackPressed();
+        }
+        else {
+            ToastBuilder.create(getApplicationContext(), "Процесс не закончен! Подождите..");
+        }
     }
 }
 

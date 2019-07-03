@@ -232,9 +232,11 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
         WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), book.getDataTableName());
 
         if (wordTranslater.checkNeedTranslate() & book.isTrainingMode()) {
+            ToastBuilder.create(getApplicationContext(), "Подождите, связь с сервером...");
             BookOpenerTask bookOpenerTask = new BookOpenerTask();
             bookOpenerTask.execute(book);
         } else {
+            ToastBuilder.create(getApplicationContext(), "Подождите");
             Intent i = new Intent(getApplicationContext(), ReadActivity.class);
             i.putExtra("book", book);
             startActivity(i);
