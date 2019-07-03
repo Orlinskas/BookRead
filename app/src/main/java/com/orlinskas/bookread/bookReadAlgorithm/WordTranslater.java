@@ -14,8 +14,6 @@ public class WordTranslater {
     private String tableName;
     private ArrayList<Word> words = new ArrayList<>();
 
-    private static final int MAX_COUNT_SYMBOL = 1400;
-
     private StringBuilder alpha = new StringBuilder();
     private StringBuilder beta  = new StringBuilder();
     private StringBuilder gamma = new StringBuilder();
@@ -70,6 +68,7 @@ public class WordTranslater {
         String translationWord;
         int countOfSplit = 1;
         for (Word word : words) {
+            int MAX_COUNT_SYMBOL = AlgorithmConstants.MAX_COUNT_SYMBOL_TO_REQUEST;
             switch (countOfSplit) {
                 case 1:
                     translationWord = word.getRussian() + ". ";

@@ -31,6 +31,10 @@ public class Word {
     public Word() {
     }
 
+    public Word(String russian) {
+        this.russian = russian;
+    }
+
     public Word(int id, String russian, int count) {
         this.id = id;
         this.russian = russian;

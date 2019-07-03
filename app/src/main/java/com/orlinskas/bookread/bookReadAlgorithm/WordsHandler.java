@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public class WordsHandler {
     public ArrayList<Word> process(ArrayList<String> words) {
-        int maxCountWords = words.size() / 2;
+        int maxCountWords = words.size() / AlgorithmConstants.COUNT_OF_HALF_PROCESSING_WORDS;
         int countWords = 0;
 
         ArrayList<Word> wordsExclusive = new ArrayList<>();
         WordHandler wordHandler = new WordHandler();
 
         for(String w : words) {
-            if (w.length() > 4) {
+            if (w.length() > AlgorithmConstants.MIN_WORD_LENGTH) {
                 Word word = new Word();
                 word.setRussian(w);
                 countWords++;

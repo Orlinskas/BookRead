@@ -28,6 +28,7 @@ import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.Settings;
 import com.orlinskas.bookread.Word;
 import com.orlinskas.bookread.bookReadAlgorithm.WordHandler;
+import com.orlinskas.bookread.bookReadAlgorithm.WordReplacer;
 import com.orlinskas.bookread.data.DatabaseAdapter;
 import com.orlinskas.bookread.data.SettingsData;
 import com.orlinskas.bookread.data.SharedPreferencesData;
@@ -220,8 +221,29 @@ public class ReadActivity extends AppCompatActivity {
 
     private void showBookText(ArrayList<String> words) {
         StringBuilder stringBuilder = new StringBuilder();
-        for(String word : words) {
-            stringBuilder.append(word);
+
+        if(book.isTrainingMode()) {
+            DatabaseAdapter databaseAdapter = new DatabaseAdapter(this, book.getDataTableName());
+            databaseAdapter.openWithTransaction();
+            ArrayList<Word> englishWords = databaseAdapter.getWords(book.getDataTableName());
+            databaseAdapter.closeWithTransaction();
+
+            for(String word : words) {
+                Word actualWord = new Word(word);
+
+                if(englishWords.contains(actualWord)) {
+                    WordReplacer wordReplacer = new WordReplacer();
+                    stringBuilder.append(wordReplacer.replace(actualWord, englishWords));
+                }
+                else {
+                    stringBuilder.append(word);
+                }
+            }
+        }
+        else {
+            for(String word : words) {
+                stringBuilder.append(word);
+            }
         }
         setExampleParams();
         bookText.setText(stringBuilder);
