@@ -126,10 +126,11 @@ public class MainActivity extends AppCompatActivity
             ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
         } else if (id == R.id.nav_share) {
 
+        } else if (id == R.id.group) {
+            ActivityOpenHelper.openActivity(getApplicationContext(), AboutAsActivity.class);
         } else if (id == R.id.nav_send_author) {
-
+            ActivityOpenHelper.openActivity(getApplicationContext(), ContactActivity.class);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

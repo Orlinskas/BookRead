@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="center_horizontal"
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:text="Команда"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:typeface="serif" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/vlad"
+                app:civ_border_color="@color/colorAlphaAccent"
+                app:civ_border_width="2dp" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/profile_image"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:shadowColor="@color/colorShadow"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:text="Орлинскас Влад"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView9"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:shadowColor="@color/colorShadow"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:text="Главный разработчик"
+                android:textColor="@color/colorGREY"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/textView1322"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView11"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:text="Код, автор идеи" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image1"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/alex"
+                app:civ_border_color="@color/colorAlphaAccent"
+
+                app:civ_border_width="2dp" />
+
+            <TextView
+                android:id="@+id/textView91"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/profile_image1"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toEndOf="@+id/profile_image1"
+                android:shadowColor="@color/colorShadow"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:text="Жолус Александр"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView111"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView91"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/profile_image1"
+                android:shadowColor="@color/colorShadow"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:text="Software Developer"
+                android:textColor="@color/colorGREY"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView111"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/profile_image1"
+                android:text="Архитектура приложения" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image2"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/mark"
+                app:civ_border_color="@color/colorAlphaAccent"
+                app:civ_border_width="2dp" />
+
+            <TextView
+                android:id="@+id/textView92"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/profile_image2"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toEndOf="@+id/profile_image2"
+                android:shadowColor="@color/colorShadow"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:text="Коротун Марк"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView112"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView92"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/profile_image2"
+                android:shadowColor="@color/colorShadow"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:text="Преподаватель английского языка"
+                android:textColor="@color/colorGREY"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView132"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView112"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/profile_image2"
+                android:text="Разработка алгоритма BookRead" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:text="Ждем ваших пулл реквестов"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp"
+            android:textStyle="italic" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:layout_margin="10dp"
+            app:srcCompat="@drawable/github" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_horizontal"
+            android:shadowColor="@color/colorShadow"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:text="http://github.com/Orlinskas/BookRead"
+            android:textAllCaps="true"
+            android:textSize="12sp"
+            android:textStyle="italic" />
+
+    </LinearLayout>
+</ScrollView>
