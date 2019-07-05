@@ -9,8 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ContextMenu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -27,12 +25,10 @@ import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.Settings;
 import com.orlinskas.bookread.Word;
-import com.orlinskas.bookread.bookReadAlgorithm.WordHandler;
 import com.orlinskas.bookread.bookReadAlgorithm.WordReplacer;
 import com.orlinskas.bookread.data.DatabaseAdapter;
 import com.orlinskas.bookread.data.SettingsData;
 import com.orlinskas.bookread.data.SharedPreferencesData;
-import com.orlinskas.bookread.data.WordsDatabase;
 import com.orlinskas.bookread.fragments.BookInfoPageFragment;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
@@ -48,7 +44,7 @@ public class ReadActivity extends AppCompatActivity {
     private RelativeLayout relativeLayout, settingsLayout, settingsTopLayout;
     private Button btnBack, btnNext, btnSettings, btnCloseSettings, btnCancelSettingsScroll;
     private ScrollView scrollView;
-    private TextView bookText, currentPageSettings, bookInfoSettings, animationPageScroll;
+    private TextView bookText, currentPageSettings, bookInfoSettings;
     private Book book;
     private ArrayList<String> words;
     private ProgressBar progressBar;
@@ -93,7 +89,6 @@ public class ReadActivity extends AppCompatActivity {
         bookInfoSettings = findViewById(R.id.activity_read_test_tv_book_info);
         btnCloseSettings = findViewById(R.id.activity_read_test_btn_close_settings);
         btnCancelSettingsScroll = findViewById(R.id.activity_read_test_btn_cancel_scroll_settings);
-        animationPageScroll = findViewById(R.id.activity_read_test_tv_animation_scroll_page);
 
         //registerForContextMenu(bookText);
 
@@ -254,35 +249,21 @@ public class ReadActivity extends AppCompatActivity {
         //bookText.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
         bookText.setTypeface(getTypeFaceCode(settings.getTypeface()));
 
-        try {
-            animationPageScroll.setTextSize(settings.getTextSize());
-            //animationPageScroll.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
-            animationPageScroll.setTypeface(getTypeFaceCode(settings.getTypeface()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         switch (settings.getTheme()){
             case 1:
                 scrollView.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
                 bookText.setTextColor(getResources().getColor(R.color.colorLowBlack));
-                animationPageScroll.setTextColor(getResources().getColor(R.color.colorLowBlack));
                 relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
-                animationPageScroll.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
                 break;
             case 2:
                 scrollView.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
                 bookText.setTextColor(getResources().getColor(R.color.colorLowGREY));
-                animationPageScroll.setTextColor(getResources().getColor(R.color.colorLowGREY));
                 relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
-                animationPageScroll.setBackgroundColor(getResources().getColor(R.color.colorThemeTelegramBackground));
                 break;
             case 3:
                 scrollView.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
                 bookText.setTextColor(getResources().getColor(R.color.colorLowBlack));
-                animationPageScroll.setTextColor(getResources().getColor(R.color.colorLowBlack));
                 relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
-                animationPageScroll.setBackgroundColor(getResources().getColor(R.color.colorThemeVintageBackground));
                 break;
         }
 
@@ -498,16 +479,14 @@ public class ReadActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            animationPageScroll.setHeight(screenHeight);
-            animationPageScroll.setVisibility(View.VISIBLE);
+            Animation animation;
+            animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.next_page_anim);
+            scrollView.startAnimation(animation);
         }
 
         @Override
         protected Boolean doInBackground(Void... parameter) {
             try {
-                Animation animation;
-                animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.next_page_anim);
-                animationPageScroll.startAnimation(animation);
                 scrollView.scrollTo(0, pagePositions.get(currentPage + 1));
                 return true;
             } catch (Exception e) {
@@ -523,7 +502,6 @@ public class ReadActivity extends AppCompatActivity {
                 currentPage++;
                 needSaveProgress = true;
             }
-            animationPageScroll.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -532,16 +510,15 @@ public class ReadActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            animationPageScroll.setHeight(screenHeight);
-            animationPageScroll.setVisibility(View.VISIBLE);
+            Animation animation;
+            animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.previos_page_anim);
+            scrollView.startAnimation(animation);
         }
 
         @Override
         protected Boolean doInBackground(Void... parameter) {
+
             try {
-                Animation animation;
-                animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.previos_page_anim);
-                animationPageScroll.startAnimation(animation);
                 scrollView.scrollTo(0, pagePositions.get(currentPage - 1));
                 return true;
             } catch (Exception e) {
@@ -557,7 +534,6 @@ public class ReadActivity extends AppCompatActivity {
                 currentPage--;
                 needSaveProgress = true;
             }
-            animationPageScroll.setVisibility(View.INVISIBLE);
         }
     }
 
