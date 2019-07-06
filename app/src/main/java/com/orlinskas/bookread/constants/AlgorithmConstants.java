@@ -7,5 +7,4 @@ public class AlgorithmConstants {
     public static final int MIN_WORD_LENGTH = 4;
     public static final int MIN_WORD_COUNT_NEED_TO_ADD = 4;
     public static final int MAX_WORD_COUNT_NEED_TO_ADD = 8;
-
 }

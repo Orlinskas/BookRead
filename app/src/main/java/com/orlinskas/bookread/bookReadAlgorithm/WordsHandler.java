@@ -13,10 +13,10 @@ public class WordsHandler {
         ArrayList<Word> wordsExclusive = new ArrayList<>();
         WordHandler wordHandler = new WordHandler();
 
-        for(String w : words) {
-            if (w.length() > AlgorithmConstants.MIN_WORD_LENGTH) {
+        for(int i = words.size() - 1; i > 0; i--) {
+            if (words.get(i).length() > AlgorithmConstants.MIN_WORD_LENGTH) {
                 Word word = new Word();
-                word.setRussian(w);
+                word.setRussian(words.get(i));
                 countWords++;
 
                 if(wordsExclusive.contains(word)){
