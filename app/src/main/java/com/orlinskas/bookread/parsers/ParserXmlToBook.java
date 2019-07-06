@@ -4,7 +4,7 @@ package com.orlinskas.bookread.parsers;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.Word;
-import com.orlinskas.bookread.bookReadAlgorithm.AlgorithmConstants;
+import com.orlinskas.bookread.constants.AlgorithmConstants;
 import com.orlinskas.bookread.bookReadAlgorithm.WordsHandler;
 import com.orlinskas.bookread.constants.BookConstant;
 import com.orlinskas.bookread.constants.XML_TAG;
@@ -238,7 +238,7 @@ public class ParserXmlToBook {
 
         try {
             for (Word word : words) {
-                if(word.getCount() > AlgorithmConstants.MIN_WORD_COUNT_NEED_TO_ADD) {
+                if(word.getCount() > AlgorithmConstants.MIN_WORD_COUNT_NEED_TO_ADD & word.getCount() < AlgorithmConstants.MAX_WORD_COUNT_NEED_TO_ADD) {
                     databaseAdapter.insert(word, tableName);
                     countOfInsert++;
                 }

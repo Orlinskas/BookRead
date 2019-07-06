@@ -1,6 +1,5 @@
 package com.orlinskas.bookread.bookReadAlgorithm;
 
-import android.widget.ArrayAdapter;
 
 import com.orlinskas.bookread.Word;
 
@@ -14,5 +13,14 @@ public class WordReplacer {
             }
         }
         return needWord.getRussian();
+    }
+
+    public String firstReplace(Word needWord, ArrayList<Word> words) {
+        for(Word word : words) {
+            if(word.equals(needWord)) {
+                return word.getEnglish();
+            }
+        }
+        return needWord.getRussian() + " (" + needWord.getEnglish() + ")";
     }
 }

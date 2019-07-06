@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.orlinskas.bookread.TranslaterRequestSender;
 import com.orlinskas.bookread.Word;
+import com.orlinskas.bookread.constants.AlgorithmConstants;
 import com.orlinskas.bookread.data.DatabaseAdapter;
 import com.orlinskas.bookread.parsers.ParserJson;
 

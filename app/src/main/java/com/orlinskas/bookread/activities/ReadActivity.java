@@ -244,6 +244,7 @@ public class ReadActivity extends AppCompatActivity {
 
     private void showBookText(ArrayList<String> words) {
         StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<Word> firstEntriesWords = new ArrayList<>();
 
         if(book.isTrainingMode()) {
             DatabaseAdapter databaseAdapter = new DatabaseAdapter(this, book.getDataTableName());
@@ -253,10 +254,16 @@ public class ReadActivity extends AppCompatActivity {
 
             for(String word : words) {
                 Word actualWord = new Word(word);
+                WordReplacer wordReplacer = new WordReplacer();
 
                 if(englishWords.contains(actualWord)) {
-                    WordReplacer wordReplacer = new WordReplacer();
-                    stringBuilder.append(wordReplacer.replace(actualWord, englishWords));
+                    if(firstEntriesWords.contains(actualWord)) {
+                        stringBuilder.append(wordReplacer.replace(actualWord, englishWords));
+                    }
+                    else {
+                        stringBuilder.append(wordReplacer.firstReplace(actualWord, englishWords));
+                        firstEntriesWords.add(actualWord);
+                    }
                 }
                 else {
                     stringBuilder.append(word);

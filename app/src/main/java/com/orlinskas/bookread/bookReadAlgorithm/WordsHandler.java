@@ -1,6 +1,7 @@
 package com.orlinskas.bookread.bookReadAlgorithm;
 
 import com.orlinskas.bookread.Word;
+import com.orlinskas.bookread.constants.AlgorithmConstants;
 
 import java.util.ArrayList;
 
