@@ -178,7 +178,7 @@ public class VocabularyActivity extends ListActivity {
             rowTextEng.setTextColor(getResources().getColor(R.color.colorAccent));
             rowTextRus.setTextColor(getResources().getColor(R.color.colorAccent));
             String russian = wordsOnlyRussian[position];
-            String english = (position + 1) + ".     " + getEnglish(russian);
+            String english = (position + 1) + ".  " + getEnglish(russian);
             rowTextRus.setText(russian);
             rowTextEng.setText(english);
 

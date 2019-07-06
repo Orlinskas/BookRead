@@ -152,7 +152,7 @@ public class WordTranslater {
                 translateWord.append(aWordsChar);
             } else {
                 if (translateWord.length() > 1) {
-                    englishWords.add(signDeleter(spaceDeleter(iDeleter(translateWord.toString()))));
+                    englishWords.add(signDeleter(iDeleter(spaceDeleter(translateWord.toString()))));
                     translateWord = new StringBuilder();
                 }
             }
@@ -197,7 +197,7 @@ public class WordTranslater {
         char wordChar[] = word.toCharArray();
 
         try {
-            if(wordChar[0] == 'I'){
+            if(wordChar[0] == 'I' | wordChar[0] == 'i'){
                 if(wordChar[1] == ' '){
                     return word.substring(2, wordChar.length);
                 }
