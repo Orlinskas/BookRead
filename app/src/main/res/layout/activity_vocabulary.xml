@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TableLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/activity_vocabulary_ll_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -33,20 +35,6 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/activity_vocabulary_iv_search"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="60dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="searchButton"
-                android:padding="5dp"
-                app:srcCompat="@drawable/ic_file_manager_search" />
-
-            <ImageView
                 android:id="@+id/activity_vocabulary_iv_help"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -64,39 +52,51 @@
 
         </RelativeLayout>
 
-        <ProgressBar
-            android:id="@+id/activity_vocabulary_pb"
-            style="?android:attr/progressBarStyleHorizontal"
+        <Spinner
+            android:id="@+id/activity_vocabulary_sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:indeterminate="true" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/activity_vocabulary_sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp" />
-        </LinearLayout>
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:spinnerMode="dialog" />
 
     </LinearLayout>
 
-
-    <TableRow
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_vocabulary_tl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/activity_vocabulary_ll_head"
+        android:layout_marginBottom="40dp"
+        android:orientation="vertical">
 
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="2"
-            android:drawSelectorOnTop="false" />
-    </TableRow>
-</TableLayout>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:drawSelectorOnTop="false" />
+        </TableRow>
+
+    </TableLayout>
+
+    <EditText
+        android:id="@+id/activity_vocabulary_edit_text_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/activity_vocabulary_tl"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="-40dp"
+        android:layout_marginEnd="5dp"
+        android:hint="Найти слово..."
+        android:inputType="text"
+        android:textColor="@color/colorAccent"
+        tools:ignore="Autofill,LabelFor" />
+
+</RelativeLayout>

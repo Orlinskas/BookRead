@@ -4,17 +4,18 @@ import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ public class VocabularyActivity extends ListActivity {
     private ArrayList<Book> books;
     private ArrayList<Word> words = new ArrayList<>();
     private static final String FIRST_TITLE = "Список ваших книг..";
-    ProgressBar progressBar;
+    private EditText searchRow;
 
 
     @Override
@@ -42,15 +43,12 @@ public class VocabularyActivity extends ListActivity {
         setContentView(R.layout.activity_vocabulary);
 
         ImageView rowIconHelp = findViewById(R.id.activity_vocabulary_iv_help);
-        ImageView rowIconSearch = findViewById(R.id.activity_vocabulary_iv_search);
         RelativeLayout rowRelativeLayout = findViewById(R.id.activity_vocabulary_rl);
-        progressBar = findViewById(R.id.activity_vocabulary_pb);
         Spinner spinner = findViewById(R.id.activity_vocabulary_sp);
+        searchRow = findViewById(R.id.activity_vocabulary_edit_text_search);
 
         rowIconHelp.setImageResource(R.drawable.ic_help_2_0);
-        rowIconSearch.setImageResource(R.drawable.ic_file_manager_search);
         rowRelativeLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        progressBar.setVisibility(View.INVISIBLE);
 
         LibraryHelper libraryHelper = new LibraryHelper(this);
         try {
@@ -84,6 +82,25 @@ public class VocabularyActivity extends ListActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        searchRow.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    findWord(searchRow.getText().toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
     }
 
     private String[] getBookTitles() {
@@ -113,35 +130,6 @@ public class VocabularyActivity extends ListActivity {
         return words.size() > 0;
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class FindWordsTask extends AsyncTask<Book, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Void doInBackground(Book... books) {
-            try {
-                DatabaseAdapter databaseAdapter = new DatabaseAdapter(getApplicationContext(), books[0].getDataTableName());
-                databaseAdapter.openWithTransaction();
-                words = databaseAdapter.getWords(books[0].getDataTableName());
-                databaseAdapter.closeWithTransaction();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            progressBar.setVisibility(View.INVISIBLE);
-        }
-    }
-
     private String[] getWordsRus(@NonNull ArrayList<Word> words) {
         String[] wordsRus = new String[words.size()];
         for(int i = 0; i < words.size(); i++)  {
@@ -152,7 +140,7 @@ public class VocabularyActivity extends ListActivity {
 
     private void fillList (Book book) {
         if(findWords(book)){
-            this.setListAdapter(new VocabularyAdapter(this, R.layout.file_manager_row, getWordsRus(words)));
+            this.setListAdapter(new VocabularyAdapter(this, R.layout.vocabulary_row, getWordsRus(words)));
             ToastBuilder.create(this, "Всего слов: " + words.size());
         }
         else {
@@ -192,6 +180,7 @@ public class VocabularyActivity extends ListActivity {
             else{
                 row.setBackgroundColor(getResources().getColor(R.color.colorWHITE));
             }
+
             return row;
         }
     }
@@ -206,7 +195,38 @@ public class VocabularyActivity extends ListActivity {
     }
 
 
-    public void searchButton(View view) {
+    private void findWord(String needWordPart) {
+        int position = 0;
+
+            for(Word word : words) {
+                String wordPartRus = null;
+                try {
+                    wordPartRus = word.getRussian().substring(0, needWordPart.length());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                String wordPartEng = null;
+                try {
+                    wordPartEng = word.getEnglish().substring(0, needWordPart.length());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (wordPartRus != null) {
+                        if(wordPartRus.equals(needWordPart)) {
+                            getListView().smoothScrollToPosition(position);
+                            break;
+                        }
+                }
+                if (wordPartEng != null ) {
+                    if(wordPartEng.equals(needWordPart)) {
+                        getListView().smoothScrollToPosition(position);
+                        break;
+                    }
+                }
+                position++;
+            }
+
     }
 
     public void helpButton(View view) {
