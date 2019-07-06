@@ -18,9 +18,9 @@ public class WordReplacer {
     public String firstReplace(Word needWord, ArrayList<Word> words) {
         for(Word word : words) {
             if(word.equals(needWord)) {
-                return word.getEnglish();
+                return word.getRussian() + " (" + word.getEnglish() + ")";
             }
         }
-        return needWord.getRussian() + " (" + needWord.getEnglish() + ")";
+        return needWord.getRussian();
     }
 }
