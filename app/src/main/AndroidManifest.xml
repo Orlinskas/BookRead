@@ -103,7 +103,16 @@
             </intent-filter>
         </activity>
 
-
+        <activity
+            android:name=".activities.VocabularyActivity"
+            android:label="Vocabulary"
+            android:screenOrientation="portrait"
+            >
+            <intent-filter>
+                <action android:name=".VocabularyActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
     </application>
 

@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_library) {
             ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);
+        } else if (id == R.id.nav_vocabulary) {
+            ActivityOpenHelper.openActivity(getApplicationContext(), VocabularyActivity.class);
         } else if (id == R.id.nav_settings) {
             ActivityOpenHelper.openActivity(getApplicationContext(), SettingsActivity.class);
         } else if (id == R.id.nav_help) {

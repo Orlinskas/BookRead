@@ -517,7 +517,6 @@ public class ReadActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... parameter) {
-
             try {
                 scrollView.scrollTo(0, pagePositions.get(currentPage - 1));
                 return true;
@@ -621,18 +620,6 @@ public class ReadActivity extends AppCompatActivity {
 
     }
 
-   // @Override
-   // public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-   //     super.onCreateContextMenu(menu, v, menuInfo);
-   //     bookText.setSelectAllOnFocus(true);
-   //     menu.add(0,v.getId(),0,"Привет");
-//
-   // }
-//
-   // @Override
-   // public boolean onContextItemSelected(MenuItem item) {
-   //     return super.onContextItemSelected(item);
-   // }
 
     //активная фаза открытого меню настроек
     @SuppressLint("DefaultLocale")
