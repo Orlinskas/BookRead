@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,22 +24,16 @@ import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.ToastBuilder;
 import com.orlinskas.bookread.Word;
 import com.orlinskas.bookread.data.DatabaseAdapter;
-import com.orlinskas.bookread.fileManager.FileFormat;
+import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.LibraryHelper;
-import com.orlinskas.bookread.parsers.ListToArray;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static com.orlinskas.bookread.fileManager.FileFormat.FB2;
-import static com.orlinskas.bookread.fileManager.FileFormat.FOLDER;
-import static com.orlinskas.bookread.fileManager.FileFormat.OTHER;
-import static com.orlinskas.bookread.fileManager.FileFormat.TXT;
 
 public class VocabularyActivity extends ListActivity {
     private ArrayList<Book> books;
     private ArrayList<Word> words = new ArrayList<>();
-    private static final String FIRST_TITLE = "Выберете книгу...";
+    private static final String FIRST_TITLE = "Список ваших книг..";
+    ProgressBar progressBar;
 
 
     @Override
@@ -49,7 +44,7 @@ public class VocabularyActivity extends ListActivity {
         ImageView rowIconHelp = findViewById(R.id.activity_vocabulary_iv_help);
         ImageView rowIconSearch = findViewById(R.id.activity_vocabulary_iv_search);
         RelativeLayout rowRelativeLayout = findViewById(R.id.activity_vocabulary_rl);
-        ProgressBar progressBar = findViewById(R.id.activity_vocabulary_pb);
+        progressBar = findViewById(R.id.activity_vocabulary_pb);
         Spinner spinner = findViewById(R.id.activity_vocabulary_sp);
 
         rowIconHelp.setImageResource(R.drawable.ic_help_2_0);
@@ -80,6 +75,15 @@ public class VocabularyActivity extends ListActivity {
 
             }
         });
+
+        try {
+            Book book = (Book) getIntent().getSerializableExtra("book");
+            if(book != null) {
+                fillList(book);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String[] getBookTitles() {
@@ -98,14 +102,43 @@ public class VocabularyActivity extends ListActivity {
 
     private boolean findWords(Book book) {
         try {
-            DatabaseAdapter databaseAdapter = new DatabaseAdapter(this, book.getDataTableName());
+            DatabaseAdapter databaseAdapter = new DatabaseAdapter(getApplicationContext(), book.getDataTableName());
             databaseAdapter.openWithTransaction();
             words = databaseAdapter.getWords(book.getDataTableName());
             databaseAdapter.closeWithTransaction();
-            return words.size() > 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+        return words.size() > 0;
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    class FindWordsTask extends AsyncTask<Book, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Book... books) {
+            try {
+                DatabaseAdapter databaseAdapter = new DatabaseAdapter(getApplicationContext(), books[0].getDataTableName());
+                databaseAdapter.openWithTransaction();
+                words = databaseAdapter.getWords(books[0].getDataTableName());
+                databaseAdapter.closeWithTransaction();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -120,6 +153,7 @@ public class VocabularyActivity extends ListActivity {
     private void fillList (Book book) {
         if(findWords(book)){
             this.setListAdapter(new VocabularyAdapter(this, R.layout.file_manager_row, getWordsRus(words)));
+            ToastBuilder.create(this, "Всего слов: " + words.size());
         }
         else {
             ToastBuilder.create(this,"Ошибка");
@@ -144,7 +178,7 @@ public class VocabularyActivity extends ListActivity {
             rowTextEng.setTextColor(getResources().getColor(R.color.colorAccent));
             rowTextRus.setTextColor(getResources().getColor(R.color.colorAccent));
             String russian = wordsOnlyRussian[position];
-            String english = getEnglish(russian);
+            String english = (position + 1) + ".     " + getEnglish(russian);
             rowTextRus.setText(russian);
             rowTextEng.setText(english);
 
@@ -169,6 +203,14 @@ public class VocabularyActivity extends ListActivity {
             }
         }
         return "Не найденно";
+    }
+
+
+    public void searchButton(View view) {
+    }
+
+    public void helpButton(View view) {
+        ActivityOpenHelper.openActivity(this, HelpActivity.class);
     }
 
 }

@@ -1,6 +1,9 @@
 package com.orlinskas.bookread.activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -24,11 +27,13 @@ import android.widget.TextView;
 import com.orlinskas.bookread.Book;
 import com.orlinskas.bookread.R;
 import com.orlinskas.bookread.Settings;
+import com.orlinskas.bookread.ToastBuilder;
 import com.orlinskas.bookread.Word;
 import com.orlinskas.bookread.bookReadAlgorithm.WordReplacer;
 import com.orlinskas.bookread.data.DatabaseAdapter;
 import com.orlinskas.bookread.data.SettingsData;
 import com.orlinskas.bookread.data.SharedPreferencesData;
+import com.orlinskas.bookread.fileManager.FileFormat;
 import com.orlinskas.bookread.fragments.BookInfoPageFragment;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
@@ -67,7 +72,7 @@ public class ReadActivity extends AppCompatActivity {
 
     //первая часть отображения
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_test);
 
@@ -136,8 +141,9 @@ public class ReadActivity extends AppCompatActivity {
         btnSettings.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
-                return true;
+                SendBookToVocabulary sendBookToVocabulary = new SendBookToVocabulary();
+                sendBookToVocabulary.execute();
+            return true;
             }
         });
 
@@ -168,6 +174,28 @@ public class ReadActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class SendBookToVocabulary extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ToastBuilder.create(getApplicationContext(), "Открываем словарь");
+        }
+
+        @Override
+        protected Void doInBackground(Void... parameter) {
+            try {
+                Intent i = new Intent(getApplicationContext(), VocabularyActivity.class);
+                i.putExtra("book", book);
+                startActivity(i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
     }
 
     @SuppressLint("StaticFieldLeak")
