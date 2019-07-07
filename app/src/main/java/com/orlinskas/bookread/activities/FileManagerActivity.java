@@ -1,5 +1,6 @@
 package com.orlinskas.bookread.activities;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -14,6 +15,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,6 +38,7 @@ import com.orlinskas.bookread.parsers.ListToArray;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.orlinskas.bookread.fileManager.FileFormat.FB2;
 import static com.orlinskas.bookread.fileManager.FileFormat.FOLDER;
@@ -45,7 +50,7 @@ public class FileManagerActivity extends ListActivity {
     private String pathRoot = Environment.getExternalStorageDirectory().getAbsolutePath();
     private String pathPrefix = "";
     private File currentDirectory = new File("/");
-    private ProgressBar progressBar;
+    private ProgressBar progressBar, progressBarCircle;
     private boolean castComplite = true;
     ImageView downloadImage;
     ImageView phoneImage;
@@ -62,13 +67,14 @@ public class FileManagerActivity extends ListActivity {
         progressBar = findViewById(R.id.activity_file_manager_pb);
         downloadImage = findViewById(R.id.activity_file_manager_iv_download);
         phoneImage = findViewById(R.id.activity_file_manager_iv_phone);
+        progressBarCircle = findViewById(R.id.activity_file_manager_pb_circle);
 
         rowIconHelp.setImageResource(R.drawable.ic_help_2_0);
         rowIconSearch.setImageResource(R.drawable.ic_file_manager_search);
         rowRelativeLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        progressBar.setVisibility(View.INVISIBLE);
         downloadImage.setImageResource(R.drawable.ic_file_manager_downloads);
         phoneImage.setImageResource(R.drawable.ic_file_manager_phone);
+        progressBarCircle.setVisibility(View.INVISIBLE);
 
         browseTo(new File(pathRoot));
     }
@@ -149,6 +155,9 @@ public class FileManagerActivity extends ListActivity {
                         ToastBuilder.create(getApplicationContext(), "Подождите пожалуйста");
                         CastFileToBookTask castFileToBookTask = new CastFileToBookTask();
                         castFileToBookTask.execute(aDirectory);
+
+                        animationProgress();
+
                     }
                 };
 
@@ -258,13 +267,14 @@ public class FileManagerActivity extends ListActivity {
     }
 
     @SuppressLint("StaticFieldLeak")
-    class CastFileToBookTask extends AsyncTask<File, Void, Boolean> {
+    class CastFileToBookTask extends AsyncTask<File, Integer, Boolean> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
+            progressBarCircle.setVisibility(View.VISIBLE);
             castComplite = false;
+            ToastBuilder.create(getApplicationContext(), "Подождите...");
         }
 
         @Override
@@ -291,8 +301,14 @@ public class FileManagerActivity extends ListActivity {
                 ToastBuilder.create(getApplicationContext(), "Не удалось добавить книгу");
             }
             castComplite = true;
-            progressBar.setVisibility(View.INVISIBLE);
+            progressBarCircle.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void animationProgress() {
+        ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", 100);
+        progressAnimator.setDuration(30000);
+        progressAnimator.start();
     }
 
     @Override
