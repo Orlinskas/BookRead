@@ -75,6 +75,7 @@ public class FileManagerActivity extends ListActivity {
         downloadImage.setImageResource(R.drawable.ic_file_manager_downloads);
         phoneImage.setImageResource(R.drawable.ic_file_manager_phone);
         progressBarCircle.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
 
         browseTo(new File(pathRoot));
     }
@@ -273,6 +274,7 @@ public class FileManagerActivity extends ListActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             progressBarCircle.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
             castComplite = false;
             ToastBuilder.create(getApplicationContext(), "Подождите...");
         }
@@ -302,12 +304,13 @@ public class FileManagerActivity extends ListActivity {
             }
             castComplite = true;
             progressBarCircle.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 
     private void animationProgress() {
         ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", 100);
-        progressAnimator.setDuration(30000);
+        progressAnimator.setDuration(60000);
         progressAnimator.start();
     }
 
