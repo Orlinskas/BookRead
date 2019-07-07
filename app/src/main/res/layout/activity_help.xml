@@ -27,42 +27,271 @@
                     android:shadowDy="2"
                     android:shadowRadius="4"
                     android:text="@string/help1"
-                    android:textColor="@color/colorGREY"
-                    android:textSize="18sp" />
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="serif" />
 
                 <ImageView
                     android:id="@+id/imageView3"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="120dp"
-                    android:layout_margin="5dp"
+                    android:layout_marginTop="5dp"
                     app:srcCompat="@drawable/im_help1" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text='Произведите поиск файла с расширением fb2 и нажмите на него. Вы также можете быстро перейти в "загрузки", нажав на кнопку: '
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="424dp"
+                    android:layout_height="175dp"
+                    android:layout_marginTop="5dp"
+                    app:srcCompat="@drawable/im_load_in_fm" />
+
+                <TextView
+                    android:id="@+id/textView31"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Подсказка: книга, которая подходит приложению выглядит так:"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="53dp"
+                    app:srcCompat="@drawable/im_book_in_fm" />
+
+                <TextView
+                    android:id="@+id/textView311"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="Примечание: добавление может занять несколько минут. При неудаче перезапустите приложение и попробуйте снова. После, обратитесь в поддержку"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
+                    android:id="@+id/textView22"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:shadowColor="@color/colorShadow"
                     android:shadowDy="2"
                     android:shadowRadius="4"
-                    android:text="@string/help2"
-                    android:textColor="@color/colorGREY"
-                    android:textSize="18sp" />
+                    android:text='2. "Библиотека".'
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="serif" />
+
+
+                <TextView
+                    android:id="@+id/textView32"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Так выглядит книга в библиотеке:"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/imageView42"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_margin="5dp"
-                    app:srcCompat="@drawable/im_help2" />
+                    android:layout_height="151dp"
+                    android:layout_marginTop="5dp"
+                    app:srcCompat="@drawable/im_book_in_library" />
+
+                <TextView
+                    android:id="@+id/textView312"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text='Нажав на красный крестик, книгу можно удалить из библиотеки. Кнопка "Режим обучения" включает или выключает замену слов в тексте'
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView223"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:shadowColor="@color/colorShadow"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
+                    android:text='3. "Режим чтения".'
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/textView3122"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text= "Экран чтения поделен на три части:"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+
+                <ImageView
+                    android:id="@+id/imageView423"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginTop="5dp"
+                    app:srcCompat="@drawable/im_read_activity_help" />
+
+                <TextView
+                    android:id="@+id/textView3123"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Нажатие на две крайние части, перелистывают страницу. Нажатие на центр экрана, открывает меню с быстрым пролистыванием и кнопкой настроек шрифта."
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/textView312332"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Подсказка: первое вхождение, изучаемых слов в текст, имееет вид: красный (red). Это сделанно для запоминания. "
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/textView31233"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Подсказка: длинное нажатие(зажатие) на центр экрана откроет словарь для данной книги, в котором можно найти слово которое вы забыли:) "
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2234"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:shadowColor="@color/colorShadow"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
+                    android:text='4. "Обратная связь".'
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/textView31224"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text= "Благодарность: Спасибо, что пользуетесь приложением, с вашей помощью мы сделаем его лучше."
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+
+                <ImageView
+                    android:id="@+id/imageView4235"
+                    android:layout_width="match_parent"
+                    android:layout_height="176dp"
+                    android:layout_marginTop="5dp"
+                    app:srcCompat="@drawable/im_comunnicate" />
+
+                <TextView
+                    android:id="@+id/textView31234"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Делитесь приложением с друзьями и пожалуйста напишите нам, при возникновении проблем или трудностей."
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/textView3123325"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Спасибо что дочитали до конца:) Буду рад ответить на ваши вопросы"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+
+            </LinearLayout>
+
         </LinearLayout>
+
     </ScrollView>
