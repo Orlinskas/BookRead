@@ -100,6 +100,10 @@ public class MainActivity extends AppCompatActivity
             ActivityOpenHelper.openActivity(getApplicationContext(), SettingsActivity.class);
             return true;
         }
+        else if(id == R.id.action_help) {
+            ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
