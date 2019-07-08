@@ -266,7 +266,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
 
         DialogInterface.OnClickListener cancelButtonListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
-                ToastBuilder.create(getApplicationContext(), "Ну и правильно, много читать не бывает)");
+                ToastBuilder.create(getApplicationContext(), "Ну и правильно, много читать не бывает");
             }
         };
 
@@ -280,7 +280,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
                     .show();
         } catch (Exception e) {
             e.printStackTrace();
-            ToastBuilder.create(getApplicationContext(), "Не надо)");
+            ToastBuilder.create(getApplicationContext(), "Не надо");
         }
         return false;
     }

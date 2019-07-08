@@ -146,7 +146,7 @@ public class FileManagerActivity extends ListActivity {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                ToastBuilder.create(getApplicationContext(), "Невозможно открыть, сейчас будет вылет, не волнуйтесь)");
+                ToastBuilder.create(getApplicationContext(), "Невозможно открыть, сейчас будет вылет");
             }
         }
         else {
@@ -296,7 +296,7 @@ public class FileManagerActivity extends ListActivity {
         protected void onPostExecute(Boolean root) {
             super.onPostExecute(root);
             if(root) {
-                ToastBuilder.create(getApplicationContext(), "Книга добавлена в библиотеку!)");
+                ToastBuilder.create(getApplicationContext(), "Книга добавлена в библиотеку!");
                 ActivityOpenHelper.openActivity(getApplicationContext(), LibraryActivity.class);
             }
             else {

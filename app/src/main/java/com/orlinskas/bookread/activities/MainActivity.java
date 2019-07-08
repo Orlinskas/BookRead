@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity
 
     private void checkStoragePermission() {
         if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
-            ToastBuilder.create(this, "Welcome!)");
+            ToastBuilder.create(this, "Welcome!");
             //добавить рандомные приветствия
         } else {
             ActivityCompat.requestPermissions
