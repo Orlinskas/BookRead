@@ -202,7 +202,9 @@ public class WordTranslater {
                     return word.substring(2, wordChar.length);
                 }
                 else {
-                    return word.substring(1, wordChar.length);
+                    if(wordChar[0] == 'I') {
+                        return word.substring(1, wordChar.length);
+                    }
                 }
             }
         } catch (Exception e) {

@@ -135,8 +135,7 @@ public class MainActivity extends AppCompatActivity
             Intent sendIntent = new Intent();
             sendIntent.setType("text/plain");
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "\"BookRead\" - английский в твоих книгах!");
-            sendIntent.putExtra(Intent.EXTRA_TEXT,  "\"BookRead\" - английский в твоих книгах! Присоединяйся https://play.google.com/store?hl=ru");
+            sendIntent.putExtra(Intent.EXTRA_TEXT,  "\"BookRead\" - английский в твоих книгах! Присоединяйся https://play.google.com/store/apps/details?id=com.orlinskas.bookread");
             startActivity(Intent.createChooser(sendIntent,"Поделиться"));
         } else if (id == R.id.group) {
             ActivityOpenHelper.openActivity(getApplicationContext(), AboutAsActivity.class);
