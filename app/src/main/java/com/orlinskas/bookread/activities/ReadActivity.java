@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -52,7 +53,7 @@ public class ReadActivity extends AppCompatActivity {
     private TextView bookText, currentPageSettings, bookInfoSettings;
     private Book book;
     private ArrayList<String> words;
-    private ProgressBar progressBar;
+    private ProgressBar progressBar, pageScrollProgress;
     private SeekBar seekBar;
 
     private int screenHeight;
@@ -76,7 +77,9 @@ public class ReadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_test);
 
-        Objects.requireNonNull(getSupportActionBar()).hide();
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
         //нужен отдельный поток на загрузке
         btnBack = findViewById(R.id.activity_read_test_btn_back_page);
@@ -94,6 +97,7 @@ public class ReadActivity extends AppCompatActivity {
         bookInfoSettings = findViewById(R.id.activity_read_test_tv_book_info);
         btnCloseSettings = findViewById(R.id.activity_read_test_btn_close_settings);
         btnCancelSettingsScroll = findViewById(R.id.activity_read_test_btn_cancel_scroll_settings);
+        pageScrollProgress = findViewById(R.id.activity_read_test_pb_page_scroll);
 
         //registerForContextMenu(bookText);
 
@@ -514,9 +518,7 @@ public class ReadActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Animation animation;
-            animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.next_page_anim);
-            scrollView.startAnimation(animation);
+            pageScrollProgress.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -533,6 +535,7 @@ public class ReadActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
+            pageScrollProgress.setVisibility(View.INVISIBLE);
             if(result){
                 currentPage++;
                 needSaveProgress = true;
@@ -545,9 +548,7 @@ public class ReadActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Animation animation;
-            animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.previos_page_anim);
-            scrollView.startAnimation(animation);
+            pageScrollProgress.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -564,6 +565,7 @@ public class ReadActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
+            pageScrollProgress.setVisibility(View.INVISIBLE);
             if(result){
                 currentPage--;
                 needSaveProgress = true;
@@ -655,7 +657,6 @@ public class ReadActivity extends AppCompatActivity {
 
     }
 
-
     //активная фаза открытого меню настроек
     @SuppressLint("DefaultLocale")
     public void onClickBackBtnSettings(View view) {
@@ -684,7 +685,6 @@ public class ReadActivity extends AppCompatActivity {
     public void onClickBtnCloseSettings(View view) {
         closeSettings();
     }
-
 
     //фаза закрытия
     @Override

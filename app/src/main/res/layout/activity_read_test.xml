@@ -76,6 +76,15 @@
             android:layout_marginRight="5dp" />
     </ScrollView>
 
+    <ProgressBar
+        android:id="@+id/activity_read_test_pb_page_scroll"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/activity_read_test_ll_container_book_info"
+        android:visibility="invisible"
+        android:indeterminate="true"/>
+
     <LinearLayout
         android:id="@+id/activity_read_test_ll_container_book_info"
         android:layout_width="match_parent"
