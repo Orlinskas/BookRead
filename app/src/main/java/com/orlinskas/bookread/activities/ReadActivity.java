@@ -38,6 +38,7 @@ import com.orlinskas.bookread.fileManager.FileFormat;
 import com.orlinskas.bookread.fragments.BookInfoPageFragment;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
+import com.orlinskas.bookread.helpers.LibraryHelper;
 import com.orlinskas.bookread.presenters.PercentProgress;
 
 import java.io.File;
@@ -103,6 +104,8 @@ public class ReadActivity extends AppCompatActivity {
 
         SettingsData settingsData = new SettingsData(this);
         settings = settingsData.loadSettings();
+
+        SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
 
         switch (settings.getTheme()) {
             case 1:
@@ -223,7 +226,6 @@ public class ReadActivity extends AppCompatActivity {
                     }
                 });
 
-                SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
                 bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f);
 
             } catch (Exception e) {
@@ -483,6 +485,8 @@ public class ReadActivity extends AppCompatActivity {
          } catch (Exception e) {
              e.printStackTrace();
          }
+
+        showFirstMessageDialog();
      }
 
     //активная фаза чтения
@@ -734,5 +738,36 @@ public class ReadActivity extends AppCompatActivity {
         else {
             super.onBackPressed();
         }
+    }
+
+    public void showFirstMessageDialog() {
+        if(!checkFirstRun()) {
+            DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1) {
+                }
+            };
+
+            DialogInterface.OnClickListener cancelButtonListener = new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    ActivityOpenHelper.openActivity(getApplicationContext(), HelpActivity.class);
+                }
+            };
+
+            try {
+                new AlertDialog.Builder(this)
+                        .setTitle("Подсказка:") //title
+                        .setMessage("Тап по краям экрана - перелистывание. Тап по центру - открыть меню. Зажать по центру - открыть словарь.") //message
+                        .setPositiveButton("Ясно", okButtonListener) //positive button
+                        .setNegativeButton("Помощь", cancelButtonListener) //negative button
+                        .show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            SharedPreferencesData.setTrueFirstRun();
+        }
+    }
+
+    public boolean checkFirstRun() {
+        return SharedPreferencesData.getFirstRun();
     }
 }
