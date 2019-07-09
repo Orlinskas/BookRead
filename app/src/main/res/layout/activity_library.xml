@@ -80,7 +80,11 @@
                 android:shadowRadius="4"
                 android:text="Автор"
                 android:textColor="@color/colorBlack"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="0dp"
+                android:layout_toRightOf="@+id/activity_library_rl_annotation_menu_image" />
 
             <TextView
                 android:id="@+id/activity_library_rl_annotation_menu_title"
@@ -97,7 +101,11 @@
                 android:shadowRadius="4"
                 android:text="название книги"
                 android:textColor="@color/colorBlack"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="0dp"
+                android:layout_toRightOf="@+id/activity_library_rl_annotation_menu_image" />
 
             <ScrollView
                 android:id="@+id/activity_library_rl_annotation_menu_scroll_viev"
@@ -125,7 +133,8 @@
                         android:shadowRadius="4"
                         android:text="Аннотация"
                         android:textColor="@color/colorBlack"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:layout_marginLeft="0dp" />
 
                     <TextView
                         android:id="@+id/activity_library_rl_annotation_menu_annotation_text"
@@ -138,7 +147,8 @@
                         android:shadowRadius="4"
                         android:text="Текст анотации"
                         android:textColor="@color/colorBlack"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:layout_marginLeft="10dp" />
                 </LinearLayout>
             </ScrollView>
 
@@ -153,7 +163,8 @@
                 android:background="@color/colorAccent"
                 android:onClick="onClickReadBook"
                 android:text="Читать"
-                android:textColor="@color/colorWHITE" />
+                android:textColor="@color/colorWHITE"
+                android:layout_alignParentLeft="false" />
 
         </RelativeLayout>
     </RelativeLayout>

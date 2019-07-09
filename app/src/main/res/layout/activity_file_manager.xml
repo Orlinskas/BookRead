@@ -31,7 +31,9 @@
                 android:text="@string/activity_title_search_book"
                 android:textColor="@color/colorWHITE"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="17dp" />
 
             <ImageView
                 android:id="@+id/activity_file_manager_iv_search"
@@ -46,7 +48,9 @@
                 android:focusable="true"
                 android:onClick="searchButton"
                 android:padding="5dp"
-                app:srcCompat="@drawable/ic_file_manager_search" />
+                app:srcCompat="@drawable/ic_file_manager_search"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="60dp" />
 
             <ImageView
                 android:id="@+id/activity_file_manager_iv_help"
@@ -63,7 +67,8 @@
                 android:focusable="true"
                 android:onClick="helpButton"
                 android:padding="5dp"
-                app:srcCompat="@drawable/ic_help_2_0" />
+                app:srcCompat="@drawable/ic_help_2_0"
+                android:layout_alignParentRight="true" />
 
         </RelativeLayout>
 
@@ -82,7 +87,7 @@
                 android:progress="0"
                 android:max="100"
 
-                />
+                android:layout_marginRight="40dp" />
 
             <ProgressBar
                 android:id="@+id/activity_file_manager_pb_circle"
@@ -92,7 +97,8 @@
                 android:layout_marginStart="-35dp"
                 android:layout_toEndOf="@+id/activity_file_manager_pb"
                 android:indeterminate="true"
-                />
+                android:layout_marginLeft="-35dp"
+                android:layout_toRightOf="@+id/activity_file_manager_pb" />
         </RelativeLayout>
 
         <LinearLayout
@@ -111,7 +117,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="onClickHome"
-                app:srcCompat="@drawable/ic_file_manager_phone" />
+                app:srcCompat="@drawable/ic_file_manager_phone"
+                android:layout_marginLeft="10dp" />
 
             <ImageView
                 android:id="@+id/activity_file_manager_iv_download"
@@ -124,7 +131,8 @@
                 android:focusable="true"
                 android:onClick="onClickDownload"
                 android:paddingTop="2dp"
-                app:srcCompat="@drawable/ic_file_manager_downloads" />
+                app:srcCompat="@drawable/ic_file_manager_downloads"
+                android:layout_marginRight="3dp" />
         </LinearLayout>
 
     </LinearLayout>

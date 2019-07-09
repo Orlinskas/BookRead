@@ -55,7 +55,10 @@
                 android:text="Орлинскас Влад"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/profile_image" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -72,7 +75,9 @@
                 android:textColor="@color/colorGREY"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/profile_image" />
 
             <TextView
                 android:id="@+id/textView1322"
@@ -82,7 +87,9 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/profile_image"
-                android:text="Код, автор идеи" />
+                android:text="Код, автор идеи"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/profile_image" />
 
         </RelativeLayout>
 
@@ -116,7 +123,10 @@
                 android:text="Жолус Александр"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/profile_image1" />
 
             <TextView
                 android:id="@+id/textView111"
@@ -132,7 +142,9 @@
                 android:text="Software Developer"
                 android:textColor="@color/colorGREY"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/profile_image1" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -142,7 +154,9 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/profile_image1"
-                android:text="Архитектура приложения" />
+                android:text="Архитектура приложения"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/profile_image1" />
 
 
         </RelativeLayout>
@@ -176,7 +190,10 @@
                 android:text="Коротун Марк"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/profile_image2" />
 
             <TextView
                 android:id="@+id/textView112"
@@ -192,7 +209,9 @@
                 android:text="Преподаватель английского языка"
                 android:textColor="@color/colorGREY"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/profile_image2" />
 
             <TextView
                 android:id="@+id/textView132"
@@ -202,7 +221,9 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/profile_image2"
-                android:text="Разработка алгоритма BookRead" />
+                android:text="Разработка алгоритма BookRead"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/profile_image2" />
 
         </RelativeLayout>
 

@@ -23,7 +23,9 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="13dp"
             android:layout_marginTop="5dp"
-            app:srcCompat="@drawable/im_ray" />
+            app:srcCompat="@drawable/im_ray"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="13dp" />
 
         <TextView
             android:id="@+id/textView12"
@@ -38,7 +40,8 @@
             android:shadowColor="@color/colorShadow"
             android:shadowDy="1"
             android:shadowRadius="2"
-            android:textStyle="bold|italic" />
+            android:textStyle="bold|italic"
+            android:layout_toRightOf="@+id/imageView9" />
 
         <TextView
             android:id="@+id/textView18"
@@ -52,7 +55,9 @@
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="— Рэй Брэдбери  "
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginLeft="148dp"
+            android:layout_toRightOf="@+id/imageView9" />
 
         <TextView
             android:id="@+id/textView19"
@@ -86,7 +91,8 @@
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:typeface="serif" />
+            android:typeface="serif"
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:id="@+id/textView202"
@@ -103,7 +109,8 @@
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:typeface="serif" />
+            android:typeface="serif"
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:id="@+id/textView2023"
@@ -120,7 +127,8 @@
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:typeface="serif" />
+            android:typeface="serif"
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:id="@+id/textView202333"
@@ -137,7 +145,9 @@
             android:textColor="@color/colorGREY"
             android:textSize="12sp"
             android:textStyle="italic"
-            android:typeface="serif" />
+            android:typeface="serif"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="20dp" />
 
         <TextView
             android:id="@+id/textView2023333"
@@ -154,7 +164,8 @@
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:typeface="serif" />
+            android:typeface="serif"
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:id="@+id/textView191"
@@ -184,7 +195,7 @@
             android:shadowColor="@color/colorShadow"
             android:shadowDy="2"
             android:shadowRadius="4"
-            android:text="- Версия 0.9"
+            android:text="@string/version"
             android:textColor="@color/colorGREY"
             android:textSize="12sp"
             android:textStyle="italic"
@@ -201,7 +212,7 @@
             android:shadowColor="@color/colorShadow"
             android:shadowDy="2"
             android:shadowRadius="4"
-            android:text="- Бета тест"
+            android:text="@string/changes"
             android:textColor="@color/colorGREY"
             android:textSize="12sp"
             android:textStyle="italic"

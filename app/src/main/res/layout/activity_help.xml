@@ -50,7 +50,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
                 <ImageView
                     android:id="@+id/imageView4"
@@ -69,7 +71,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
                 <ImageView
                     android:id="@+id/imageView8"
@@ -88,7 +92,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
             </LinearLayout>
 
@@ -123,7 +129,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
                 <ImageView
                     android:id="@+id/imageView42"
@@ -142,7 +150,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
             </LinearLayout>
 
@@ -176,7 +186,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
 
                 <ImageView
@@ -196,7 +208,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
                 <TextView
                     android:id="@+id/textView312332"
@@ -208,7 +222,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
                 <TextView
                     android:id="@+id/textView31233"
@@ -220,7 +236,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
             </LinearLayout>
 
@@ -254,7 +272,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
 
                 <ImageView
@@ -274,7 +294,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
                 <TextView
                     android:id="@+id/textView3123325"
@@ -287,7 +309,9 @@
                     android:textAlignment="viewStart"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="start" />
 
 
             </LinearLayout>

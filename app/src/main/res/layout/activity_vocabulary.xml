@@ -32,7 +32,9 @@
                 android:text="Словарь"
                 android:textColor="@color/colorWHITE"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="17dp" />
 
             <ImageView
                 android:id="@+id/activity_vocabulary_iv_help"
@@ -48,7 +50,8 @@
                 android:focusable="true"
                 android:onClick="helpButton"
                 android:padding="5dp"
-                app:srcCompat="@drawable/ic_help_2_0" />
+                app:srcCompat="@drawable/ic_help_2_0"
+                android:layout_alignParentRight="true" />
 
         </RelativeLayout>
 

@@ -33,7 +33,9 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/gmail" />
+        app:srcCompat="@drawable/gmail"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:id="@+id/textView16"
@@ -48,7 +50,9 @@
         android:focusable="true"
         android:text="orlinskas.development@gmai.com"
         android:textColor="@color/colorFileManager"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/imageView5" />
 
     <TextView
         android:id="@+id/textView81"
@@ -76,7 +80,8 @@
         android:layout_below="@+id/textView81"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/gmail" />
+        app:srcCompat="@drawable/gmail"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:id="@+id/textView161"
@@ -91,7 +96,9 @@
         android:focusable="true"
         android:text="orlinskaslove@gmai.com"
         android:textColor="@color/colorFileManager"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/imageView51" />
 
     <ImageView
         android:id="@+id/imageView511"
@@ -100,7 +107,8 @@
         android:layout_below="@+id/imageView51"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/inst" />
+        app:srcCompat="@drawable/inst"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:id="@+id/textView1611"
@@ -115,5 +123,7 @@
         android:focusable="true"
         android:text="http://www.instagram.com/orlinskas"
         android:textColor="@color/colorFileManager"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/imageView511" />
 </RelativeLayout>

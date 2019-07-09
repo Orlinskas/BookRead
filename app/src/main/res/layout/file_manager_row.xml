@@ -15,7 +15,9 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="20dp"
-        app:srcCompat="@drawable/ic_folder" />
+        app:srcCompat="@drawable/ic_folder"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp" />
 
     <TextView
         android:id="@+id/file_manager_row_tv"
@@ -30,5 +32,8 @@
         android:shadowRadius="4"
         android:textColor="@color/colorGREY"
         android:textSize="14sp"
-        android:text="Папка"/>
+        android:text="Папка"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="71dp"
+        android:layout_marginRight="0dp" />
 </RelativeLayout>

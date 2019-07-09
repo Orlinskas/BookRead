@@ -31,7 +31,8 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         android:contentDescription="@string/book_image"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/library_book_fragment_tv_title"
@@ -48,7 +49,11 @@
         android:shadowRadius="4"
         android:text="Название книги "
         android:textColor="@color/colorGREY"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="106dp"
+        android:layout_marginRight="31dp" />
 
     <TextView
         android:id="@+id/library_book_fragment_tv_author"
@@ -64,7 +69,10 @@
         android:shadowRadius="4"
         android:text="Имя автора Фамилия автора"
         android:textColor="@color/colorGREY"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="107dp"
+        android:layout_marginRight="13dp" />
 
     <Switch
         android:id="@+id/library_book_fragment_switch_mode"
@@ -79,7 +87,8 @@
         android:shadowRadius="4"
         android:text="Режим обучения"
         android:textColor="@color/colorAccent"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:layout_alignParentRight="true" />
 
     <TextView
         android:id="@+id/library_book_fragment_tv_date"
@@ -93,7 +102,8 @@
         android:shadowRadius="4"
         android:text="Дата добавления"
         android:textColor="@color/colorGREY"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:layout_alignLeft="@+id/library_book_fragment_tv_title" />
 
     <Button
         android:id="@+id/library_book_fragment_btn"
@@ -103,7 +113,10 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="-15dp"
         android:layout_marginEnd="40dp"
-        android:text="" />
+        android:text=""
+        android:layout_alignLeft="@+id/library_book_fragment_iv"
+        android:layout_marginLeft="-15dp"
+        android:layout_marginRight="40dp" />
 
     <ImageView
         android:id="@+id/library_book_fragment_iv_delete"
@@ -118,6 +131,9 @@
         android:clickable="true"
         android:focusable="true"
         android:padding="3dp"
-        app:srcCompat="@drawable/ic_delete" />
+        app:srcCompat="@drawable/ic_delete"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="3dp" />
 
 </RelativeLayout>
