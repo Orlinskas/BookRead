@@ -1,6 +1,7 @@
 package com.orlinskas.bookread.activities;
 
 import android.Manifest;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -36,17 +37,22 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                permissionStatus = ContextCompat.checkSelfPermission
-                        (getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
-                if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
-                    ActivityOpenHelper.openActivity(getApplicationContext(), FileManagerActivity.class);
-                }
-                else {
-                    ToastBuilder.create(getApplicationContext(), "Вы не разрешили приложению доступ к памяти телефона!");
+                try {
+                    permissionStatus = ContextCompat.checkSelfPermission
+                            (getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+                    if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+                        ActivityOpenHelper.openActivity(getApplicationContext(), FileManagerActivity.class);
+                    }
+                    else {
+                        ToastBuilder.create(getApplicationContext(), "Вы не разрешили приложению доступ к памяти телефона!");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -66,8 +72,12 @@ public class MainActivity extends AppCompatActivity
         //SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
         AppContext.setContext(getApplicationContext());
 
-        permissionStatus = ContextCompat.checkSelfPermission
-                (this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        try {
+            permissionStatus = ContextCompat.checkSelfPermission
+                    (this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         checkStoragePermission();
     }
 
@@ -115,8 +125,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_add_book) {
-            permissionStatus = ContextCompat.checkSelfPermission
-                    (this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            try {
+                permissionStatus = ContextCompat.checkSelfPermission
+                        (this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
                 ActivityOpenHelper.openActivity(getApplicationContext(), FileManagerActivity.class);
             }
@@ -152,9 +166,13 @@ public class MainActivity extends AppCompatActivity
             ToastBuilder.create(this, "Welcome!");
             //добавить рандомные приветствия
         } else {
-            ActivityCompat.requestPermissions
-                    (this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
-                            PermissionConstant.MY_REQUEST_CODE);
+            try {
+                ActivityCompat.requestPermissions
+                        (this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                                PermissionConstant.MY_REQUEST_CODE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
