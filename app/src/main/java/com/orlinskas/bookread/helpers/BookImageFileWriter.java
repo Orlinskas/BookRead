@@ -2,8 +2,6 @@ package com.orlinskas.bookread.helpers;
 
 import android.content.Context;
 
-import com.orlinskas.bookread.Book;
-
 import java.io.File;
 import java.io.FileWriter;
 

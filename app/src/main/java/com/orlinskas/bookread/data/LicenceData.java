@@ -42,12 +42,12 @@ public class LicenceData {
         String filePath = context.getFilesDir().getPath() + "/" + FILE_LICENCE_NAME;
         File file = new File(filePath);
 
-        try (FileOutputStream fos = new FileOutputStream(file);
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(licence);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+       // try (FileOutputStream fos = new FileOutputStream(file);
+       //      ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+       //     oos.writeObject(licence);
+       // }
+       // catch (Exception e){
+       //     e.printStackTrace();
+       // }
     }
 }
