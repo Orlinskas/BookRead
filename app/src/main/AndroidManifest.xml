@@ -17,9 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-
-        tools:ignore="GoogleAppIndexingWarning"
-        android:fullBackupContent="true">
+        android:fullBackupContent="true"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <activity
             android:name=".activities.MainActivity"
