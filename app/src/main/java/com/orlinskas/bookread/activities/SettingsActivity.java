@@ -257,10 +257,9 @@ public class SettingsActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    private boolean saveSettings() throws Exception{
+    private void saveSettings() throws Exception{
         SettingsData settingsData = new SettingsData(this);
         settingsData.saveSettings(settings);
-        return true;
     }
 
     private Typeface getTypeFaceCode(int number) {

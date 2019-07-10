@@ -15,9 +15,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,11 +31,9 @@ import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.LibraryHelper;
 import com.orlinskas.bookread.parsers.ListToArray;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.orlinskas.bookread.fileManager.FileFormat.FB2;
 import static com.orlinskas.bookread.fileManager.FileFormat.FOLDER;

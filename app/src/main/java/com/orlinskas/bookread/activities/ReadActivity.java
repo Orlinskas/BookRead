@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -34,16 +33,13 @@ import com.orlinskas.bookread.bookReadAlgorithm.WordReplacer;
 import com.orlinskas.bookread.data.DatabaseAdapter;
 import com.orlinskas.bookread.data.SettingsData;
 import com.orlinskas.bookread.data.SharedPreferencesData;
-import com.orlinskas.bookread.fileManager.FileFormat;
 import com.orlinskas.bookread.fragments.BookInfoPageFragment;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
-import com.orlinskas.bookread.helpers.LibraryHelper;
 import com.orlinskas.bookread.presenters.PercentProgress;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Objects;
 
 //баг с открытием нужной страницы. видно первую, но открыта нужная
 public class ReadActivity extends AppCompatActivity {
