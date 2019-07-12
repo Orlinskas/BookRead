@@ -36,7 +36,7 @@ import com.orlinskas.bookread.data.SharedPreferencesData;
 import com.orlinskas.bookread.fragments.BookInfoPageFragment;
 import com.orlinskas.bookread.helpers.ActivityOpenHelper;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
-import com.orlinskas.bookread.presenters.PercentProgress;
+import com.orlinskas.bookread.presenters.ReadingProgressHandler;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class ReadActivity extends AppCompatActivity {
     private boolean settingsOpen = false;
     private boolean needSaveProgress = false;
     private float bookProgress;
-    private PercentProgress percentProgress = new PercentProgress();
+    private ReadingProgressHandler readingProgressHandler = new ReadingProgressHandler();
     private boolean isOpenNeedProgressPage = false;
 
     //первая часть отображения
@@ -103,7 +103,7 @@ public class ReadActivity extends AppCompatActivity {
 
         SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
 
-        switch (settings.getTheme()) {
+        switch (settings.getThemeId()) {
             case 1:
                 relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
                 break;
@@ -213,7 +213,7 @@ public class ReadActivity extends AppCompatActivity {
         protected Void doInBackground(Void... parameter) {
             try {
                 book = (Book) getIntent().getSerializableExtra("book");
-                words = readBookFile(book.getBookBodyFile());
+                words = readBookFile(book.getBodyTextFile());
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -222,7 +222,7 @@ public class ReadActivity extends AppCompatActivity {
                     }
                 });
 
-                bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f);
+                bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getTitle(), 0.0f);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -249,9 +249,9 @@ public class ReadActivity extends AppCompatActivity {
         ArrayList<Word> firstEntriesWords = new ArrayList<>();
 
         if(book.isTrainingMode()) {
-            DatabaseAdapter databaseAdapter = new DatabaseAdapter(this, book.getDataTableName());
+            DatabaseAdapter databaseAdapter = new DatabaseAdapter(this, book.getDatabaseTableName());
             databaseAdapter.openWithTransaction();
-            ArrayList<Word> englishWords = databaseAdapter.getWords(book.getDataTableName());
+            ArrayList<Word> englishWords = databaseAdapter.getWords(book.getDatabaseTableName());
             databaseAdapter.closeWithTransaction();
 
             for(String word : words) {
@@ -286,7 +286,7 @@ public class ReadActivity extends AppCompatActivity {
         //bookText.setShadowLayer(1.0f, 0.0f, 1.0f, getResources().getColor(R.color.colorGREY));
         bookText.setTypeface(getTypeFaceCode(settings.getTypeface()));
 
-        switch (settings.getTheme()){
+        switch (settings.getThemeId()){
             case 1:
                 scrollView.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
                 bookText.setTextColor(getResources().getColor(R.color.colorLowBlack));
@@ -456,7 +456,7 @@ public class ReadActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    openPageWithProgress(bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f));
+                    openPageWithProgress(bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getTitle(), 0.0f));
                 }
             });
             return null;
@@ -471,7 +471,7 @@ public class ReadActivity extends AppCompatActivity {
 
     private void openPageWithProgress (float bookProgress) {
          try {
-             int needPage = percentProgress.getPageNumber(bookProgress, realCountPages);
+             int needPage = readingProgressHandler.getPageNumber(bookProgress, realCountPages);
              if(needPage != 0){
                  openPage(needPage);
                  if(currentPage == needPage){
@@ -580,7 +580,7 @@ public class ReadActivity extends AppCompatActivity {
             oldCurrentPage = currentPage;
             btnCloseSettings.setVisibility(View.VISIBLE);
             settingsTopLayout.setVisibility(View.VISIBLE);
-            bookInfoSettings.setText(book.getBookTitle());
+            bookInfoSettings.setText(book.getTitle());
             currentPageSettings.setText(String.format("%d/%d", currentPage + 1, realCountPages - 1));
             seekBar.setVisibility(View.VISIBLE);
             seekBar.setMax(realCountPages - 1);
@@ -675,7 +675,7 @@ public class ReadActivity extends AppCompatActivity {
 
     public void onClickGoToSettings(View view) {
         try {
-            SharedPreferencesData.savePreferenceUsingKey(book.getBookTitle(), percentProgress.getPercentProgress(currentPage, realCountPages));
+            SharedPreferencesData.savePreferenceUsingKey(book.getTitle(), readingProgressHandler.getPercentProgress(currentPage, realCountPages));
             ActivityOpenHelper.openActivity(this, SettingsActivity.class);
         } catch (Exception e) {
             e.printStackTrace();
@@ -693,14 +693,14 @@ public class ReadActivity extends AppCompatActivity {
         SettingsData settingsData = new SettingsData(this);
         Settings currentSettings = settingsData.loadSettings();
         if(settings.isPortraitOrientation() != currentSettings.isPortraitOrientation()
-                | settings.getTheme() != currentSettings.getTheme()
+                | settings.getThemeId() != currentSettings.getThemeId()
                 | settings.getTextSize() != currentSettings.getTextSize()
                 | settings.getTypeface() != currentSettings.getTypeface()){
             try {
                 settings = currentSettings;
                 setExampleParams();
                 try {
-                    openPageWithProgress(bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f));
+                    openPageWithProgress(bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getTitle(), 0.0f));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -714,7 +714,7 @@ public class ReadActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (needSaveProgress) {
-            SharedPreferencesData.savePreferenceUsingKey(book.getBookTitle(), percentProgress.getPercentProgress(currentPage, realCountPages));
+            SharedPreferencesData.savePreferenceUsingKey(book.getTitle(), readingProgressHandler.getPercentProgress(currentPage, realCountPages));
         }
     }
 
@@ -722,7 +722,7 @@ public class ReadActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         // if (needSaveProgress) {
-        //     SharedPreferencesData.savePreferenceUsingKey(book.getBookTitle(), percentProgress.getPercentProgress(currentPage, realCountPages));
+        //     SharedPreferencesData.savePreferenceUsingKey(book.getTitle(), readingProgressHandler.getPercentProgress(currentPage, realCountPages));
         // }
     }
 

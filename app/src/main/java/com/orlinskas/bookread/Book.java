@@ -9,36 +9,34 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * @author Orlinskas
+ * @version 2
+ */
 public class Book implements Serializable {
     private SimpleDateFormat commonFormat = new SimpleDateFormat(BookConstant.YYYY_MM_DD, Locale.ENGLISH);
 
-    private String authorName = BookConstant.UNKNOWN_AUTHOR;
-    private String bookTitle = BookConstant.NA_BOOK_TITLE;
+    private String authorFullName = BookConstant.UNKNOWN_AUTHOR;
+    private String title = BookConstant.NA_BOOK_TITLE;
     private String annotation = BookConstant.DEFAULT_ANNOTATION;
-    private String date = BookConstant.NOT_AVAILABILITY;
-    private String bookBody = BookConstant.NOT_AVAILABILITY;
+    private String createDate = BookConstant.NOT_AVAILABILITY;
+    private String bodyText = BookConstant.NOT_AVAILABILITY;
     private int coverImagePath;
-    private File bookBodyFile;
-    private File coverImage;
-    private int bookPercentProgress = 0;
-    private String dataTableName;
+    private File bodyTextFile;
+    private File coverImageFile;
+    private int readingProgressPercent = 0;
+    private String databaseTableName;
     private boolean trainingMode = true;
-    private boolean isTranslate;
-
-    public Book(String authorName, String bookTitle, String annotation){
-        this.authorName = authorName;
-        this.bookTitle = bookTitle;
-        this.annotation = annotation;
-        this.bookBody = bookBody;
-        SimpleDateFormat commonFormat = new SimpleDateFormat(BookConstant.YYYY_MM_DD, Locale.ENGLISH);
-        try {
-            this.date = commonFormat.format(new Date());
-        } catch (Exception e) {
-            this.date = "n/a";
-        }
-    }
+    private boolean isTranslateWords;
 
     public Book(){
+    }
+
+    public Book(String authorFullName, String title, String annotation){
+        this.authorFullName = authorFullName;
+        this.title = title;
+        this.annotation = annotation;
+        this.createDate = commonFormat.format(new Date());
     }
 
     @Override
@@ -46,30 +44,30 @@ public class Book implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return Objects.equals(authorName, book.authorName) &&
-                Objects.equals(bookTitle, book.bookTitle) &&
-                Objects.equals(date, book.date);
+        return Objects.equals(authorFullName, book.authorFullName) &&
+                Objects.equals(title, book.title) &&
+                Objects.equals(createDate, book.createDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(authorName, bookTitle, date);
+        return Objects.hash(authorFullName, title, createDate);
     }
 
-    public String getAuthorName() {
-        return authorName;
+    public String getAuthorFullName() {
+        return authorFullName;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public void setAuthorFullName(String authorFullName) {
+        this.authorFullName = authorFullName;
     }
 
-    public String getBookTitle() {
-        return bookTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setBookTitle(String bookTitle) {
-        this.bookTitle = bookTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAnnotation() {
@@ -80,40 +78,36 @@ public class Book implements Serializable {
         this.annotation = annotation;
     }
 
-    public String getDate() {
-        return date;
+    public String getCreateDate() {
+        return createDate;
     }
 
     public void setDate() {
-        try {
-            this.date = commonFormat.format(new Date());
-        } catch (Exception e) {
-            this.date = "n/a";
-        }
+        this.createDate = commonFormat.format(new Date());
     }
 
-    public String getBookBody() {
-        return bookBody;
+    public String getBodyText() {
+        return bodyText;
     }
 
-    public void setBookBody(String bookBody) {
-        this.bookBody = bookBody;
+    public void setBodyText(String bodyText) {
+        this.bodyText = bodyText;
     }
 
-    public File getBookBodyFile() {
-        return bookBodyFile;
+    public File getBodyTextFile() {
+        return bodyTextFile;
     }
 
-    public void setBookBodyFile(File bookBodyFile) {
-        this.bookBodyFile = bookBodyFile;
+    public void setBodyTextFile(File bodyTextFile) {
+        this.bodyTextFile = bodyTextFile;
     }
 
-    public File getCoverImage() {
-        return coverImage;
+    public File getCoverImageFile() {
+        return coverImageFile;
     }
 
-    public void setCoverImage(File coverImage) {
-        this.coverImage = coverImage;
+    public void setCoverImageFile(File coverImageFile) {
+        this.coverImageFile = coverImageFile;
     }
 
     public int getCoverImagePath() {
@@ -124,20 +118,20 @@ public class Book implements Serializable {
         this.coverImagePath = coverImagePath;
     }
 
-    public int getBookPercentProgress() {
-        return bookPercentProgress;
+    public int getReadingProgressPercent() {
+        return readingProgressPercent;
     }
 
-    public void setBookPercentProgress(int bookPercentProgress) {
-        this.bookPercentProgress = bookPercentProgress;
+    public void setReadingProgressPercent(int readingProgressPercent) {
+        this.readingProgressPercent = readingProgressPercent;
     }
 
-    public String getDataTableName() {
-        return dataTableName;
+    public String getDatabaseTableName() {
+        return databaseTableName;
     }
 
-    public void setDataTableName(String dataTableName) {
-        this.dataTableName = dataTableName;
+    public void setDatabaseTableName(String databaseTableName) {
+        this.databaseTableName = databaseTableName;
     }
 
     public boolean isTrainingMode() {
@@ -148,11 +142,11 @@ public class Book implements Serializable {
         this.trainingMode = trainingMode;
     }
 
-    public boolean isTranslate() {
-        return isTranslate;
+    public boolean isTranslateWords() {
+        return isTranslateWords;
     }
 
-    public void setTranslate(boolean translate) {
-        isTranslate = translate;
+    public void setTranslateWords(boolean translateWords) {
+        isTranslateWords = translateWords;
     }
 }

@@ -8,7 +8,7 @@ public class WordHandler {
     private static final int MIN_NEED_COUNT = 4;
 
     public boolean processRussian(Word word) {
-        return !isUpperCase(word.getRussian());
+        return !isUpperCase(word.getOriginal());
     }
 
     private boolean isLength(String word) {

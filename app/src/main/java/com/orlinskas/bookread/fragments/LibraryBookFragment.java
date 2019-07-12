@@ -51,15 +51,15 @@ public class LibraryBookFragment extends Fragment {
         switchMode = view.findViewById(R.id.library_book_fragment_switch_mode);
         switchMode.setChecked(book.isTrainingMode());
 
-        if (book.getCoverImage() == null) {
+        if (book.getCoverImageFile() == null) {
             image.setImageResource(book.getCoverImagePath());
         }else {
-            image.setImageURI(Uri.parse(book.getCoverImage().getAbsolutePath()));
+            image.setImageURI(Uri.parse(book.getCoverImageFile().getAbsolutePath()));
         }
         delete.setImageResource(R.drawable.ic_delete);
-        author.setText(book.getAuthorName());
-        title.setText(book.getBookTitle());
-        date.setText(book.getDate());
+        author.setText(book.getAuthorFullName());
+        title.setText(book.getTitle());
+        date.setText(book.getCreateDate());
         progressBar.setVisibility(View.INVISIBLE);
         if(countFragments%2 == 0) {
             relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorWHITE));

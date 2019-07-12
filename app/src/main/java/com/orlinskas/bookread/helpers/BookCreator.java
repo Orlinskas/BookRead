@@ -9,7 +9,10 @@ import com.orlinskas.bookread.parsers.ParserXmlToBook;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
-
+/**
+ * @author Orlinskas
+ * @version 1
+ */
 public class BookCreator {
 
     public Book create(Context context, File book){
@@ -18,5 +21,4 @@ public class BookCreator {
         ParserXmlToBook parserXmlToBook = new ParserXmlToBook(context);
         return parserXmlToBook.parse(xml, book.getName());
     }
-
 }

@@ -41,8 +41,8 @@ public class DatabaseAdapter {
 
     public long insert(Word word, String tableName) {
         ContentValues cv = new ContentValues();
-        cv.put(WordsDatabase.COLUMN_RUSSIAN, word.getRussian());
-        cv.put(WordsDatabase.COLUMN_ENGLISH, word.getEnglish());
+        cv.put(WordsDatabase.COLUMN_RUSSIAN, word.getOriginal());
+        cv.put(WordsDatabase.COLUMN_ENGLISH, word.getTranslate());
         cv.put(WordsDatabase.COLUMN_COUNT, word.getCount());
         return database.insert(tableName, null, cv);
     }
@@ -57,7 +57,7 @@ public class DatabaseAdapter {
                 String english = cursor.getString(cursor.getColumnIndex(WordsDatabase.COLUMN_ENGLISH));
                 int count = cursor.getInt(cursor.getColumnIndex(WordsDatabase.COLUMN_COUNT));
 
-                if (russian.equals(word.getRussian())) {
+                if (russian.equals(word.getOriginal())) {
                     if (english == null) {
                         cursor.close();
                         return new Word(id, russian, count);
@@ -104,7 +104,7 @@ public class DatabaseAdapter {
                     String english = cursor.getString(cursor.getColumnIndex(WordsDatabase.COLUMN_ENGLISH));
                     int count = cursor.getInt(cursor.getColumnIndex(WordsDatabase.COLUMN_COUNT));
 
-                    if (russian.equals(word.getRussian())) {
+                    if (russian.equals(word.getOriginal())) {
                         cursor.close();
                         return true;
                     }
@@ -125,8 +125,8 @@ public class DatabaseAdapter {
             whereClause = WordsDatabase.COLUMN_ID + "=" + word.getId();
             cv = new ContentValues();
             cv.put(WordsDatabase.COLUMN_ID, word.getId());
-            cv.put(WordsDatabase.COLUMN_RUSSIAN, word.getRussian());
-            cv.put(WordsDatabase.COLUMN_ENGLISH, word.getEnglish());
+            cv.put(WordsDatabase.COLUMN_RUSSIAN, word.getOriginal());
+            cv.put(WordsDatabase.COLUMN_ENGLISH, word.getTranslate());
             cv.put(WordsDatabase.COLUMN_COUNT, word.getCount());
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,7 +5,10 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.File;
 import java.io.FileReader;
-
+/**
+ * @author Orlinskas
+ * @version 1
+ */
 public class ParserFb2ToXML {
 
     public XmlPullParser parse(File file) {

@@ -39,7 +39,7 @@ public class WordTranslater {
         }
 
         try {
-            return words.get(1).getEnglish().length() < 2;
+            return words.get(1).getTranslate().length() < 2;
         } catch (Exception e) {
             e.printStackTrace();
             return true;
@@ -72,35 +72,35 @@ public class WordTranslater {
             int MAX_COUNT_SYMBOL = AlgorithmConstants.MAX_COUNT_SYMBOL_TO_REQUEST;
             switch (countOfSplit) {
                 case 1:
-                    translationWord = word.getRussian() + ". ";
+                    translationWord = word.getOriginal() + ". ";
                     alpha.append(translationWord);
                     if(alpha.toString().length() > MAX_COUNT_SYMBOL){
                         countOfSplit = 2;
                     }
                     break;
                 case 2:
-                    translationWord = word.getRussian() + ". ";
+                    translationWord = word.getOriginal() + ". ";
                     beta.append(translationWord);
                     if(beta.toString().length() > MAX_COUNT_SYMBOL){
                         countOfSplit = 3;
                     }
                     break;
                 case 3:
-                    translationWord = word.getRussian() + ". ";
+                    translationWord = word.getOriginal() + ". ";
                     gamma.append(translationWord);
                     if(gamma.toString().length() > MAX_COUNT_SYMBOL){
                         countOfSplit = 4;
                     }
                     break;
                 case 4:
-                    translationWord = word.getRussian() + ". ";
+                    translationWord = word.getOriginal() + ". ";
                     quatro.append(translationWord);
                     if(quatro.toString().length() > MAX_COUNT_SYMBOL){
                         countOfSplit = 5;
                     }
                     break;
                 case 5:
-                    translationWord = word.getRussian() + ". ";
+                    translationWord = word.getOriginal() + ". ";
                     close.append(translationWord);
                     break;
             }
@@ -215,7 +215,7 @@ public class WordTranslater {
 
     private void saveTranslate (ArrayList<String> translateWords) throws Exception {
         for (int i = 0; i < words.size(); i++) {
-            words.get(i).setEnglish(translateWords.get(i));
+            words.get(i).setTranslate(translateWords.get(i));
         }
     }
 

@@ -16,7 +16,7 @@ public class WordsHandler {
         for(int i = words.size() - 1; i > 0; i--) {
             if (words.get(i).length() > AlgorithmConstants.MIN_WORD_LENGTH) {
                 Word word = new Word();
-                word.setRussian(words.get(i));
+                word.setOriginal(words.get(i));
                 countWords++;
 
                 if(wordsExclusive.contains(word)){

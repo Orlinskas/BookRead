@@ -66,7 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
             album.setChecked(true);
         }
 
-        switch (settings.getTheme()) {
+        switch (settings.getThemeId()) {
             case 1:
                 changeVisibleElement(defaultLine);
                 break;
@@ -209,19 +209,19 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void onClickVintageTheme(View view) {
        changeVisibleElement(vintageLine);
-       settings.setTheme(3);
+       settings.setThemeId(3);
         setExampleParams();
     }
 
     public void onClickTelegramTheme(View view) {
        changeVisibleElement(telegramLine);
-        settings.setTheme(2);
+        settings.setThemeId(2);
         setExampleParams();
     }
 
     public void onClickDefaultTheme(View view) {
         changeVisibleElement(defaultLine);
-        settings.setTheme(1);
+        settings.setThemeId(1);
         setExampleParams();
     }
 
@@ -282,7 +282,7 @@ public class SettingsActivity extends AppCompatActivity {
         example.setTextSize(settings.getTextSize());
         example.setTypeface(getTypeFaceCode(settings.getTypeface()));
 
-        switch (settings.getTheme()){
+        switch (settings.getThemeId()){
             case 1:
                 example.setBackgroundColor(getResources().getColor(R.color.colorLowGREY));
                 example.setTextColor(getResources().getColor(R.color.colorLowBlack));

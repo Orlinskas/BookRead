@@ -2,6 +2,10 @@ package com.orlinskas.bookread.parsers;
 
 import java.util.ArrayList;
 
+/**
+ * @author Orlinskas
+ * @version 1
+ */
 public class ArrayListToString {
 
     public static String parse (ArrayList<String> words){

@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
+/**
+ * @author Orlinskas
+ * @version 1
+ */
 public class AppContext extends Application {
 
     @SuppressLint("StaticFieldLeak")

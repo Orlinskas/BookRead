@@ -63,7 +63,7 @@ public class VocabularyActivity extends ListActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String bookTitle = getBookTitles()[position];
                 for(Book book : books) {
-                    if(book.getBookTitle().equals(bookTitle)){
+                    if(book.getTitle().equals(bookTitle)){
                         fillList(book);
                     }
                 }
@@ -109,7 +109,7 @@ public class VocabularyActivity extends ListActivity {
             titles = new String[books.size() + 1];
             titles[0] = FIRST_TITLE;
             for(int i = 0; i < books.size(); i++) {
-                titles[i + 1] = books.get(i).getBookTitle();
+                titles[i + 1] = books.get(i).getTitle();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,9 +119,9 @@ public class VocabularyActivity extends ListActivity {
 
     private boolean findWords(Book book) {
         try {
-            DatabaseAdapter databaseAdapter = new DatabaseAdapter(getApplicationContext(), book.getDataTableName());
+            DatabaseAdapter databaseAdapter = new DatabaseAdapter(getApplicationContext(), book.getDatabaseTableName());
             databaseAdapter.openWithTransaction();
-            words = databaseAdapter.getWords(book.getDataTableName());
+            words = databaseAdapter.getWords(book.getDatabaseTableName());
             databaseAdapter.closeWithTransaction();
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,7 +133,7 @@ public class VocabularyActivity extends ListActivity {
     private String[] getWordsRus(@NonNull ArrayList<Word> words) {
         String[] wordsRus = new String[words.size()];
         for(int i = 0; i < words.size(); i++)  {
-            wordsRus[i] = words.get(i).getRussian();
+            wordsRus[i] = words.get(i).getOriginal();
         }
         return wordsRus;
     }
@@ -187,8 +187,8 @@ public class VocabularyActivity extends ListActivity {
 
     private String getEnglish(String russian) {
         for(Word word : words) {
-            if(word.getRussian().equals(russian)){
-                return word.getEnglish();
+            if(word.getOriginal().equals(russian)){
+                return word.getTranslate();
             }
         }
         return "Не найденно";
@@ -201,13 +201,13 @@ public class VocabularyActivity extends ListActivity {
             for(Word word : words) {
                 String wordPartRus = null;
                 try {
-                    wordPartRus = word.getRussian().substring(0, needWordPart.length());
+                    wordPartRus = word.getOriginal().substring(0, needWordPart.length());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 String wordPartEng = null;
                 try {
-                    wordPartEng = word.getEnglish().substring(0, needWordPart.length());
+                    wordPartEng = word.getTranslate().substring(0, needWordPart.length());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -1,7 +1,10 @@
 package com.orlinskas.bookread.parsers;
 
 import java.util.List;
-
+/**
+ * @author Orlinskas
+ * @version 1
+ */
 public class ListToArray {
 
     public static String[] parse(List<String> directoryEntries) {

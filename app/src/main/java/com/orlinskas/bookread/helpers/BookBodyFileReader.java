@@ -5,7 +5,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+/**
+ * @author Zholus
+ * @version 1
+ */
 public class BookBodyFileReader {
     private Character[] characters = new Character[]{
             ' ', '\n', '.', ',', '!', '&', '?', ':', ';',

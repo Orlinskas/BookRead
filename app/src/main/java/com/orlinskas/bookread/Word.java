@@ -1,17 +1,33 @@
 package com.orlinskas.bookread;
 
 import java.util.Objects;
-
+/**
+ * @author Orlinskas
+ * @version 2
+ */
 public class Word {
     private int id;
-    private String russian;
-    private String english;
+    private String original;
+    private String translate;
     private int count = 1;
 
-    public Word(int id, String russian, String english, int count) {
+    public Word() {
+    }
+
+    public Word(String original) {
+        this.original = original;
+    }
+
+    public Word(int id, String original, int count) {
         this.id = id;
-        this.russian = russian;
-        this.english = english;
+        this.original = original;
+        this.count = count;
+    }
+
+    public Word(int id, String original, String translate, int count) {
+        this.id = id;
+        this.original = original;
+        this.translate = translate;
         this.count = count;
     }
 
@@ -20,25 +36,12 @@ public class Word {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Word word = (Word) o;
-        return Objects.equals(russian, word.russian);
+        return Objects.equals(original, word.original);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(russian);
-    }
-
-    public Word() {
-    }
-
-    public Word(String russian) {
-        this.russian = russian;
-    }
-
-    public Word(int id, String russian, int count) {
-        this.id = id;
-        this.russian = russian;
-        this.count = count;
+        return Objects.hash(original);
     }
 
     public int getId() {
@@ -49,20 +52,20 @@ public class Word {
         this.id = id;
     }
 
-    public String getRussian() {
-        return russian;
+    public String getOriginal() {
+        return original;
     }
 
-    public void setRussian(String russian) {
-        this.russian = russian;
+    public void setOriginal(String original) {
+        this.original = original;
     }
 
-    public String getEnglish() {
-        return english;
+    public String getTranslate() {
+        return translate;
     }
 
-    public void setEnglish(String english) {
-        this.english = english;
+    public void setTranslate(String translate) {
+        this.translate = translate;
     }
 
     public int getCount() {

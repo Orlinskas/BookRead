@@ -18,9 +18,9 @@ public class WordDataWriter {
     public void containWordsInDatabase(String word) {
         try {
             Word wordData = new Word();
-            wordData.setRussian(word);
+            wordData.setOriginal(word);
 
-            if (wordData.getRussian().length() > 3) {//можно проверить ворд хэндлером WordHandler
+            if (wordData.getOriginal().length() > 3) {//можно проверить ворд хэндлером WordHandler
                 DatabaseAdapter databaseAdapter = new DatabaseAdapter(context, tableName);
                 databaseAdapter.open();
 

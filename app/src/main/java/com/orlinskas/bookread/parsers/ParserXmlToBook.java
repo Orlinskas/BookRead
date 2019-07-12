@@ -10,8 +10,8 @@ import com.orlinskas.bookread.constants.BookConstant;
 import com.orlinskas.bookread.constants.XML_TAG;
 import com.orlinskas.bookread.data.DatabaseAdapter;
 import com.orlinskas.bookread.helpers.BookBodyFileReader;
-import com.orlinskas.bookread.helpers.BookBodyFileWriter;
-import com.orlinskas.bookread.helpers.BookImageFileWriter;
+import com.orlinskas.bookread.helpers.BodyTextFileWriter;
+import com.orlinskas.bookread.helpers.CoverImageFileWriter;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -159,21 +159,21 @@ public class ParserXmlToBook {
     private Book createBook(){
 
         Book book = new Book(authorName.toString(), bookTitle, annotation.toString());
-        book.setBookBodyFile(writeBookBodyToFile(book, body.toString()));
+        book.setBodyTextFile(writeBookBodyToFile(book, body.toString()));
         if(imageBase64 != null){
-            book.setCoverImage(decodeImage(book, imageBase64));
+            book.setCoverImageFile(decodeImage(book, imageBase64));
         }
         else {
-            book.setCoverImage(null);
+            book.setCoverImageFile(null);
             book.setCoverImagePath(defaultCoverImages[randomNumber(defaultCoverImages.length)]);
         }
 
-        book.setDataTableName("tab" + 10 + (int) (Math.random() * 1000));
+        book.setDatabaseTableName("tab" + 10 + (int) (Math.random() * 1000));
 
         BookBodyFileReader bookBodyFileReader = new BookBodyFileReader();
         WordsHandler wordsHandler = new WordsHandler();
         try {
-            addWordsToData(wordsHandler.process(bookBodyFileReader.read(book.getBookBodyFile())), book.getDataTableName());
+            addWordsToData(wordsHandler.process(bookBodyFileReader.read(book.getBodyTextFile())), book.getDatabaseTableName());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,8 +192,8 @@ public class ParserXmlToBook {
     }
 
     private File decodeImage(Book book, String imageBase64) {
-        BookImageFileWriter bookImageFileWriter = new BookImageFileWriter();
-        File imageFile = bookImageFileWriter.write(context, book.getBookTitle(), book.getDate(), imageBase64);
+        CoverImageFileWriter coverImageFileWriter = new CoverImageFileWriter();
+        File imageFile = coverImageFileWriter.write(context, book.getTitle(), book.getCreateDate(), imageBase64);
         try {
             byte data[] = Base64.decode(imageBase64, Base64.DEFAULT);
             FileOutputStream fos = new FileOutputStream(imageFile);
@@ -207,8 +207,8 @@ public class ParserXmlToBook {
     }
 
     private File writeBookBodyToFile(Book book, String body) {
-        BookBodyFileWriter bookBodyFileWriter = new BookBodyFileWriter();
-        return bookBodyFileWriter.write(context, book, body);
+        BodyTextFileWriter bodyTextFileWriter = new BodyTextFileWriter();
+        return bodyTextFileWriter.write(context, book, body);
     }
 
     private boolean containCoverImage(String searchText) {

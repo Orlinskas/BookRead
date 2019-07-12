@@ -147,10 +147,10 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
     }
 
     @Override //показать меню
-    public boolean showBookAnnotation(Book book) {
+    public void showBookAnnotation(Book book) {
         try {
             SharedPreferencesData.setPreferences(getSharedPreferences(SharedPreferencesData.SETTINGS_AND_DATA, MODE_PRIVATE));
-            bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getBookTitle(), 0.0f);
+            bookProgress = SharedPreferencesData.getPreferenceUsingKey(book.getTitle(), 0.0f);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -164,13 +164,13 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
                 animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.open_library_menu);
                 parentMenuAnnotation.startAnimation(animation);
                 backgrounOnOpenMenu.setVisibility(View.VISIBLE);
-                if (book.getCoverImage() == null) {
+                if (book.getCoverImageFile() == null) {
                     menuImageBook.setImageResource(book.getCoverImagePath());
                 }else {
-                    menuImageBook.setImageURI(Uri.parse(book.getCoverImage().getAbsolutePath()));
+                    menuImageBook.setImageURI(Uri.parse(book.getCoverImageFile().getAbsolutePath()));
                 }
-                authorName.setText(book.getAuthorName());
-                bookTitle.setText(book.getBookTitle());
+                authorName.setText(book.getAuthorFullName());
+                bookTitle.setText(book.getTitle());
 
                 if(book.getAnnotation().length() < 10){
                     annotation.setText("Приятного чтения!");
@@ -186,9 +186,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
                 e.printStackTrace();
                 openBook(book);
             }
-            return true;
         }
-        return false;
     }
 
     @Override
@@ -229,7 +227,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
 
         }
 
-        WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), book.getDataTableName());
+        WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), book.getDatabaseTableName());
 
         if (wordTranslater.checkNeedTranslate() & book.isTrainingMode()) {
             ToastBuilder.create(getApplicationContext(), "Подождите, связь с сервером...");
@@ -245,7 +243,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
     }
 
     @Override
-    public boolean deleteBook(final Book book) {
+    public void deleteBook(final Book book) {
 
         DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface arg0, int arg1) {
@@ -274,7 +272,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
             new AlertDialog.Builder(this)
                     .setTitle("Подтверждение") //title
                     .setMessage("Хотите удалить книгу из библиотеки "
-                            + book.getBookTitle().substring(0, 10) + "...?") //message
+                            + book.getTitle().substring(0, 10) + "...?") //message
                     .setPositiveButton("Да", okButtonListener) //positive button
                     .setNegativeButton("Нет", cancelButtonListener) //negative button
                     .show();
@@ -282,7 +280,6 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
             e.printStackTrace();
             ToastBuilder.create(getApplicationContext(), "Не надо");
         }
-        return false;
     }
 
     @Override
@@ -314,7 +311,7 @@ public class LibraryActivity extends AppCompatActivity implements FragmentLibrar
         @Override
         protected Boolean doInBackground(Book... books) {
             book = books[0];
-            WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), books[0].getDataTableName());
+            WordTranslater wordTranslater = new WordTranslater(getApplicationContext(), books[0].getDatabaseTableName());
             return wordTranslater.go();
         }
 

@@ -3,6 +3,10 @@ package com.orlinskas.bookread;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * @author Orlinskas
+ * @version 1
+ */
 public class Library implements Serializable {
     private ArrayList<Book> books = new ArrayList<>();
 

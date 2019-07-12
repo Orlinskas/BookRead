@@ -2,21 +2,24 @@ package com.orlinskas.bookread;
 
 import java.io.Serializable;
 
+/**
+ * @author Orlinskas
+ * @version 2
+ */
 public class Settings implements Serializable {
     private boolean portraitOrientation = true;
-    private int theme = 1;
+    private int themeId = 1;
     private int textSize = 14;
     private int typeface = 0;
 
-    public Settings (boolean portraitOrientation, int theme, int textSize, int typeface){
+    public Settings (boolean portraitOrientation, int themeId, int textSize, int typeface){
        this.portraitOrientation = portraitOrientation;
-       this.theme = theme;
+       this.themeId = themeId;
        this.textSize = textSize;
        this.typeface = typeface;
     }
 
     public Settings(){
-
     }
 
     public boolean isPortraitOrientation() {
@@ -27,12 +30,12 @@ public class Settings implements Serializable {
         this.portraitOrientation = portraitOrientation;
     }
 
-    public int getTheme() {
-        return theme;
+    public int getThemeId() {
+        return themeId;
     }
 
-    public void setTheme(int theme) {
-        this.theme = theme;
+    public void setThemeId(int themeId) {
+        this.themeId = themeId;
     }
 
     public int getTextSize() {
